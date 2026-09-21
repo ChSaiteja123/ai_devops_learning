@@ -1,0 +1,30 @@
+{
+  "generated_at": "2026-09-18T10:41:21.928700+00:00",
+  "incident_count": 2,
+  "incidents": [
+    {
+      "alert_id": "ALERT-1001",
+      "priority": "critical",
+      "summary": "checkout-api in production: HTTP 500 rate is above 10 percent",
+      "actions": [
+        "Notify the payments-platform owner.",
+        "Open an incident record for checkout-api.",
+        "Inspect the latest deployment and service dashboard.",
+        "Request human approval before rollback or traffic changes."
+      ],
+      "automated_action_taken": false
+    },
+    {
+      "alert_id": "ALERT-1002",
+      "priority": "warning",
+      "summary": "worker in production: Queue age is above five minutes",
+      "actions": [
+        "Notify the orders-platform owner.",
+        "Open an incident record for worker.",
+        "Inspect the latest deployment and service dashboard.",
+        "Review queue and dependency health before escalation."
+      ],
+      "automated_action_taken": false
+    }
+  ]
+}

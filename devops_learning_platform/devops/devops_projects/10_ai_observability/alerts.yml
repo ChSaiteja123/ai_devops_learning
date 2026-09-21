@@ -1,0 +1,20 @@
+groups:
+  - name: ai-service
+    rules:
+      - alert: AIServiceHighLatency
+        expr: histogram_quantile(0.95, rate(ai_request_duration_seconds_bucket[5m])) > 5
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: AI service latency is elevated
+          description: The 95th percentile AI request latency is above five seconds.
+
+      - alert: AIServiceErrors
+        expr: rate(ai_requests_total{status="error"}[5m]) > 0.1
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: AI service errors are elevated
+          description: The AI service is returning more than 0.1 errors per second.

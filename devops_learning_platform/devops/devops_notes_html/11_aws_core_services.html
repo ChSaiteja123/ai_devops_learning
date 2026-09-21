@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AWS Core Services - DevOps Notes</title><link rel="stylesheet" href="style.css"></head><body>
+<header class="site-header"><div class="page"><a class="back-link" href="index.html">Back to DevOps Notes</a></div></header><main class="page"><article>
+<h1 class="note-title">AWS Core Services</h1>
+<p class="note-overview">Formatted learning document with commands, examples, production guidance, and operational callouts.</p>
+<p class="text-line">AWS Core Services</p>
+<h3 class="section-heading">PURPOSE / OVERVIEW</h3>
+<p class="text-line">Amazon Web Services (AWS) is the largest public cloud platform. It provides a broad set of services for compute, storage, networking, security, and monitoring.</p>
+<h2 class="section-heading">1. CORE AWS COMPUTE SERVICES</h2>
+<p class="text-line">Core AWS compute services</p>
+<p class="text-line bullet">- EC2: virtual machines</p>
+<p class="text-line bullet">- ECS: container orchestration service</p>
+<p class="text-line bullet">- EKS: Kubernetes service</p>
+<p class="text-line bullet">- Lambda: serverless compute</p>
+<h2 class="section-heading">2. CORE AWS STORAGE SERVICES</h2>
+<p class="text-line">Core AWS storage services</p>
+<p class="text-line bullet">- S3: object storage</p>
+<p class="text-line bullet">- EBS: block storage for EC2</p>
+<p class="text-line bullet">- EFS: file storage for Linux workloads</p>
+<h2 class="section-heading">3. CORE NETWORKING SERVICES</h2>
+<p class="text-line">Core networking services</p>
+<p class="text-line bullet">- VPC: isolated virtual network</p>
+<p class="text-line bullet">- Subnets: segmentation inside VPC</p>
+<p class="text-line bullet">- Internet Gateway: public internet access</p>
+<p class="text-line bullet">- NAT Gateway: private subnet outbound connectivity</p>
+<p class="text-line bullet">- Route53: DNS service</p>
+<p class="text-line bullet">- ELB / ALB: load balancing</p>
+<h2 class="section-heading">4. CORE DATABASE SERVICES</h2>
+<p class="text-line">Core database services</p>
+<p class="text-line bullet">- RDS: managed relational database</p>
+<p class="text-line bullet">- DynamoDB: NoSQL database</p>
+<p class="text-line bullet">- ElastiCache: in-memory caching</p>
+<h2 class="section-heading">5. CORE SECURITY AND IDENTITY SERVICES</h2>
+<div class="callout security"><strong>[SECURITY]</strong> Core security and identity services</div>
+<p class="text-line bullet">- IAM: access control</p>
+<p class="text-line bullet">- KMS: encryption keys</p>
+<p class="text-line bullet">- GuardDuty: threat detection</p>
+<p class="text-line bullet">- WAF: web application firewall</p>
+<h2 class="section-heading">6. CORE MONITORING SERVICES</h2>
+<p class="text-line">Core monitoring services</p>
+<p class="text-line bullet">- CloudWatch: metrics, logs, alarms</p>
+<p class="text-line bullet">- CloudTrail: API activity logging</p>
+<h2 class="section-heading">7. EXAMPLE ARCHITECTURE</h2>
+<p class="text-line">Example architecture</p>
+<p class="text-line">User -&gt; ALB -&gt; EC2 or EKS -&gt; RDS -&gt; S3</p>
+<h2 class="section-heading">8. CORE CONCEPTS</h2>
+<h3 class="section-heading">EXAMPLE</h3>
+<div class="code-block">
+AWS knowledge is essential for enterprise DevOps, platform engineering, and cloud architecture work.
+</div>
+<h2 class="section-heading">9. AWS CORE SERVICES DEEP DIVE</h2>
+<h3 class="section-heading">EXAMPLE</h3>
+<div class="code-block">
+AWS core services deep dive
+Regions contain isolated availability zones.
+Choose regions for latency, compliance, resilience, and service availability.
+Distribute critical workloads across multiple availability zones.
+Use accounts to separate environments and trust boundaries.
+Organizations apply policies across accounts.
+IAM controls identities, policies, roles, and resource access.
+Prefer roles and federation over long-lived access keys.
+Require MFA for privileged human access.
+Use least privilege and review unused permissions.
+CloudTrail records API activity for investigation and governance.
+CloudWatch provides metrics, logs, dashboards, and alarms.
+S3 stores durable objects with lifecycle and versioning controls.
+Use S3 encryption and block public access by default.
+Use bucket policies and identity policies deliberately.
+Use versioning and object lock when recovery requires it.
+Use lifecycle rules to transition or expire objects.
+EC2 provides configurable virtual compute.
+Use AMIs as immutable host baselines.
+Use autoscaling groups for replaceable capacity.
+Use instance profiles instead of embedded keys.
+EBS volumes require snapshots and retention planning.
+EFS provides shared filesystem access for compatible workloads.
+VPC provides logical network isolation.
+Use private subnets for internal compute and data services.
+Use NAT for controlled outbound access from private subnets.
+Use security groups as stateful workload firewalls.
+Use network ACLs as subnet-level supplementary controls.
+Route 53 provides DNS and health-aware routing.
+ALB routes HTTP traffic using listeners and target groups.
+NLB supports high-performance transport traffic.
+RDS manages relational databases and backups.
+ElastiCache provides managed in-memory caching.
+DynamoDB provides scalable key-value and document storage.
+EKS manages Kubernetes control-plane operations.
+ECS schedules containers with AWS-native integrations.
+Lambda runs event-driven functions without host management.
+SQS decouples producers and consumers with durable queues.
+SNS fans notifications to multiple subscribers.
+EventBridge routes events using rules and patterns.
+KMS manages encryption keys and grants.
+Secrets Manager stores and rotates application secrets.
+Systems Manager supports patching, inventory, and remote operations.
+WAF filters web requests against defined rules.
+GuardDuty detects suspicious account and network behavior.
+Config evaluates resource configuration against policies.
+Use service control policies for organization guardrails.
+Use resource tags for ownership and cost allocation.
+Enable cost budgets and anomaly detection.
+Use trusted advisor findings as improvement input.
+Restrict root account usage and secure root credentials.
+Centralize logs in a protected security account.
+Use cross-account roles for controlled operations.
+Audit role trust policies for unintended principals.
+Protect state and backups from deletion.
+Use backup vaults and retention locks where required.
+Test restoration across accounts or regions.
+Define RTO and RPO per workload.
+Use health checks and deployment markers.
+Automate infrastructure with Terraform or CloudFormation.
+Review plans for public exposure and replacement risk.
+Use policy as code before changes reach AWS.
+Pin provider versions and verify module sources.
+Use private endpoints to reduce public exposure.
+Control egress to limit data exfiltration.
+Monitor quota usage before scaling.
+Request quotas before planned launches.
+Use spot instances for interruptible work.
+Use savings plans only after stable usage is measured.
+Include NAT, load balancer, and data transfer costs.
+Delete unused elastic IPs, volumes, and snapshots.
+Use S3 lifecycle rules for storage cost.
+Use log retention appropriate to investigation needs.
+Do not retain high-cardinality debug logs indefinitely.
+Use tagging enforcement to improve chargeback.
+Use multiple AZs for critical paths.
+Use regional recovery for business-critical data.
+Document service dependencies and limits.
+Practice provider incident response and escalation.
+AWS is powerful when identity, network, and cost controls are designed together.
+</div>
+<h2 class="section-heading">10. AWS ACCOUNT AND SERVICE OPERATIONS</h2>
+<h3 class="section-heading">EXAMPLE</h3>
+<div class="code-block">
+AWS account and service operations
+Use AWS Organizations to separate production, security, logging, and sandbox accounts.
+Apply service control policies for forbidden regions, public resources, and unsafe services.
+Use IAM Identity Center or federation instead of shared IAM users for human access.
+Require MFA and short session duration for privileged roles.
+Use resource-based policies and identity policies together only when ownership is clear.
+Centralize CloudTrail, Config, and security findings in a protected security account.
+Enable S3 block public access and default encryption unless a reviewed exception exists.
+Use private subnets for application and database tiers, with controlled service endpoints.
+Distribute load balancers, autoscaling groups, and critical data paths across availability zones.
+Choose ECS, EKS, Lambda, or EC2 from workload operations rather than popularity.
+Use SQS to absorb bursts and isolate slow or unavailable consumers.
+Use SNS or EventBridge for fan-out and event routing with explicit retry behavior.
+Use instance profiles, task roles, execution roles, and function roles with narrow permissions.
+Store application credentials in Secrets Manager or Parameter Store with access auditing.
+Use KMS key policies, grants, and rotation settings appropriate to the data classification.
+Define backup vaults, retention locks, and cross-account copies for critical data.
+Test restoration of EBS, RDS, S3, DynamoDB, and configuration state.
+Review Route 53, ALB, WAF, and certificate dependencies during failover planning.
+Use CloudWatch dashboards for service health and CloudTrail for administrative evidence.
+Set alarms for quotas, certificates, backup failures, billing anomalies, and user-facing errors.
+Use AWS Config and policy checks to detect drift from encryption, tagging, and network standards.
+Estimate NAT, load balancer, CloudWatch, backup, and cross-region transfer cost before launch.
+Use Savings Plans, Reserved Instances, and Spot only after workload behavior is measured.
+Remove unused elastic IPs, volumes, snapshots, security groups, and test load balancers.
+Record the region, account, resource identifiers, deployment digest, and owner for each service.
+Keep a provider incident runbook with status-page checks, traffic controls, and escalation contacts.
+AWS operations require account boundaries, identity discipline, tested recovery, and cost visibility.
+</div>
+<h2 class="section-heading">11. AWS ACCOUNT GOVERNANCE</h2>
+<h3 class="section-heading">EXAMPLE</h3>
+<div class="code-block">
+AWS account governance
+Use an organization structure that separates workloads from security and centralized logging.
+Protect the organization management account and avoid running application resources there.
+Use service control policies as guardrails, not as a replacement for IAM least privilege.
+Create dedicated roles for auditors, developers, operators, and automation.
+Use external identity federation for people and short-lived role sessions.
+Review role trust policies for wildcard principals and unintended external accounts.
+Secure root credentials, require MFA, and reserve root for tasks that require it.
+Enable CloudTrail in every account and region required by the governance policy.
+Centralize CloudTrail, Config, GuardDuty, and Security Hub findings in protected accounts.
+Protect audit buckets with restrictive policies, versioning, encryption, and retention controls.
+Use Config rules to detect public storage, missing encryption, unrestricted ports, and missing tags.
+Route high-confidence findings to an incident workflow with an owner and response target.
+</div>
+<h2 class="section-heading">12. AWS SERVICE SELECTION</h2>
+<h3 class="section-heading">EXAMPLE</h3>
+<div class="code-block">
+AWS service selection
+Choose EC2 when host control or specialized software outweighs management overhead.
+Choose ECS when container scheduling is needed without operating a Kubernetes control plane.
+Choose EKS when Kubernetes APIs, ecosystem, or portability justify the added responsibility.
+Choose Lambda for event-driven tasks with bounded execution and compatible startup behavior.
+Use SQS for durable buffering and retry isolation between producers and consumers.
+Use SNS for fan-out notifications and EventBridge for event filtering and routing.
+Use S3 for objects, not for transactional row updates or low-latency mutable records.
+Use EBS for instance-attached block storage and EFS for shared filesystem semantics.
+Use RDS for relational transactions and DynamoDB for known high-scale access patterns.
+Use ElastiCache only when the application defines stale-data and cache-outage behavior.
+Review quotas, regional availability, encryption support, and operational ownership before adoption.
+Record the reason for selecting a service and the conditions that would trigger reevaluation.
+</div>
+<h2 class="section-heading">13. AWS RELIABILITY AND SECURITY CHECKS</h2>
+<h3 class="section-heading">EXAMPLE</h3>
+<div class="code-block">
+AWS reliability and security checks
+Distribute critical compute and load balancing across availability zones.
+Use private subnets and VPC endpoints for internal workloads and AWS API access where appropriate.
+Use load balancer health checks that represent application readiness.
+Use autoscaling with capacity limits that protect downstream databases and service quotas.
+Use immutable AMIs, container digests, or function versions for repeatable deployment.
+Keep backup copies in a separate account or recovery boundary when deletion is a concern.
+Test restore of data and infrastructure with the same identities and network assumptions used in production.
+Monitor certificate expiry, quota consumption, backup health, queue age, and user-facing latency.
+Use CloudWatch alarms and dashboards with owners, runbooks, and sensible missing-data behavior.
+Record deployment IDs and resource identifiers in logs for incident correlation.
+Use WAF, Shield, security groups, NACLs, and IAM as complementary controls.
+Review public access findings before launch and after every network or policy change.
+</div>
+<h2 class="section-heading">14. AWS COST CONTROLS</h2>
+<h3 class="section-heading">EXAMPLE</h3>
+<div class="code-block">
+AWS cost controls
+Use cost allocation tags and account boundaries to make ownership visible.
+Set budgets for NAT, load balancers, CloudWatch logs, backups, data transfer, and storage.
+Use S3 lifecycle rules and log retention that match investigation and compliance needs.
+Delete idle resources, stale snapshots, old AMIs, unused elastic IPs, and test load balancers.
+Compare Savings Plans, Reserved Instances, Spot, and on-demand pricing against actual usage.
+Estimate cross-zone, cross-region, NAT processing, and managed-service charges before scaling.
+AWS operations are strongest when security, reliability, and cost decisions share the same ownership model.
+Use resource policies and identity policies only after determining which account owns the resource.
+Keep service-linked roles under review and document why each trusted AWS service needs access.
+Use regional and zonal failure tests for critical paths instead of assuming provider availability.
+Keep deployment artifacts immutable and record the digest in CloudWatch and change records.
+Use queue dead-letter handling and replay controls for event-driven services.
+Monitor account quotas, API throttling, and failed automation separately from application errors.
+Use private connectivity for control-plane calls when the threat model and service support it.
+Review cross-account trust whenever teams, vendors, or organizational units change.
+Document the minimum permissions needed to restore each backup and infrastructure component.
+AWS service ownership includes lifecycle, access review, recovery proof, and retirement cleanup.
+Review service limits before every major launch and record approved quota increases.
+Keep provider escalation contacts and account identifiers in the operational runbook.
+</div>
+</article></main></body></html>

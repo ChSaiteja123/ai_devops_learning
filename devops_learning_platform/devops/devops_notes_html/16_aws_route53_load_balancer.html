@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AWS Route53 and Load Balancing - DevOps Notes</title><link rel="stylesheet" href="style.css"></head><body>
+<header class="site-header"><div class="page"><a class="back-link" href="index.html">Back to DevOps Notes</a></div></header><main class="page"><article>
+<h1 class="note-title">AWS Route53 and Load Balancing</h1>
+<p class="note-overview">Formatted learning document with commands, examples, production guidance, and operational callouts.</p>
+<p class="text-line">AWS Route53 and Load Balancing</p>
+<h3 class="section-heading">PURPOSE / OVERVIEW</h3>
+<p class="text-line">Amazon Route53 is AWS&#39;s DNS service. It routes traffic to endpoints such as ELB, EC2, and external services.</p>
+<h2 class="section-heading">1. FEATURES</h2>
+<p class="text-line">Features</p>
+<p class="text-line bullet">- domain registration</p>
+<p class="text-line bullet">- DNS routing policies</p>
+<p class="text-line bullet">- health checks</p>
+<p class="text-line bullet">- latency-based routing</p>
+<p class="text-line bullet">- failover routing</p>
+<h2 class="section-heading">2. LOAD BALANCING</h2>
+<p class="text-line">Load balancing</p>
+<p class="text-line">Elastic Load Balancer distributes incoming traffic across multiple targets.</p>
+<h2 class="section-heading">3. TYPES</h2>
+<p class="text-line">Types</p>
+<p class="text-line bullet">- ALB: application layer balancing</p>
+<p class="text-line bullet">- NLB: network layer balancing</p>
+<p class="text-line bullet">- CLB: classic load balancer (older)</p>
+<h2 class="section-heading">4. EXAMPLE ARCHITECTURE</h2>
+<p class="text-line">Example architecture</p>
+<p class="text-line">Users -&gt; Route53 -&gt; ALB -&gt; EC2 instances or Kubernetes pods</p>
+<h2 class="section-heading">5. WHY THIS MATTERS</h2>
+<p class="text-line">Why this matters</p>
+<p class="text-line bullet">- higher availability</p>
+<p class="text-line bullet">- better performance</p>
+<p class="text-line bullet">- no single point of failure</p>
+<h2 class="section-heading">6. BEST PRACTICES</h2>
+<h3 class="section-heading">Best practices</h3>
+<div class="callout warning"><strong>[WARNING]</strong> DNS changes can remain cached after an update, so verify propagation and keep a tested rollback path.</div>
+<p class="text-line bullet">- use health checks</p>
+<p class="text-line bullet">- use multiple availability zones</p>
+<p class="text-line bullet">- keep backend services behind private networking</p>
+<h2 class="section-heading">7. TROUBLESHOOTING AND OPERATIONS</h2>
+<p class="text-line">Routing and load balancing are essential in production systems for scalability and resilience.</p>
+<h2 class="section-heading">8. ROUTE 53 AND LOAD BALANCING DEEP DIVE</h2>
+<p class="text-line">Route 53 and load balancing deep dive</p>
+<p class="text-line">DNS maps names to service endpoints.</p>
+<p class="text-line">Use public hosted zones for internet-facing names.</p>
+<p class="text-line">Use private hosted zones for VPC-only names.</p>
+<p class="text-line">Choose TTLs from change speed and resolver behavior.</p>
+<p class="text-line">Short TTLs improve agility but increase query load.</p>
+<p class="text-line">Health checks can drive DNS failover decisions.</p>
+<p class="text-line">Health checks should represent user-visible availability.</p>
+<p class="text-line">Do not make health checks deeper than their recovery action.</p>
+<p class="text-line">Use weighted records for controlled traffic percentages.</p>
+<p class="text-line">Use latency routing for geographically distributed users.</p>
+<p class="text-line">Use failover records for primary and secondary endpoints.</p>
+<p class="text-line">Use geolocation only when location policy is understood.</p>
+<p class="text-line">Alias records integrate AWS endpoints without ordinary DNS charges.</p>
+<p class="text-line">Validate DNS changes with authoritative and recursive queries.</p>
+<p class="text-line">Remember caches delay record changes after an update.</p>
+<p class="text-line">Protect hosted zone changes with least privilege and review.</p>
+<p class="text-line">Enable query logging when investigation requires it.</p>
+<p class="text-line">Avoid logging sensitive query parameters in names.</p>
+<p class="text-line">Use DNSSEC where domain integrity requirements justify it.</p>
+<p class="text-line">Automate certificate validation and renewal.</p>
+<p class="text-line">ALB operates at the HTTP and HTTPS layer.</p>
+<p class="text-line">Use listeners to define ports and protocols.</p>
+<p class="text-line">Use target groups for health and traffic selection.</p>
+<p class="text-line">Route by host, path, header, or query conditions.</p>
+<p class="text-line">Use redirects to enforce HTTPS.</p>
+<p class="text-line">Terminate TLS with current secure policies.</p>
+<p class="text-line">Re-encrypt to targets when the trust model requires it.</p>
+<p class="text-line">Use access logs for request and status investigation.</p>
+<p class="text-line">Avoid logging secrets or personal data unnecessarily.</p>
+<p class="text-line">ALB health checks should test readiness, not only a process port.</p>
+<p class="text-line">Use slow-start or deregistration delay for graceful rollout.</p>
+<p class="text-line">NLB supports high-performance TCP, TLS, and UDP patterns.</p>
+<p class="text-line">Choose NLB when transport behavior or static addresses matter.</p>
+<p class="text-line">Use cross-zone load balancing deliberately.</p>
+<p class="text-line">Understand source IP preservation and proxy protocol behavior.</p>
+<p class="text-line">Register targets across availability zones.</p>
+<p class="text-line">Keep backend services private behind the load balancer.</p>
+<p class="text-line">Use security groups that allow only intended load balancer flows.</p>
+<p class="text-line">Monitor rejected connections, target errors, latency, and resets.</p>
+<p class="text-line">Alert on healthy host count and user-facing error rate.</p>
+<p class="text-line">Use access logs and traces to identify backend bottlenecks.</p>
+<p class="text-line">Drain connections before replacing targets.</p>
+<p class="text-line">Use deployment canaries before changing all targets.</p>
+<p class="text-line">Use blue-green target groups for rapid switching.</p>
+<p class="text-line">Define rollback thresholds before a release.</p>
+<p class="text-line">Test DNS and load balancer failover regularly.</p>
+<p class="text-line">Check certificate chains and expiry in incident runbooks.</p>
+<p class="text-line">Check target security groups before changing application code.</p>
+<p class="text-line">Check route tables and NACLs for asymmetric reachability.</p>
+<p class="text-line">Check application host headers and path assumptions.</p>
+<p class="text-line">Avoid redirect loops when combining HTTP and HTTPS listeners.</p>
+<p class="text-line">Use WAF with ALB for managed web protections.</p>
+<p class="text-line">Tune WAF rules to reduce false positives.</p>
+<p class="text-line">Use rate-based rules for abusive request patterns.</p>
+<p class="text-line">Keep WAF exceptions owned and time-limited.</p>
+<p class="text-line">Use CloudFront when global caching reduces origin load.</p>
+<p class="text-line">Protect origins so traffic follows the intended path.</p>
+<p class="text-line">Use origin health and cache behavior deliberately.</p>
+<p class="text-line">Control DNS, load balancer, WAF, and certificate permissions separately.</p>
+<p class="text-line">Tag routing resources for owner, environment, and cost center.</p>
+<p class="text-line">Estimate DNS queries, load balancer hours, rules, logs, and transfer.</p>
+<p class="text-line">Clean unused target groups, listeners, records, and certificates.</p>
+<p class="text-line">Routing design must include failure behavior and operator visibility.</p>
+<h2 class="section-heading">9. DNS AND LOAD BALANCER OPERATIONS</h2>
+<h3 class="section-heading">EXAMPLE</h3>
+<div class="code-block">
+DNS and load balancer operations
+Record domain ownership, hosted zone type, resolver path, certificate owner, and renewal process.
+Choose TTLs from expected change frequency, resolver caching, and failover requirements.
+Use authoritative queries to verify a change before testing through a recursive resolver.
+Remember that cached DNS responses can outlive the configured TTL in some clients.
+Use weighted records for measured traffic experiments and document the rollback weight.
+Use failover records only when the secondary endpoint has been tested and can serve traffic.
+Make health checks represent a useful user journey without triggering expensive operations.
+Protect Route 53 changes with least privilege, review, and an auditable automation identity.
+Use private hosted zones for internal names and check VPC associations during diagnosis.
+Use DNSSEC when domain integrity requirements and operational ownership support it.
+Automate ACM certificate validation and alert before certificate expiration.
+For ALB, separate listeners, rules, target groups, and security groups by service boundary.
+Use HTTPS listeners with a current TLS policy and redirect HTTP intentionally.
+Choose host, path, header, and query routing rules that are deterministic and reviewable.
+Make target health checks test readiness and required local dependencies.
+Set deregistration delay and slow start to support graceful deployment transitions.
+Use NLB for transport-level protocols, static address needs, or high connection scale.
+Understand proxy protocol, source IP preservation, and TLS termination before enabling them.
+Register targets across zones and verify that cross-zone behavior matches cost and resilience goals.
+Keep targets private and allow inbound traffic only from the intended load balancer security group.
+Monitor healthy target count, target errors, connection errors, resets, latency, and saturation.
+Use access logs, traces, and deployment markers to connect requests with backend changes.
+Use blue-green target groups or canary weights for high-risk releases.
+Define rollback thresholds before shifting traffic and keep the previous target group ready.
+Check DNS, certificates, listener rules, target ports, routes, NACLs, and application host headers during incidents.
+Use WAF rate limits and managed rules with time-limited, owned exceptions.
+Use CloudFront when caching lowers origin load, then protect the origin from bypass traffic.
+Estimate query, load balancer, rule, log, WAF, certificate, and data-transfer cost.
+Remove unused records, target groups, listeners, certificates, and health checks after ownership review.
+Routing is reliable when changes are reversible and failure signals are visible at every layer.
+</div>
+<h2 class="section-heading">10. DNS CHANGE MANAGEMENT</h2>
+<p class="text-line">DNS change management</p>
+<p class="text-line">Record the registrar, hosted zone, authoritative nameservers, resolver rules, and domain owner.</p>
+<p class="text-line">Use infrastructure code for records and require review for production routing changes.</p>
+<p class="text-line">Validate record syntax, alias targets, health checks, and hosted zone before applying.</p>
+<p class="text-line">Use a low TTL only when the operational benefit justifies resolver query volume and cost.</p>
+<p class="text-line">Remember that clients and intermediate resolvers may cache records beyond the expected change window.</p>
+<p class="text-line">Test changes with dig against authoritative nameservers and from representative client networks.</p>
+<p class="text-line">Use weighted routing for canaries with an explicit initial weight and rollback weight.</p>
+<p class="text-line">Use failover routing only when the secondary endpoint has current data and working capacity.</p>
+<p class="text-line">Use latency routing when endpoint performance has been measured across the intended geographies.</p>
+<p class="text-line">Use geolocation routing only when location boundaries and fallback behavior are documented.</p>
+<p class="text-line">Use private hosted zones for internal names and verify VPC associations after network changes.</p>
+<p class="text-line">Protect record changes with least privilege, approval, audit logs, and emergency rollback access.</p>
+<p class="text-line">Monitor query failures, health check status, resolution latency, and unexpected endpoint changes.</p>
+<h2 class="section-heading">11. LOAD BALANCER DESIGN</h2>
+<p class="text-line">Load balancer design</p>
+<p class="text-line">Choose ALB for HTTP routing, WAF integration, host and path rules, and application semantics.</p>
+<p class="text-line">Choose NLB for TCP, TLS, UDP, static address, or very high connection requirements.</p>
+<p class="text-line">Use target groups that represent a stable service boundary and health behavior.</p>
+<p class="text-line">Configure listeners with explicit ports, TLS policies, certificates, and redirect behavior.</p>
+<p class="text-line">Order listener rules deliberately and test default actions for unexpected hosts and paths.</p>
+<p class="text-line">Keep target security groups restricted to the load balancer security group and required health ports.</p>
+<p class="text-line">Use deregistration delay and slow start to drain connections and warm new targets.</p>
+<p class="text-line">Set health checks to validate readiness without making expensive downstream calls.</p>
+<p class="text-line">Use access logs, target response codes, connection errors, resets, and latency to diagnose traffic.</p>
+<p class="text-line">Preserve correlation IDs from the edge through the application and downstream services.</p>
+<p class="text-line">Use cross-zone balancing deliberately after considering resilience, source IP, and transfer cost.</p>
+<p class="text-line">Understand proxy protocol and source address behavior before changing backend parsing.</p>
+<h2 class="section-heading">12. RELEASE AND INCIDENT WORKFLOW</h2>
+<p class="text-line">Release and incident workflow</p>
+<p class="text-line">Deploy a canary target group before changing all production targets.</p>
+<p class="text-line">Shift traffic gradually and compare error rate, latency, saturation, and business success metrics.</p>
+<p class="text-line">Keep the previous target group healthy until the observation window and rollback decision expire.</p>
+<p class="text-line">Define rollback thresholds before starting a weight, listener, or target change.</p>
+<p class="text-line">Check DNS, certificates, listeners, target health, routes, NACLs, and application host headers in order.</p>
+<p class="text-line">Check WAF logs for false positives before changing application code for rejected requests.</p>
+<p class="text-line">Use rate-based rules for abusive traffic and time-limited exceptions for legitimate clients.</p>
+<p class="text-line">Protect CloudFront origins so users cannot bypass intended WAF or authentication controls.</p>
+<p class="text-line">Monitor certificate expiry, healthy target count, 4xx and 5xx rates, connection resets, and latency.</p>
+<p class="text-line">Test DNS failover, target replacement, certificate renewal, WAF recovery, and origin failure.</p>
+<h2 class="section-heading">13. COST AND OWNERSHIP</h2>
+<p class="text-line">Cost and ownership</p>
+<p class="text-line">Estimate DNS queries, load balancer hours, listener rules, WAF requests, logs, and data transfer.</p>
+<p class="text-line">Remove unused records, health checks, target groups, listeners, certificates, and access logs.</p>
+<p class="text-line">Tag routing resources with owner, service, environment, and cost center.</p>
+<p class="text-line">Routing operations work when the edge path is tested end to end, not only when each component is green.</p>
+<p class="text-line">Edge release checklist</p>
+<p class="text-line">Confirm the certificate covers every host name used by the listener and redirect path.</p>
+<p class="text-line">Validate security group sources, listener ports, target ports, and health-check protocol together.</p>
+<p class="text-line">Check that application frameworks trust the expected proxy headers and preserve client context safely.</p>
+<p class="text-line">Test large headers, request bodies, websocket behavior, redirects, and timeout boundaries.</p>
+<p class="text-line">Verify that WAF rules do not block health checks, authentication callbacks, or required APIs.</p>
+<p class="text-line">Use separate WAF rules and logging for production, staging, and security testing.</p>
+<p class="text-line">Keep rate limits below legitimate burst capacity and document the calculation.</p>
+<p class="text-line">Use CloudFront cache keys that exclude secrets and vary only on required headers or parameters.</p>
+<p class="text-line">Configure origin timeouts and retry behavior so edge retries do not multiply backend load.</p>
+<p class="text-line">Protect origin endpoints from direct access when traffic should pass through the edge controls.</p>
+<p class="text-line">Use a synthetic check from outside the provider network for public availability.</p>
+<p class="text-line">Use a private synthetic check for internal names and private load balancers.</p>
+<p class="text-line">Record resolver, edge, target, and application timestamps when diagnosing latency.</p>
+<p class="text-line">Check whether errors originate at DNS, TLS, WAF, listener rules, target health, or application code.</p>
+<p class="text-line">Use access logs with controlled retention and redact query values that contain sensitive data.</p>
+<p class="text-line">Set alarms for no healthy targets, elevated target 5xx, TLS failures, and DNS health-check failure.</p>
+<p class="text-line">Page on customer impact, not only on one target replacement in a redundant pool.</p>
+<p class="text-line">Use weighted canary records or target groups and compare business success metrics.</p>
+<p class="text-line">Stop traffic shifting when latency, error rate, or saturation exceeds the predeclared threshold.</p>
+<p class="text-line">Keep the previous DNS record, listener rules, target group, and certificate available for rollback.</p>
+<p class="text-line">Test rollback propagation time against the actual resolver and client caching behavior.</p>
+<p class="text-line">Test a failed certificate renewal before the certificate is close to expiration.</p>
+<p class="text-line">Verify domain registrar access and recovery contacts independently from application access.</p>
+<p class="text-line">Restrict Route 53 changes to automation roles with a reviewed deployment path.</p>
+<p class="text-line">Audit health-check and record changes because they can redirect customer traffic.</p>
+<p class="text-line">Keep DNS failover data and application capacity synchronized before declaring a secondary ready.</p>
+<p class="text-line">Use connection draining and deregistration delay before removing targets from service.</p>
+<p class="text-line">Check cross-zone transfer and log delivery cost after changing load balancer topology.</p>
+<p class="text-line">Clean old aliases, health checks, target groups, certificates, and WAF rules after ownership review.</p>
+<p class="text-line">Maintain an edge incident runbook with provider status, escalation, rollback, and communication steps.</p>
+<p class="text-line">Edge reliability depends on correct DNS, secure TLS, healthy targets, and measured traffic changes.</p>
+<p class="text-line">Record the final traffic weight, healthy target count, and rollback deadline after every canary.</p>
+<p class="text-line">Review DNS and edge ownership when domains, teams, or providers change.</p>
+<p class="text-line">Keep certificate renewal evidence with the release and operational records.</p>
+<p class="text-line">Test client behavior when DNS answers change during an active connection.</p>
+<p class="text-line">Use edge cost and request-volume trends to identify unused routing resources.</p>
+<p class="text-line">Document the expected propagation and drain time in the rollback runbook.</p>
+</article></main></body></html>

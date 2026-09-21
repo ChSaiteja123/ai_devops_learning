@@ -1,0 +1,245 @@
+AWS EC2 and Security Groups
+===========================
+
+PURPOSE / OVERVIEW
+--------------------------------------------------------------------------------
+Amazon EC2 provides resizable virtual servers in the cloud. It is one of the most commonly used AWS compute services.
+
+1. EC2 FEATURES
+--------------------------------------------------------------------------------
+EC2 features
+
+- configurable instance type
+- operating system choice
+- elastic IP support
+- auto-scaling integration
+- IAM role support
+
+2. SECURITY GROUPS
+--------------------------------------------------------------------------------
+[SECURITY] Security Groups
+
+- act as virtual firewalls for EC2 instances
+- allow inbound/outbound traffic rules
+- stateful, meaning return traffic is allowed automatically
+
+3. EXAMPLE
+--------------------------------------------------------------------------------
+Example
+
+[SECURITY] Security Group inbound rules:
+- SSH from 0.0.0.0/0 on port 22
+- HTTP from 0.0.0.0/0 on port 80
+- HTTPS from 0.0.0.0/0 on port 443
+
+4. COMMON EC2 USE CASES
+--------------------------------------------------------------------------------
+Common EC2 use cases
+
+- run web servers
+- host application backends
+- run Jenkins agents
+- host deployment tools
+- serve APIs and static applications
+
+5. BEST PRACTICES
+--------------------------------------------------------------------------------
+Best practices
+
+- use IAM roles instead of long-lived keys
+- restrict security group access
+- use private subnets for application workloads
+- enable monitoring and patching
+
+6. PRODUCTION GUIDANCE
+--------------------------------------------------------------------------------
+EC2 is foundational infrastructure for many DevOps pipelines and cloud deployments.
+
+7. EC2 DEEP DIVE
+--------------------------------------------------------------------------------
+EC2 deep dive
+An EC2 instance is virtual compute with a selected AMI and instance type.
+Choose instance families from measured CPU, memory, network, and storage needs.
+Use launch templates for repeatable instance configuration.
+Use autoscaling groups for replacement and capacity management.
+Distribute instances across availability zones.
+Use health checks that detect application failure, not only host failure.
+Use lifecycle hooks for draining and initialization.
+Use user data for bootstrap only when scripts are tested and idempotent.
+Prefer baked AMIs for predictable and fast startup.
+Patch base images and instance packages on a defined schedule.
+Use Systems Manager instead of broad SSH where appropriate.
+Attach IAM instance profiles with minimal permissions.
+Never place access keys in user data.
+Use encrypted EBS volumes and controlled KMS keys.
+Use snapshots with retention and restore testing.
+Remember snapshots are regional unless copied.
+Use gp3 or suitable volume types based on measured IOPS.
+Avoid ephemeral instance storage for durable data.
+Use private subnets for application instances.
+Use public subnets only for intentionally public components.
+Use NAT or private endpoints for outbound dependencies.
+[SECURITY] Security groups are stateful allow rules.
+[SECURITY] Security groups have no explicit deny rule.
+Keep ingress sources narrow and documented.
+Avoid 0.0.0.0/0 for administrative ports.
+Restrict SSH or RDP to identity-aware access paths.
+Use separate security groups for load balancers, apps, and databases.
+Reference security groups instead of fixed private IPs.
+Keep egress restrictions in mind for sensitive workloads.
+Use network ACLs as an additional subnet boundary.
+Log and review security group changes.
+Use tags for owner, environment, application, and expiry.
+Protect termination of critical instances with process checks.
+Do not treat termination protection as a backup.
+Use immutable replacement rather than manual host repair.
+Drain traffic before instance termination.
+Use lifecycle hooks for connection draining.
+Monitor CPU, memory, disk, network, and status checks.
+Install an agent for memory and filesystem metrics.
+Alert on user impact and capacity saturation.
+Use CloudWatch logs or a centralized log agent.
+Include instance ID, AMI, and deployment version in logs.
+Use encrypted transport for management and application traffic.
+Rotate certificates and inspect expiry.
+Use SSM patch baselines and compliance reports.
+Record approved exceptions for unpatched packages.
+Use vulnerability scanning for AMIs and running hosts.
+Remove unused packages and listening services.
+Apply host firewall policy as defense in depth.
+Use separate accounts for production workloads.
+Use SCPs to restrict forbidden regions and services.
+Use roles for operations and short-lived sessions.
+Audit CloudTrail events for access and network changes.
+Use VPC flow logs to investigate reachability.
+Check route tables when a service cannot connect.
+Check DNS resolution before changing security groups.
+Check NACL return rules for asymmetric failures.
+Check source security group references in the right VPC.
+Use Reachability Analyzer for supported network paths.
+Use Systems Manager Run Command for audited diagnostics.
+Avoid untracked manual changes that create configuration drift.
+Define an emergency access procedure and review it.
+Use private registries and signed images for deployments.
+Deploy through a pipeline with artifact identity.
+Use canary instances before changing an entire group.
+Keep rollback AMIs available during rollout.
+Test startup time against autoscaling response requirements.
+Pre-bake dependencies when bootstrap is too slow.
+Use warm pools when startup latency is critical.
+Use spot capacity for fault-tolerant workers only.
+Handle interruption notices and checkpoint work.
+Right-size from utilization data and workload profiles.
+Compare on-demand, reserved, savings plan, and spot options.
+Delete unattached volumes and stale snapshots.
+Stop nonproduction instances outside working hours.
+EC2 operations combine capacity planning with strict access control.
+
+8. EC2 LAUNCH AND INCIDENT WORKFLOW
+--------------------------------------------------------------------------------
+EC2 launch and incident workflow
+Confirm the target account, region, VPC, subnet, and security groups before launching instances.
+Use launch templates so AMI, instance type, storage, metadata, and tags are reviewable.
+Require IMDSv2 and disable unnecessary metadata access paths.
+Use a baked AMI for repeatable dependencies and keep bootstrap scripts short and idempotent.
+Validate user data in a disposable instance before using it in an autoscaling group.
+Use instance profiles with only the APIs required by the application.
+Encrypt root and data volumes with approved KMS keys and record the backup policy.
+Set deletion protection or process checks only as a supplement to tested backups.
+Use autoscaling health checks that include application readiness and dependency behavior.
+Configure lifecycle hooks to drain connections before termination or replacement.
+Keep at least one previous AMI or image digest available for rollback.
+Use Systems Manager Session Manager and Run Command for audited administration where possible.
+Restrict SSH to a controlled access path and verify host keys before maintenance.
+Separate load balancer, application, worker, and database security groups.
+Reference security groups rather than broad CIDR ranges for internal traffic.
+Document every inbound rule with source, port, owner, and removal condition.
+Review egress rules when the workload handles sensitive data or external integrations.
+Use VPC flow logs and Reachability Analyzer before changing a security group during an outage.
+Check route tables, DNS, NACLs, source ports, and endpoint policies in network diagnosis.
+Use CloudWatch agent metrics for memory, disk, and process health not supplied by default.
+Alert on status checks, failed health checks, saturation, and unexpected termination.
+Patch from a tested baseline and replace instances rather than manually repairing drift.
+Scan AMIs and running hosts for packages, listening ports, and vulnerable services.
+Use spot instances only for checkpointed or replaceable work.
+Compare on-demand, reserved, savings plan, and spot cost using observed utilization.
+Stop or schedule nonproduction capacity outside working hours.
+Delete unattached volumes, old snapshots, unused addresses, and obsolete launch templates.
+Test autoscaling under load and during an availability-zone loss.
+EC2 reliability comes from immutable replacement, narrow access, and evidence-driven capacity.
+
+9. EC2 LAUNCH CONTROLS
+--------------------------------------------------------------------------------
+EC2 launch controls
+Verify account, region, VPC, subnet, route table, and security groups before launch.
+Use a launch template with an AMI ID, instance type, metadata options, volumes, and tags.
+Require IMDSv2 and limit metadata hop behavior for workloads that do not need proxy access.
+Use encrypted EBS by default and restrict KMS key administration separately from usage.
+Set root and data volume deletion behavior intentionally for stateful and stateless instances.
+Use an instance profile instead of placing credentials in scripts, images, or user data.
+Keep user data idempotent, short, observable, and safe to rerun after interruption.
+Prefer a tested AMI when bootstrap time affects autoscaling or recovery objectives.
+Record AMI build inputs, patch date, installed agents, and vulnerability results.
+Use tags for owner, service, environment, release, cost center, and expiration.
+
+10. SECURITY GROUP DESIGN
+--------------------------------------------------------------------------------
+[SECURITY] Security group design
+Create separate groups for internet load balancers, internal load balancers, applications, workers, and databases.
+Allow application traffic from the correct source group rather than an entire subnet or VPC.
+Avoid public SSH, RDP, database, and cache ports; use Session Manager or controlled access paths.
+Document the business reason and owner for every administrative ingress rule.
+Keep egress rules narrow when the workload handles regulated data or can be abused for exfiltration.
+Remember that security groups allow traffic and do not provide explicit deny rules.
+Use NACLs for subnet-level controls only when their stateless behavior is understood.
+Review ephemeral return ports when changing NACLs or troubleshooting intermittent connections.
+Log security group changes through CloudTrail and review unexpected modifications.
+Use policy checks to reject broad ports, public databases, and unapproved source ranges.
+
+11. EC2 TROUBLESHOOTING
+--------------------------------------------------------------------------------
+EC2 troubleshooting
+Start with status checks, instance state, system logs, and recent deployment metadata.
+Check DNS, route tables, security groups, NACLs, and VPC endpoints before changing application code.
+Use VPC flow logs to distinguish rejected traffic from no traffic reaching the interface.
+Use Reachability Analyzer for supported source-to-destination paths.
+Use Systems Manager Run Command for repeatable diagnostics with an audit trail.
+Inspect CloudWatch agent data for memory, disk, process count, and filesystem pressure.
+Check dmesg and system logs for OOM kills, filesystem errors, kernel failures, and clock drift.
+Inspect application logs and health checks when the host is healthy but the target is unhealthy.
+Check lifecycle hooks and drain state when instances terminate while requests are active.
+Preserve instance ID, AMI, launch template version, and deployment digest in incident notes.
+
+12. EC2 FLEET RELIABILITY
+--------------------------------------------------------------------------------
+EC2 fleet reliability
+Use autoscaling groups across zones with a tested minimum, desired, and maximum capacity.
+Set capacity limits from quota, database connection, and downstream service constraints.
+Use lifecycle hooks to install agents, warm caches, and drain traffic safely.
+Use canary instances before changing an AMI, kernel, agent, or startup script across the group.
+Keep the previous launch template and AMI until the observation window and rollback plan expire.
+Use health checks that detect application readiness, not only a responsive operating system.
+Test zone loss, failed bootstrap, full disk, expired certificate, and failed dependency behavior.
+Use Spot only for interruptible work with checkpointing and replacement capacity.
+Schedule nonproduction instances and clean associated volumes and addresses when stopped.
+Review instance family utilization and network performance before resizing.
+EC2 management combines immutable images, least privilege, controlled network paths, and tested replacement.
+Use an approved AMI pipeline that patches, scans, signs, and publishes images with provenance.
+Remove compilers, debug tools, default users, and unused listeners from production images.
+Set filesystem, process, and file descriptor limits from measured workload needs.
+Use time synchronization and certificate monitoring because drift can break access and TLS.
+Keep SSM agent health visible and alert when managed instances disappear from inventory.
+Review IAM instance profile changes as carefully as security group changes.
+Use CloudTrail and Config history to identify manual changes that create launch-template drift.
+Protect EBS snapshots from unauthorized sharing and copy recovery data to a separate boundary.
+Test restoring an encrypted volume with the recovery role, key policy, and expected filesystem.
+Use a drain timeout that matches long-lived connections and message processing time.
+Keep autoscaling warm capacity within quota and budget limits.
+Use target tracking metrics that represent demand rather than a single noisy host metric.
+Investigate repeated replacements as an application or capacity defect, not normal healing.
+Use a documented emergency access path that expires and produces an audit record.
+Review public IP assignments, source/destination checks, and network interfaces after deployment.
+Keep instance and volume tags synchronized so cleanup automation cannot remove owned resources.
+Measure boot time, registration time, and readiness time against the recovery objective.
+EC2 runbooks should include launch, diagnose, drain, replace, restore, and cost-cleanup procedures.
+Review launch-template changes with the application owner before a fleet rollout.

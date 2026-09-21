@@ -1,0 +1,34 @@
+# 18_storageclass.yaml — StorageClass for dynamic provisioning
+# AWS EBS gp3 storage class
+# Usage: kubectl apply -f 18_storageclass.yaml
+
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: gp3-fast
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "true"
+provisioner: ebs.csi.aws.com
+volumeBindingMode: WaitForFirstConsumer    # provision when pod is scheduled
+reclaimPolicy: Delete
+allowVolumeExpansion: true
+parameters:
+  type: gp3
+  iops: "3000"
+  throughput: "125"
+  encrypted: "true"
+  kmsKeyId: "arn:aws:kms:us-east-1:123456789:key/mrk-abc123"
+---
+# Shared ReadWriteMany storage via EFS
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: efs-shared
+provisioner: efs.csi.aws.com
+reclaimPolicy: Retain
+parameters:
+  provisioningMode: efs-ap
+  fileSystemId: fs-0123456789
+  directoryPerms: "700"
+  gidRangeStart: "1000"
+  gidRangeEnd: "2000"

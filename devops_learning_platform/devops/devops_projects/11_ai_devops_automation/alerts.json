@@ -1,0 +1,18 @@
+[
+  {
+    "alert_id": "ALERT-1001",
+    "service": "checkout-api",
+    "severity": "critical",
+    "symptom": "HTTP 500 rate is above 10 percent",
+    "environment": "production",
+    "owner": "payments-platform"
+  },
+  {
+    "alert_id": "ALERT-1002",
+    "service": "worker",
+    "severity": "warning",
+    "symptom": "Queue age is above five minutes",
+    "environment": "production",
+    "owner": "orders-platform"
+  }
+]

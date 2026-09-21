@@ -1,0 +1,25 @@
+# 16_service_headless.yaml — Headless Service for StatefulSet / direct pod DNS
+# Use case: Kafka, Cassandra, Redis Cluster — apps that need to discover individual pods
+# DNS returns all pod IPs instead of a single ClusterIP
+# Usage: kubectl apply -f 16_service_headless.yaml -n dev
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka-headless
+  namespace: dev
+  labels:
+    app: kafka
+spec:
+  clusterIP: None        # <-- this makes it headless
+  selector:
+    app: kafka
+  ports:
+    - name: broker
+      port: 9092
+      targetPort: 9092
+    - name: controller
+      port: 9093
+      targetPort: 9093
+# Pod DNS: kafka-0.kafka-headless.dev.svc.cluster.local
+#           kafka-1.kafka-headless.dev.svc.cluster.local

@@ -1,0 +1,261 @@
+Docker
+========================
+
+PURPOSE / OVERVIEW
+--------------------------------------------------------------------------------
+Docker is a containerization platform used to package applications and their dependencies into portable containers.
+
+1. WHY DOCKER MATTERS
+--------------------------------------------------------------------------------
+Why Docker matters
+
+- consistent environments across local and production
+- faster deployment
+- simplified dependency management
+- easy scaling and isolation
+
+2. CORE CONCEPTS
+--------------------------------------------------------------------------------
+Core concepts
+
+- Dockerfile: instructions to build an image
+- Image: packaged application with runtime and dependencies
+- Container: running instance of an image
+- Registry: stores Docker images
+
+3. DOCKERFILE EXAMPLE
+--------------------------------------------------------------------------------
+Dockerfile example
+
+FROM python:3.11-slim
+WORKDIR /app
+COPY . /app
+RUN pip install -r requirements.txt
+EXPOSE 8000
+CMD ["python", "app.py"]
+
+4. BUILD COMMAND
+--------------------------------------------------------------------------------
+Build command
+
+COMMANDS
+----------------------------------------
+docker build -t myapp:latest .
+
+5. RUN COMMAND
+--------------------------------------------------------------------------------
+Run command
+
+COMMANDS
+----------------------------------------
+docker run -d -p 8000:8000 myapp:latest
+
+6. SECURITY SCANNING
+--------------------------------------------------------------------------------
+[SECURITY] Security scanning
+
+COMMANDS
+----------------------------------------
+Trivy can scan a Docker image before it is published:
+trivy image --severity HIGH,CRITICAL --exit-code 1 myapp:latest
+
+7. TROUBLESHOOTING AND OPERATIONS
+--------------------------------------------------------------------------------
+In a Jenkins pipeline, build the image first and scan the exact image tag that would be promoted to a registry.
+
+8. USEFUL COMMANDS
+--------------------------------------------------------------------------------
+Useful commands
+
+- docker ps
+- docker images
+- docker logs <container>
+- docker stop <container>
+- docker rm <container>
+- docker rmi <image>
+
+9. BENEFITS
+--------------------------------------------------------------------------------
+Benefits
+
+- environment parity
+- fewer "works on my machine" problems
+- simplified application delivery
+
+10. WORKFLOWS AND PRACTICES
+--------------------------------------------------------------------------------
+EXAMPLE
+----------------------------------------
+Docker is a fundamental technology for modern DevOps and Kubernetes-based deployment workflows.
+
+11. DOCKER DEEP DIVE
+--------------------------------------------------------------------------------
+EXAMPLE
+----------------------------------------
+Docker deep dive
+An image is an immutable filesystem layer collection and metadata.
+A container is an isolated process created from an image.
+Tags are mutable labels, so production should use digests.
+Use a trusted base image with a support lifecycle.
+Use multi-stage builds to remove compilers from runtime images.
+Copy dependency manifests before source code for safe cache reuse.
+Use lockfiles and deterministic package installation.
+Run the final image as a non-root user.
+Set explicit ownership and permissions during the build.
+Never bake secrets into image layers.
+Deleted secrets remain recoverable from image history.
+Use BuildKit secret mounts for private build dependencies.
+Use .dockerignore to exclude Git data, caches, and local secrets.
+Pin base images by digest when reproducibility matters.
+Scan base images and dependencies on every release.
+Generate an SBOM and sign the published image.
+Use a trusted registry with access logs and retention rules.
+Protect production tags from overwrite.
+Promote one image digest across environments.
+Add labels for source revision, owner, version, and build time.
+Use exec-form ENTRYPOINT and CMD for correct signal delivery.
+Handle SIGTERM and finish graceful shutdown within the stop timeout.
+Separate readiness checks from liveness checks.
+Avoid health checks that depend on unrelated external systems.
+Set CPU, memory, and process limits.
+Use a read-only root filesystem when possible.
+Mount writable paths explicitly as volumes or temporary filesystems.
+Drop unnecessary Linux capabilities.
+Use seccomp and platform MAC policies where available.
+Avoid privileged containers and host namespace sharing.
+Never mount the Docker socket into untrusted workloads.
+Rootless mode can reduce daemon privilege when compatibility permits.
+Keep the host kernel and container runtime patched.
+Use docker inspect for configuration and mount diagnosis.
+Use docker logs with timestamps for first response.
+Use docker stats to inspect resource pressure.
+Use docker events to correlate lifecycle changes.
+Prune only after identifying resources that are safe to remove.
+Data in a writable layer is not durable application storage.
+Back up named volumes with an application-consistent process.
+Use user-defined networks for service discovery and isolation.
+Publish only ports that users or dependencies require.
+Do not bind administration ports to every host interface.
+Use TLS and authentication on exposed endpoints.
+Keep environment configuration outside the image.
+Use a secret store or runtime secret mount for sensitive values.
+Validate configuration at startup and fail clearly.
+Use Compose for local multi-service development.
+Do not assume Compose defaults match production orchestration.
+Log to stdout and stderr for runtime collection.
+Do not write unbounded logs inside the container filesystem.
+Use structured logs with request and deployment identifiers.
+Test signal propagation and shutdown behavior in CI.
+Test the exact digest that will be deployed.
+Run integration tests against disposable dependencies.
+Check startup, health, ports, permissions, and migration behavior.
+Triage scanner findings by exploitability and reachability.
+Do not ignore unfixed findings without an owner and expiry.
+Fail builds on policy-defined critical vulnerabilities.
+Keep scanner databases current and record scan time.
+Review base image licenses and distribution terms.
+Use registry mirrors to improve availability and control downloads.
+Limit image push and pull credentials.
+Audit who can overwrite tags or delete images.
+Preserve deployed digests for rollback.
+Remove package caches from final layers.
+Avoid copying tests and source into runtime images unnecessarily.
+Use regional registries to reduce transfer cost.
+Build each required CPU architecture and test it.
+Publish multi-platform manifests only after all variants pass.
+Record builder version and build context.
+Prevent cache poisoning from untrusted branches.
+Use isolated builders for sensitive releases.
+Lint Dockerfiles automatically and review exceptions.
+Schedule base image upgrades rather than allowing drift.
+Define an emergency patch process for vulnerable bases.
+Monitor restart loops, OOM kills, health failures, and pull errors.
+Alert on user impact rather than every replacement.
+Pause and roll back unhealthy deployments.
+Drain connections before removing old containers.
+Keep migrations compatible with mixed image versions.
+Document ports, volumes, environment variables, and health semantics.
+Container packaging works best when runtime assumptions are explicit.
+Inspect every published image.
+Use immutable image digests.
+Scan every release candidate.
+Generate an SBOM.
+Sign trusted images.
+Verify signatures at deployment.
+Use non-root runtime users.
+Drop unnecessary capabilities.
+Avoid privileged containers.
+Avoid host namespace sharing.
+Protect the Docker socket.
+Use read-only filesystems.
+Limit CPU and memory.
+Define graceful shutdown.
+Test signal delivery.
+Define readiness behavior.
+Define liveness behavior.
+Keep logs bounded.
+Externalize configuration.
+Externalize secrets.
+Protect registry credentials.
+Audit tag changes.
+Retain rollback digests.
+Test volume restores.
+Test network isolation.
+Test image startup.
+Test architecture variants.
+Review base image lifecycle.
+Docker security is runtime security.
+
+12. CONTAINER RELEASE VERIFICATION
+--------------------------------------------------------------------------------
+Container release verification
+Compare the promoted digest with the digest tested by integration and smoke tests.
+Verify the runtime user, read-only paths, capabilities, health state, and exposed ports.
+Test graceful shutdown while requests are active and confirm connections drain correctly.
+Record the previous digest, registry location, SBOM, signature, and rollback owner.
+Remove stale local images and volumes only after checking that no recovery path depends on them.
+Review registry audit logs after unexpected pulls, tag changes, or deletion events.
+Check container DNS and user-defined network membership before debugging application endpoints.
+Inspect mounted files and environment sources when configuration differs between hosts.
+Compare container architecture with the node architecture after an exec format error.
+Use a temporary diagnostic container rather than modifying the production image in place.
+Confirm that a restart policy is not masking a deterministic configuration failure.
+Test log rotation and verify that blocked logging cannot stop the application process.
+Keep runtime images small to reduce transfer time, vulnerability surface, and storage cost.
+Review Dockerfile instructions for unnecessary package managers, shells, and build tools.
+Use non-root file ownership that matches the runtime UID rather than changing permissions broadly.
+Document the exact command, compose profile, or orchestrator definition used to start the service.
+Container operations are repeatable when image identity, runtime configuration, and data ownership are explicit.
+
+13. IMAGE BUILD AND RUNTIME TROUBLESHOOTING
+--------------------------------------------------------------------------------
+Image build and runtime troubleshooting
+Use a pinned builder and record the build context, source revision, and base digest.
+Run docker build --pull when refreshing a base image is intentional.
+Use docker history to investigate unexpected layers or copied files.
+Use docker inspect to compare environment, mounts, networks, and health configuration.
+Use docker exec only for controlled diagnosis, never as an undocumented production fix.
+Check docker logs --since and container exit codes before restarting repeatedly.
+Use docker stats to distinguish CPU pressure, memory pressure, and idle processes.
+Inspect disk usage with docker system df before pruning images or volumes.
+Use docker compose config to validate interpolated local configuration.
+Separate development Compose files from production orchestration manifests.
+Use explicit healthcheck start periods for applications with migrations or warm-up work.
+Ensure the process receiving PID 1 handles SIGTERM and reaps child processes.
+Set stop timeouts that allow graceful connection draining.
+Keep application data in managed storage or named volumes with tested backups.
+Mount configuration read-only when the process does not need to modify it.
+Use tmpfs for sensitive short-lived files when the platform supports it.
+Limit container processes with pids limits and resource reservations.
+Use restart policies only when repeated restarts will not hide a permanent failure.
+Test image behavior with missing optional dependencies and invalid configuration.
+Verify that the image starts without network access when the application should be self-contained.
+Test registry pull permissions using the same identity as the deployment platform.
+Retain the deployed digest and previous digest for rapid rollback.
+Use admission policy to reject unsigned, mutable, or privileged images.
+Review image licenses and remove packages that are not required at runtime.
+Schedule rebuilds for operating system security updates even when application code is unchanged.
+Document ports, required capabilities, writable paths, signals, and health semantics.
+Measure build cache hit rate and registry transfer time to control delivery cost.
+Test multi-architecture images on each supported architecture before publication.
+Container security includes the host kernel, runtime, registry, image, and application configuration.

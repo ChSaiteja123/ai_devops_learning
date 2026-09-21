@@ -1,0 +1,67 @@
+# 11_install_configure_postgres.yaml — Install and configure PostgreSQL
+# Usage: ansible-playbook -i inventory/hosts.ini 02_intermediate/11_install_configure_postgres.yaml
+---
+- name: Install and configure PostgreSQL
+  hosts: dbservers
+  become: true
+
+  vars:
+    postgres_version: "15"
+    postgres_data_dir: "/var/lib/postgresql/{{ postgres_version }}/main"
+    db_name: appdb
+    db_user: appuser
+    # In production, store this in Ansible Vault, not plaintext!
+    db_password: "ChangeMe_UseVault"
+    postgres_listen_addresses: "localhost"
+    max_connections: 100
+
+  tasks:
+    - name: Install PostgreSQL
+      ansible.builtin.apt:
+        name:
+          - "postgresql-{{ postgres_version }}"
+          - "postgresql-contrib"
+          - python3-psycopg2     # required for Ansible postgresql modules
+        state: present
+
+    - name: Ensure PostgreSQL is started and enabled
+      ansible.builtin.service:
+        name: postgresql
+        state: started
+        enabled: true
+
+    - name: Configure PostgreSQL listen address
+      ansible.builtin.lineinfile:
+        path: "{{ postgres_data_dir }}/postgresql.conf"
+        regexp: "^#?listen_addresses"
+        line: "listen_addresses = '{{ postgres_listen_addresses }}'"
+      notify: Restart PostgreSQL
+
+    - name: Set max connections
+      ansible.builtin.lineinfile:
+        path: "{{ postgres_data_dir }}/postgresql.conf"
+        regexp: "^#?max_connections"
+        line: "max_connections = {{ max_connections }}"
+      notify: Restart PostgreSQL
+
+    - name: Create database
+      community.postgresql.postgresql_db:
+        name: "{{ db_name }}"
+        state: present
+      become_user: postgres
+
+    - name: Create database user
+      community.postgresql.postgresql_user:
+        db: "{{ db_name }}"
+        name: "{{ db_user }}"
+        password: "{{ db_password }}"
+        priv: "ALL"
+        state: present
+      become_user: postgres
+      no_log: true        # don't log the password!
+
+  handlers:
+    - name: Restart PostgreSQL
+      ansible.builtin.service:
+        name: postgresql
+        state: restarted

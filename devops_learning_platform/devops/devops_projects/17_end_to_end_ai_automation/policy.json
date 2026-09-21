@@ -1,0 +1,5 @@
+{
+  "critical_requires_approval": true,
+  "allowed_actions": ["inspect_dashboard", "create_incident", "prepare_rollback"],
+  "blocked_actions": ["delete_data", "rotate_production_secrets", "execute_unreviewed_command"]
+}

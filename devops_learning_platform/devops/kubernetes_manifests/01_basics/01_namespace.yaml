@@ -1,0 +1,26 @@
+# 01_namespace.yaml — Create isolated namespaces for environments
+# Usage: kubectl apply -f 01_namespace.yaml
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dev
+  labels:
+    environment: development
+    team: platform
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: staging
+  labels:
+    environment: staging
+    team: platform
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: production
+  labels:
+    environment: production
+    team: platform

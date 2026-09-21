@@ -1,0 +1,79 @@
+# 17_docker_management.yaml — Install Docker and manage containers with Ansible
+# Usage: ansible-playbook -i inventory/hosts.ini 03_advanced/17_docker_management.yaml
+---
+- name: Install and configure Docker
+  hosts: webservers
+  become: true
+
+  vars:
+    docker_compose_version: "2.24.0"
+    app_image: myapp
+    app_version: "v2.1"
+    registry_url: "123456789.dkr.ecr.us-east-1.amazonaws.com"
+    containers:
+      - name: webapp
+        image: "{{ registry_url }}/{{ app_image }}:{{ app_version }}"
+        ports:
+          - "8000:8000"
+        env:
+          APP_ENV: production
+      - name: redis
+        image: redis:7-alpine
+        ports:
+          - "6379:6379"
+
+  tasks:
+    - name: Install Docker prerequisites
+      ansible.builtin.apt:
+        name:
+          - ca-certificates
+          - curl
+          - gnupg
+        state: present
+
+    - name: Add Docker GPG key
+      ansible.builtin.apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add Docker apt repository
+      ansible.builtin.apt_repository:
+        repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+        state: present
+
+    - name: Install Docker engine
+      ansible.builtin.apt:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-buildx-plugin
+        state: present
+
+    - name: Start and enable Docker
+      ansible.builtin.service:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: Add ubuntu user to docker group
+      ansible.builtin.user:
+        name: ubuntu
+        groups: docker
+        append: true
+
+    - name: Pull Docker images
+      community.docker.docker_image:
+        name: "{{ item.image }}"
+        source: pull
+      loop: "{{ containers }}"
+
+    - name: Run application containers
+      community.docker.docker_container:
+        name: "{{ item.name }}"
+        image: "{{ item.image }}"
+        state: started
+        restart_policy: unless-stopped
+        ports: "{{ item.ports | default([]) }}"
+        env: "{{ item.env | default({}) }}"
+      loop: "{{ containers }}"

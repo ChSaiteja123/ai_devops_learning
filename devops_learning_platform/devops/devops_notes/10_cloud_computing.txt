@@ -1,0 +1,249 @@
+Cloud Computing
+========================
+
+PURPOSE / OVERVIEW
+--------------------------------------------------------------------------------
+Cloud computing provides on-demand computing resources over the internet. It allows teams to scale infrastructure without physically owning hardware.
+
+1. CLOUD SERVICE MODELS
+--------------------------------------------------------------------------------
+Cloud service models
+
+EXAMPLE
+----------------------------------------
+- IaaS: Infrastructure as a Service
+  Example: EC2, VPC, EBS
+- PaaS: Platform as a Service
+  Example: Elastic Beanstalk, App Service
+- SaaS: Software as a Service
+  Example: Gmail, Office 365
+
+2. KEY CLOUD ADVANTAGES
+--------------------------------------------------------------------------------
+Key cloud advantages
+
+- elasticity
+- cost optimization
+- faster provisioning
+- global availability
+- lower operational burden
+
+3. CLOUD PROVIDERS
+--------------------------------------------------------------------------------
+Cloud providers
+
+- AWS
+- Microsoft Azure
+- Google Cloud Platform
+
+4. CLOUD ARCHITECTURE USUALLY INCLUDES
+--------------------------------------------------------------------------------
+Cloud architecture usually includes
+
+- compute
+- storage
+- networking
+- identity and access management
+- monitoring
+- security
+
+5. EXAMPLE
+--------------------------------------------------------------------------------
+Example
+
+A Python application is deployed on EC2 or Kubernetes in AWS, stores data in RDS, and uses S3 for static assets.
+
+6. PRODUCTION GUIDANCE
+--------------------------------------------------------------------------------
+The cloud is central to modern DevOps workflows and production system design.
+[IMPORTANT] Define identity, network, recovery, compliance, and cost controls before launching production workloads.
+
+7. CLOUD COMPUTING DEEP DIVE
+--------------------------------------------------------------------------------
+Cloud computing deep dive
+Cloud resources are delivered through programmable control planes.
+IaaS provides compute, storage, and networking primitives.
+PaaS manages more runtime responsibility for the customer.
+SaaS delivers a complete application capability.
+Public clouds use provider-operated shared infrastructure.
+Private clouds provide dedicated or controlled environments.
+Hybrid clouds connect environments through identity and network flows.
+Multi-cloud increases options and operational complexity.
+Define workload requirements before selecting services.
+Record availability, latency, compliance, residency, and recovery needs.
+Use a landing zone with accounts, identity, networking, and logging.
+Separate production and nonproduction boundaries.
+Use organization policies to prevent unsafe regions and public exposure.
+Centralize audit logs with restricted access.
+Use identity federation and short-lived credentials.
+Avoid shared administrator accounts.
+Apply least privilege to people and workloads.
+Require MFA for privileged access.
+Keep emergency access monitored and time-limited.
+Encrypt data at rest and in transit.
+Manage keys with an approved KMS.
+Rotate keys and test access after rotation.
+Classify data before choosing storage and retention.
+Use private networking for internal services.
+Expose only required endpoints through controlled gateways.
+Segment management, application, and data traffic.
+Treat DNS and identity as critical dependencies.
+Design for zone or region failure when required.
+Define recovery point and recovery time objectives.
+Test failover and restoration regularly.
+Prefer managed services when operational value exceeds lock-in cost.
+Understand service quotas before launch.
+Request quota increases before growth events.
+Use autoscaling with realistic bounds.
+Avoid scaling from noisy metrics alone.
+Use queues to absorb bursts.
+Use stateless compute for horizontal scale.
+Keep durable data outside replaceable instances.
+Use immutable images and infrastructure as code.
+Tag resources with owner, environment, and cost center.
+Use budgets and anomaly detection for spending.
+Delete unused disks, snapshots, IPs, and test environments.
+Schedule nonproduction resources off when idle.
+Compare reserved capacity with measured usage.
+Include transfer, logging, backup, and support charges.
+Optimize total cost, not only unit price.
+Measure utilization before rightsizing.
+Use lifecycle policies for objects and logs.
+Control cross-zone and cross-region transfer.
+Keep chatty services close to their data.
+Use caching and compression for high-volume traffic.
+Define service ownership and escalation paths.
+Create runbooks for quota, identity, network, and provider incidents.
+Monitor control-plane actions and workload health.
+Use provider status as one signal, not the only signal.
+Document exit assumptions for critical managed services.
+Review provider terms and support levels.
+Map regulatory requirements to concrete controls.
+Retain compliance evidence for required periods.
+Use policy as code for repeatable governance.
+Patch images, hosts, runtimes, and dependencies.
+Scan images and infrastructure continuously.
+Restrict public IP addresses and admin ports.
+Use identity-aware access for administration.
+Monitor authentication and privilege anomalies.
+Use workload identities instead of embedded keys.
+Keep credentials out of images and logs.
+Test secret revocation and replacement.
+Use canaries for provider or platform changes.
+Keep rollback procedures versioned.
+Use feature flags for user-visible behavior.
+Validate health after scaling and failover.
+Trace requests across managed service boundaries.
+Control log and trace retention costs.
+Set alerts around user-facing objectives.
+Practice incident communication with providers.
+Record provider case numbers in timelines.
+Run disaster recovery exercises with stakeholders.
+Cloud follows a shared responsibility model.
+
+8. CLOUD ARCHITECTURE AND OPERATIONS CHECKLIST
+--------------------------------------------------------------------------------
+Cloud architecture and operations checklist
+Write a workload decision record before choosing a managed service or deployment model.
+Record expected traffic, data size, latency, availability, compliance, and growth assumptions.
+Choose a failure boundary that matches the required recovery point and recovery time.
+Separate accounts or projects when a workload needs a strong administrative boundary.
+Use a landing zone with identity, logging, network, policy, and billing ownership.
+Centralize audit events in a protected account with restricted deletion permissions.
+Use federation and short-lived sessions for humans and workload identities for applications.
+Require MFA for privileged access and monitor emergency access continuously.
+Keep application, management, and data networks separate.
+Use private endpoints and gateways before adding public IP addresses.
+Document every internet-facing endpoint, owner, certificate, and authentication method.
+Use quotas as capacity constraints and request increases before planned launches.
+Model provider dependencies, control-plane outages, and regional failure modes.
+Keep critical data in durable services with tested backup and restore procedures.
+Test failover with realistic traffic and verify that clients honor DNS and retry behavior.
+Use immutable artifacts and infrastructure as code to rebuild rather than repair instances.
+Set budgets for normal use and alerts for anomalous spend.
+Include egress, NAT, load balancer, logging, backup, support, and managed-service charges.
+Measure utilization before buying reserved capacity or resizing production resources.
+Use lifecycle policies for idle environments, snapshots, logs, and object storage.
+Tag every resource with owner, environment, service, cost center, and expiration when temporary.
+Create runbooks for identity lockout, quota exhaustion, network failure, provider incident, and restore.
+Monitor user-facing objectives separately from provider health dashboards.
+Keep an exit plan for critical vendors, including data export and identity dependencies.
+Review compliance evidence, retention, and data residency after architecture changes.
+Run a disaster recovery exercise at least as often as the business requires proof of recovery.
+Cloud reliability is a product of architecture, operating discipline, and feedback from real usage.
+
+9. CLOUD LANDING ZONE CONTROLS
+--------------------------------------------------------------------------------
+Cloud landing zone controls
+Create separate accounts or projects for production, security, centralized logging, and experimentation.
+Use an organization root only for billing and carefully controlled governance actions.
+Delegate account administration through roles rather than shared root credentials.
+Record approved regions, services, instance families, and data classifications.
+Apply preventive policies before teams create resources, not only after drift appears.
+Require owner, environment, service, cost center, and expiration tags through policy.
+Send audit logs to a central destination that workload administrators cannot delete.
+Protect log archives with encryption, retention, and limited read access.
+Use a standard network pattern with address management, private service access, and egress controls.
+Define an approved path for internet ingress through gateways, WAF, and load balancers.
+Define an approved path for administration through federation, bastions, or identity-aware access.
+Keep break-glass roles disabled or tightly monitored when not in use.
+Test account recovery, identity provider failure, and loss of a primary administrator.
+
+10. CLOUD WORKLOAD DESIGN
+--------------------------------------------------------------------------------
+Cloud workload design
+Separate stateless compute from durable data so instances can be replaced automatically.
+Use queues, caches, and backpressure when producers can outpace consumers.
+Choose synchronous calls only when their timeout and failure behavior are acceptable.
+Set timeouts at every network boundary and budget total request time across dependencies.
+Use idempotency keys for payment, provisioning, and other retried operations.
+Use managed identity and workload roles instead of credentials embedded in application settings.
+Keep encryption keys, secrets, and data stores in services with independent access policies.
+Use immutable images and versioned infrastructure rather than manual console changes.
+Design health checks around readiness, dependency state, and user impact.
+Use autoscaling limits that protect quotas, databases, and downstream services.
+Use circuit breakers and load shedding when a dependency becomes unavailable.
+Define a degraded mode for noncritical features before an outage occurs.
+Use regional or zonal redundancy only where the recovery objective justifies the cost.
+Document which data may be reconstructed and which data must be replicated.
+
+11. CLOUD COST AND GOVERNANCE
+--------------------------------------------------------------------------------
+Cloud cost and governance
+Allocate shared platform cost with tags, accounts, usage dimensions, or chargeback rules.
+Review idle resources, unattached storage, old snapshots, and unused public addresses weekly.
+Use budgets for teams and environments rather than relying only on an organization total.
+Investigate cost anomalies by deployment, traffic, storage growth, and data transfer.
+Include observability, backup, support, and egress in the cost of a service.
+Prefer autoscaling and scheduling to permanent overprovisioning in nonproduction.
+Use committed discounts only after baseline usage is stable and cancellation risk is understood.
+Measure performance and availability before choosing a cheaper service tier.
+Avoid cross-region and cross-zone traffic for chatty paths unless resilience requires it.
+Use compression, caching, batching, and lifecycle policies to reduce transfer and storage.
+Give temporary environments an owner and an automatic expiration mechanism.
+
+12. CLOUD INCIDENT RESPONSE
+--------------------------------------------------------------------------------
+Cloud incident response
+Keep provider status, account contacts, quota limits, and escalation paths in the incident runbook.
+Capture request IDs, region, account, resource identifiers, and timestamps in provider cases.
+Check control-plane status separately from data-plane user impact.
+Use a known-good region, account, or artifact only when its dependencies are documented.
+Do not make unrelated architecture changes during a provider incident without a review.
+Preserve audit logs and deployment evidence before rotating credentials or deleting resources.
+Validate restored service from the user path, not only from a provider console state.
+Record recovery gaps as engineering work with an owner, priority, and due date.
+Cloud practice is mature when controls are preventive, recovery is tested, and cost is explainable.
+Use service quotas as part of capacity planning and monitor headroom before growth events.
+Keep an inventory of public endpoints, data stores, identities, and third-party dependencies.
+Test the application when a provider returns throttling, timeout, partial failure, or stale data.
+Use exponential backoff with jitter and idempotency for calls that may be retried.
+Protect asynchronous workloads with dead-letter queues and an operator replay procedure.
+Review shared responsibility assumptions whenever a managed service or deployment model changes.
+Keep architecture diagrams linked to owners, runbooks, recovery tests, and current resource identifiers.
+Validate that logging and monitoring remain available during regional or identity-provider failures.
+Use change markers to compare cloud configuration changes with customer-visible behavior.
+Retire proof-of-concept resources after the decision record is complete.
+Cloud architecture should make safe operation easier than ad hoc console changes.
+Review provider service health and account-level quota signals during major incidents.
+Keep a tested contact path for security, billing, and technical provider escalation.

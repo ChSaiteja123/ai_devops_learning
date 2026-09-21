@@ -1,0 +1,39 @@
+# 02_install_packages.yaml — Install packages on Ubuntu/Debian
+# Usage: ansible-playbook -i inventory/hosts.ini 01_basics/02_install_packages.yaml
+# Run check: ansible-playbook --check ...  (dry run, no changes made)
+---
+- name: Install common packages on web servers
+  hosts: webservers
+  become: true    # sudo/root
+
+  vars:
+    packages:
+      - nginx
+      - curl
+      - git
+      - htop
+      - unzip
+      - python3-pip
+
+  tasks:
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600    # don't update if cache < 1 hour old
+
+    - name: Install required packages
+      ansible.builtin.apt:
+        name: "{{ packages }}"
+        state: present
+
+    - name: Remove unwanted packages
+      ansible.builtin.apt:
+        name:
+          - telnet
+          - rsh-client
+        state: absent
+        purge: true
+
+    - name: Auto-remove unused packages
+      ansible.builtin.apt:
+        autoremove: true

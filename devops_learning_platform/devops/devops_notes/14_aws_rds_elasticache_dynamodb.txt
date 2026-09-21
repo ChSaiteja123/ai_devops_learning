@@ -1,0 +1,252 @@
+AWS RDS, ElastiCache, and DynamoDB
+==================================
+
+PURPOSE / OVERVIEW
+--------------------------------------------------------------------------------
+RDS
+Amazon RDS provides managed relational databases such as MySQL, PostgreSQL, MariaDB, and Oracle.
+[PRODUCTION] Managed database services reduce host administration but do not replace application-aware backups and restore testing.
+
+1. BENEFITS
+--------------------------------------------------------------------------------
+Benefits
+
+- automated backups
+- patching and maintenance
+- read replicas
+- multi-AZ support
+- easier scaling
+
+2. COMMON USE CASE
+--------------------------------------------------------------------------------
+Common use case
+
+A Django or Node.js application stores user and application data in RDS.
+
+3. ELASTICACHE
+--------------------------------------------------------------------------------
+ElastiCache
+
+ElastiCache provides managed in-memory caching services such as Redis and Memcached.
+
+4. USE CASES
+--------------------------------------------------------------------------------
+Use cases
+
+- reduce database load
+- improve application latency
+- cache frequent queries
+
+5. DYNAMODB
+--------------------------------------------------------------------------------
+DynamoDB
+
+DynamoDB is a fully managed NoSQL database service optimized for high-scale key-value workloads.
+
+6. USE CASES
+--------------------------------------------------------------------------------
+Use cases
+
+- session storage
+- IoT data
+- application metadata
+- high-throughput event workloads
+
+7. EXAMPLE
+--------------------------------------------------------------------------------
+Example
+
+A web app uses RDS for relational records, ElastiCache for session cache, and DynamoDB for event data.
+
+8. CORE CONCEPTS
+--------------------------------------------------------------------------------
+Databases are a critical part of resilient application design in cloud systems.
+
+9. RDS, ELASTICACHE, AND DYNAMODB DEEP DIVE
+--------------------------------------------------------------------------------
+RDS, ElastiCache, and DynamoDB deep dive
+RDS manages relational engines, backups, patching, and failover options.
+Choose engine features that match application compatibility requirements.
+Place databases in private subnets.
+Use security groups that allow only required application sources.
+Encrypt storage, snapshots, and connections.
+Store credentials in Secrets Manager.
+Rotate credentials with an application-compatible process.
+Enable automated backups with retention that matches recovery objectives.
+Create snapshots before risky schema or parameter changes.
+Test point-in-time recovery regularly.
+Use Multi-AZ for high availability, not read scaling.
+Use read replicas for read scale and regional patterns.
+Understand replication lag before routing reads.
+Monitor connections, CPU, memory, storage, IOPS, and replica lag.
+Set storage thresholds before capacity is exhausted.
+Use parameter groups under version control where practical.
+Change one database parameter at a time when risk is high.
+Use maintenance windows for disruptive updates.
+Test engine upgrades against production-like data volumes.
+Keep migrations backward compatible with rolling application releases.
+Use expand-and-contract schema changes.
+Do not assume backup means application-consistent recovery.
+Validate indexes and query plans after data growth.
+Use connection pooling with safe limits.
+Avoid opening a new database connection per request.
+Use timeouts and bounded retries for transient failures.
+Do not retry non-idempotent transactions blindly.
+Use transactions around related relational writes.
+ElastiCache reduces repeated database reads and computation.
+Choose Redis or Memcached from data and feature needs.
+Treat cache data as disposable unless persistence is designed.
+Use TTLs to prevent stale or unbounded entries.
+Use cache-aside patterns with failure behavior defined.
+Prevent cache stampedes with request coalescing or jitter.
+Do not store secrets in a cache without protection.
+Encrypt cache traffic and restrict client security groups.
+Monitor evictions, memory, hit rate, connections, and latency.
+Use replicas and failover options for critical caches.
+Test behavior when the cache is empty or unavailable.
+DynamoDB partitions data by partition key.
+Choose keys that distribute traffic evenly.
+Avoid hot partitions from sequential or popular keys.
+Use sort keys for related item access patterns.
+Design access patterns before creating tables.
+Use provisioned capacity when demand is predictable.
+Use on-demand capacity for variable workloads.
+Configure auto scaling with realistic targets.
+Use conditional writes for optimistic concurrency.
+Use transactions for supported multi-item atomic changes.
+Use TTL for automatic expiration of temporary records.
+Streams capture item changes for event workflows.
+Global tables support multi-region replication with conflict considerations.
+Point-in-time recovery protects against accidental changes.
+Export and restore data using tested procedures.
+Use encryption keys and least-privilege table access.
+Avoid Scan for routine application requests.
+Use Query with selective key conditions.
+Monitor throttles, consumed capacity, latency, and errors.
+Use exponential backoff for throttled requests.
+Understand eventual versus strongly consistent reads.
+Use idempotency keys for retried writes.
+Validate item size and index costs.
+Review global secondary indexes for write and storage impact.
+Use alarms for storage growth, failover, and backup failures.
+Document database owners, dependencies, and recovery steps.
+Estimate storage, I/O, transfer, backup, and cache costs.
+Delete unused snapshots and test clusters safely.
+Databases require tested recovery, not only managed-service defaults.
+
+10. MANAGED DATABASE RELIABILITY AND TROUBLESHOOTING
+--------------------------------------------------------------------------------
+Managed database reliability and troubleshooting
+Record the database owner, engine version, endpoint, dependencies, and recovery objectives.
+Keep RDS, cache clusters, and DynamoDB tables in the intended account, region, and network.
+Use private subnets and security groups that allow access only from application identities.
+Store credentials in Secrets Manager and test rotation without interrupting active traffic.
+Enable encryption, automated backups, point-in-time recovery, and retention appropriate to risk.
+Create a snapshot before engine upgrades, parameter changes, and major schema migrations.
+Test restore into an isolated environment and verify data, permissions, endpoints, and application behavior.
+Use Multi-AZ for RDS availability and understand the failover DNS and connection behavior.
+Use read replicas for read scale, not as a substitute for backups or write failover planning.
+Monitor RDS connections, CPU, memory, storage, IOPS, locks, deadlocks, and replica lag.
+Set alarms before storage, connection, or transaction limits threaten availability.
+Use parameter and option groups under version control with an approved maintenance window.
+Test engine upgrades with production-like extensions, queries, data volume, and connection pools.
+Use expand-and-contract migrations so old and new application versions can coexist.
+Keep migrations short, observable, and reversible where data semantics allow.
+Use connection pooling and bounded timeouts to avoid exhausting database capacity.
+Retry only transient, idempotent operations and use exponential backoff with jitter.
+Capture slow-query evidence before changing indexes or instance sizes.
+Treat ElastiCache entries as disposable unless persistence and restore are explicitly designed.
+Use cache-aside with TTLs, stampede protection, and a defined cache outage behavior.
+Monitor hit rate, evictions, memory, connections, replication, failover, and latency.
+Test cold-cache startup and a cache cluster failure under realistic request load.
+Design DynamoDB keys from access patterns and verify traffic distribution before launch.
+Use Query instead of Scan for application paths and control page sizes for large results.
+Monitor throttles, consumed capacity, hot partitions, latency, errors, and index growth.
+Use conditional writes and idempotency keys when clients may retry requests.
+Choose on-demand or provisioned capacity from measured traffic and cost sensitivity.
+Review global secondary indexes for write amplification, storage, and backfill impact.
+Use Streams, TTL, global tables, and transactions only with a documented failure model.
+Estimate storage, I/O, backup, transfer, cache nodes, and replication cost before scaling.
+Delete unused snapshots, replicas, test clusters, and obsolete parameter groups safely.
+Managed databases still require application-aware backups, capacity planning, and recovery drills.
+
+11. RDS OPERATIONS
+--------------------------------------------------------------------------------
+RDS operations
+Choose an engine and version from application compatibility, extension needs, and support lifecycle.
+Keep RDS instances in private subnets with a dedicated database subnet group.
+Use security groups that allow database ports only from the application security group.
+Set encryption, backup retention, deletion protection, and maintenance windows before production use.
+Use parameter and option groups under version control and review restart implications.
+Use Multi-AZ for synchronous standby failover and test the application response to a DNS change.
+Use read replicas for read scale while monitoring lag and read-after-write expectations.
+Set storage autoscaling limits before the database reaches a capacity emergency.
+Monitor connections, CPU, memory, storage, IOPS, throughput, locks, deadlocks, and replica lag.
+Use Performance Insights or slow-query logs to investigate latency before increasing instance size.
+Keep connection pools below the database and proxy capacity limits.
+Use RDS Proxy when connection storms or serverless concurrency require pooling behavior.
+Test failover, point-in-time restore, snapshot restore, and credential rotation on a schedule.
+Verify extensions, parameter groups, users, grants, endpoints, and application migrations after restore.
+Use backward-compatible expand-and-contract migrations during rolling application releases.
+Avoid large blocking migrations during peak traffic and define a cancellation strategy.
+Take a snapshot before risky engine, parameter, or schema changes.
+Use bounded retries for transient failover and do not retry non-idempotent transactions blindly.
+
+12. ELASTICACHE OPERATIONS
+--------------------------------------------------------------------------------
+ElastiCache operations
+Choose Redis features or Memcached simplicity from persistence, replication, and data-structure needs.
+Define whether cached data can be lost and how the application behaves on a cache outage.
+Use TLS and authentication where supported, with a security group limited to application clients.
+Set TTLs for cached values and avoid unbounded keys or accidental large payloads.
+Use cache-aside, write-through, or refresh-ahead only with an explicit consistency model.
+Protect hot keys and cache stampedes with request coalescing, jitter, or bounded refreshes.
+Monitor hit rate, evictions, memory, connections, replication lag, failover, and latency.
+Test cold cache, node replacement, primary failover, and unavailable-cache behavior.
+Keep cache capacity and node count aligned with measured memory and connection usage.
+
+13. DYNAMODB OPERATIONS
+--------------------------------------------------------------------------------
+DynamoDB operations
+Design partition and sort keys from access patterns before creating the table.
+Distribute writes across partitions and avoid sequential or highly popular partition keys.
+Use Query with key conditions and projections instead of Scan on request paths.
+Choose on-demand or provisioned capacity from traffic variability and cost requirements.
+Set auto scaling targets and alarms for throttles, consumed capacity, latency, errors, and hot keys.
+Use conditional writes, transactions, and idempotency keys for safe retries and concurrency.
+Understand eventual and strongly consistent reads before relying on read-after-write behavior.
+Review global secondary indexes for write amplification, storage, and backfill duration.
+Use TTL for temporary data, but do not treat expiration as an immediate deletion guarantee.
+Use Streams for change events with retry and duplicate handling.
+Test point-in-time recovery, export, restore, global table conflict behavior, and key rotation.
+Estimate backup, storage, index, replication, and data transfer cost before enabling features.
+Managed data services reduce host work but do not remove schema, capacity, or recovery responsibility.
+Database change and recovery checklist
+Record the expected lock duration, replication effect, storage growth, and rollback action for each migration.
+Use a maintenance window for disruptive engine, parameter, cache, and capacity changes.
+Verify that application health checks do not report success while database connections are failing.
+Use separate credentials for migrations and normal runtime access when governance requires it.
+Audit database grants, cache authentication, table policies, and key permissions on a schedule.
+Keep sensitive database logs protected and avoid recording query parameters that contain private data.
+Use connection timeouts shorter than the request deadline so callers can recover predictably.
+Set pool sizes from database capacity, replica count, and expected concurrent requests.
+Use circuit breakers when a database or cache dependency is overloaded.
+Test partial dependency failure instead of testing only a complete outage.
+Keep retry queues bounded so a database recovery does not create a thundering herd.
+Use checksums or row counts to validate restored data before directing production traffic.
+Compare restored schema, indexes, extensions, users, grants, and parameter settings with the source.
+Use a read-only validation phase before opening writes to a restored database.
+Document data loss expectations when replaying queues after a restore.
+Review backup and snapshot retention for compliance, cost, and deletion recovery.
+Delete temporary restore environments and their security groups after validation.
+Monitor database service events and maintenance notifications, not only application metrics.
+Use query plan regression tests for high-value or high-volume access paths.
+Keep DynamoDB item size, index projection, and transaction limits in application tests.
+Validate cache invalidation during deployments that change data shape or serialization.
+Include failover, restore, credential rotation, and quota exhaustion in disaster exercises.
+Database reliability is proven by application-aware recovery evidence.
+Record recovery duration and validation results against the declared RTO and RPO.
+Review database cost by instance, storage, I/O, backup, transfer, and idle capacity.
+Keep application owners involved in engine upgrades and failover exercises.
+Test data deletion and retention controls as part of security reviews.
+Document the final restore decision and the evidence supporting production cutover.

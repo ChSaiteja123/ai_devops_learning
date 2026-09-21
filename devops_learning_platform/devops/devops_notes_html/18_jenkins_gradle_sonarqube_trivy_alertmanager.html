@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jenkins, Gradle, SonarQube, Trivy, and Alertmanager - DevOps Notes</title><link rel="stylesheet" href="style.css"></head><body>
+<header class="site-header"><div class="page"><a class="back-link" href="index.html">Back to DevOps Notes</a></div></header><main class="page"><article>
+<h1 class="note-title">Jenkins, Gradle, SonarQube, Trivy, and Alertmanager</h1>
+<p class="note-overview">Formatted learning document with commands, examples, production guidance, and operational callouts.</p>
+<p class="text-line">Jenkins, Gradle, SonarQube, Trivy, and Alertmanager</p>
+<h3 class="section-heading">PURPOSE / OVERVIEW</h3>
+<p class="text-line">This toolchain combines build automation, code quality, vulnerability scanning, and operational alerting in a CI/CD workflow.</p>
+<h2 class="section-heading">1. PIPELINE FLOW</h2>
+<p class="text-line">Pipeline flow</p>
+<h3 class="section-heading">EXAMPLE</h3>
+<div class="code-block">
+Git commit -&gt; Jenkins -&gt; Gradle build/test -&gt; SonarQube analysis -&gt; Trivy scan -&gt; container build -&gt; Trivy image scan -&gt; deployment -&gt; Prometheus metrics -&gt; Alertmanager notifications
+</div>
+<h2 class="section-heading">2. JENKINS</h2>
+<p class="text-line">Jenkins</p>
+<p class="text-line">Jenkins is an automation server that executes repeatable pipelines.</p>
+<h2 class="section-heading">3. IMPORTANT CONCEPTS</h2>
+<div class="callout important"><strong>[IMPORTANT]</strong> Important concepts</div>
+<p class="text-line bullet">- Jenkins controller: coordinates jobs and pipeline execution</p>
+<p class="text-line bullet">- agent: machine that runs pipeline steps</p>
+<p class="text-line bullet">- Jenkinsfile: pipeline definition stored with application code</p>
+<p class="text-line bullet">- credentials: protected secrets managed by Jenkins</p>
+<p class="text-line bullet">- stages: named sections such as test, scan, build, and deploy</p>
+<p class="text-line bullet">- artifacts: files retained after a build</p>
+<h2 class="section-heading">4. EXAMPLE DECLARATIVE JENKINS STAGE</h2>
+<p class="text-line">Example declarative Jenkins stage</p>
+<h3 class="section-heading">EXAMPLE</h3>
+<div class="code-block">
+pipeline {
+agent any
+stages {
+stage(&#39;Test&#39;) {
+steps {
+sh &#39;gradle test&#39;
+}
+}
+}
+}
+</div>
+<h2 class="section-heading">5. JENKINS BEST PRACTICES</h2>
+<p class="text-line">Jenkins best practices</p>
+<p class="text-line bullet">- store the Jenkinsfile in source control</p>
+<p class="text-line bullet">- use ephemeral or disposable agents where practical</p>
+<p class="text-line bullet">- keep secrets in Jenkins Credentials, never in Git</p>
+<p class="text-line bullet">- require approval before production deployment</p>
+<p class="text-line bullet">- archive test reports and security results</p>
+<p class="text-line bullet">- use a shared library for repeated enterprise pipeline logic</p>
+<h2 class="section-heading">6. GRADLE</h2>
+<p class="text-line">Gradle</p>
+<h3 class="section-heading">EXAMPLE</h3>
+<div class="code-block">
+Gradle is a build automation tool commonly used for Java, Kotlin, and Android projects.
+</div>
+<h2 class="section-heading">7. COMMON GRADLE TASKS</h2>
+<p class="text-line">Common Gradle tasks</p>
+<p class="text-line bullet">- gradle clean: remove previous build output</p>
+<p class="text-line bullet">- gradle test: compile and execute tests</p>
+<p class="text-line bullet">- gradle build: create a complete build artifact</p>
+<p class="text-line bullet">- gradle dependencies: inspect dependency graph</p>
+<p class="text-line bullet">- gradle sonar: send analysis to SonarQube</p>
+<h2 class="section-heading">8. EXAMPLE BUILD.GRADLE CONFIGURATION</h2>
+<p class="text-line">Example build.gradle configuration</p>
+<h3 class="section-heading">EXAMPLE</h3>
+<div class="code-block">
+plugins {
+id &#39;java&#39;
+id &#39;org.sonarqube&#39; version &#39;5.1.0.4882&#39;
+}
+</div>
+<h2 class="section-heading">9. KEY TOOLS AND COMPONENTS</h2>
+<h3 class="section-heading">EXAMPLE</h3>
+<div class="code-block">
+repositories {
+mavenCentral()
+}
+</div>
+<h2 class="section-heading">10. WORKFLOWS AND PRACTICES</h2>
+<h3 class="section-heading">EXAMPLE</h3>
+<div class="code-block">
+dependencies {
+testImplementation &#39;org.junit.jupiter:junit-jupiter:5.10.3&#39;
+}
+<h2 class="section-heading">31. OBSERVABILITY AUTOMATION IN CI/CD</h2>
+<p class="text-line">CI/CD can validate alert automation before it connects to real receivers. Compile the router, run deterministic payloads, verify duplicate suppression, and archive the notification plan.</p>
+<h2 class="section-heading">32. NOTIFICATION PLAN DESIGN</h2>
+<p class="text-line">An alert event should become a plan before it becomes an external notification. Record source status, unique alerts, duplicates, severity, receiver, services, runbooks, and delivery state.</p>
+<div class="callout security"><strong>[SECURITY]</strong> Never treat an alert label, annotation, or runbook URL as permission to execute a shell command, rollback, scale, or change traffic.</div>
+<h2 class="section-heading">33. WEBHOOK OPERATIONS</h2>
+<p class="text-line">Authenticate webhook requests, restrict receiver network access, validate JSON size and fields, apply bounded retries, use a dead-letter path, redact secrets, and monitor permanent failures.</p>
+<h2 class="section-heading">34. SAFE INCIDENT AUTOMATION</h2>
+<p class="text-line">Keep execution credentials outside the alert processor. Use dry-run mode, allowlisted actions, environment validation, human approval, idempotency, and a complete operator audit trail.</p>
+<h2 class="section-heading">35. INCIDENT AUTOMATION TEST MATRIX</h2>
+<div class="code-block">valid critical alert | valid warning alert | resolved alert
+missing labels | invalid severity | missing fingerprint | duplicate fingerprint
+malformed JSON | receiver timeout | sensitive annotation redaction</div>
+<p class="text-line">The companion project is <a class="back-link" href="../devops_projects/16_observability_automation/README.md">16_observability_automation</a>.</p>
+</div>
+<h2 class="section-heading">11. COMMANDS AND CONFIGURATION</h2>
+<h3 class="section-heading">EXAMPLE</h3>
+<div class="code-block">
+test {
+useJUnitPlatform()
+}
+</div>
+<h2 class="section-heading">12. GRADLE SECURITY PRACTICES</h2>
+<div class="callout security"><strong>[SECURITY]</strong> Gradle security practices</div>
+<p class="text-line bullet">- pin plugin and dependency versions</p>
+<p class="text-line bullet">- use dependency locking for repeatable builds</p>
+<p class="text-line bullet">- use a private artifact repository when required</p>
+<p class="text-line bullet">- avoid downloading dependencies from untrusted repositories</p>
+<h2 class="section-heading">13. SONARQUBE</h2>
+<p class="text-line">SonarQube</p>
+<p class="text-line">SonarQube performs static analysis of source code and reports bugs, vulnerabilities, code smells, and duplication.</p>
+<h2 class="section-heading">14. KEY CONCEPTS</h2>
+<p class="text-line">Key concepts</p>
+<p class="text-line bullet">- project key: unique SonarQube project identifier</p>
+<p class="text-line bullet">- quality profile: rules used during analysis</p>
+<p class="text-line bullet">- quality gate: pass/fail conditions for code quality</p>
+<p class="text-line bullet">- coverage: percentage of code exercised by tests</p>
+<p class="text-line bullet">- technical debt: estimated effort to improve maintainability</p>
+<h2 class="section-heading">15. TYPICAL JENKINS INTEGRATION</h2>
+<p class="text-line">Typical Jenkins integration</p>
+<h3 class="section-heading">EXAMPLE</h3>
+<div class="code-block">
+withSonarQubeEnv(&#39;sonarqube&#39;) {
+sh &#39;gradle sonar&#39;
+}
+</div>
+<h2 class="section-heading">16. PRODUCTION PRACTICE</h2>
+<div class="callout production"><strong>[PRODUCTION]</strong> Production practice</div>
+<p class="text-line">Run SonarQube after tests and fail the pipeline when the quality gate does not meet the team standard. Store the SonarQube token as a Jenkins credential.</p>
+<h2 class="section-heading">17. TRIVY</h2>
+<p class="text-line">Trivy</p>
+<h3 class="section-heading">EXAMPLE</h3>
+<div class="code-block">
+Trivy is a vulnerability scanner for container images, filesystems, Git repositories, and infrastructure configuration.
+</div>
+<h2 class="section-heading">18. FILESYSTEM SCAN</h2>
+<p class="text-line">Filesystem scan</p>
+<h3 class="section-heading">COMMANDS</h3>
+<div class="code-block">
+trivy fs --severity HIGH,CRITICAL --exit-code 1 --ignore-unfixed .
+</div>
+<h2 class="section-heading">19. CONTAINER IMAGE SCAN</h2>
+<p class="text-line">Container image scan</p>
+<h3 class="section-heading">COMMANDS</h3>
+<div class="code-block">
+trivy image --severity HIGH,CRITICAL --exit-code 1 --ignore-unfixed myapp:1.0.0
+</div>
+<h2 class="section-heading">20. INFRASTRUCTURE SCAN</h2>
+<p class="text-line">Infrastructure scan</p>
+<h3 class="section-heading">COMMANDS</h3>
+<div class="code-block">
+trivy config --severity HIGH,CRITICAL .
+</div>
+<h2 class="section-heading">21. IMPORTANT OPTIONS</h2>
+<div class="callout important"><strong>[IMPORTANT]</strong> Important options</div>
+<p class="text-line bullet">- --severity: select vulnerability levels</p>
+<p class="text-line bullet">- --exit-code 1: fail CI when findings exist</p>
+<p class="text-line bullet">- --ignore-unfixed: reduce noise from vulnerabilities without fixes</p>
+<p class="text-line bullet">- --format sarif: produce a report for security platforms</p>
+<h2 class="section-heading">22. TRIVY BEST PRACTICES</h2>
+<p class="text-line">Trivy best practices</p>
+<p class="text-line bullet">- scan dependencies before building images</p>
+<p class="text-line bullet">- scan the final image after building it</p>
+<p class="text-line bullet">- use small trusted base images</p>
+<p class="text-line bullet">- update base images regularly</p>
+<p class="text-line bullet">- define an approved exception process for false positives</p>
+<h2 class="section-heading">23. ALERTMANAGER</h2>
+<p class="text-line">Alertmanager</p>
+<p class="text-line">Alertmanager receives alerts from Prometheus, groups related alerts, suppresses duplicates, and routes notifications.</p>
+<h2 class="section-heading">24. WORKFLOWS AND PRACTICES</h2>
+<p class="text-line">Prometheus sends an alert when an expression remains true for a configured duration. Alertmanager then routes it to email, Slack, PagerDuty, or a webhook.</p>
+<h2 class="section-heading">25. EXAMPLE PROMETHEUS ALERT</h2>
+<p class="text-line">Example Prometheus alert</p>
+<h3 class="section-heading">EXAMPLE</h3>
+<div class="code-block">
+groups:
+- name: application
+rules:
+- alert: ApplicationDown
+expr: up == 0
+for: 2m
+labels:
+severity: critical
+annotations:
+summary: Application target is down
+</div>
+<h2 class="section-heading">26. EXAMPLE ALERTMANAGER ROUTE</h2>
+<p class="text-line">Example Alertmanager route</p>
+<h3 class="section-heading">EXAMPLE</h3>
+<div class="code-block">
+route:
+receiver: platform-team
+group_by: [alertname, job]
+</div>
+<h2 class="section-heading">27. RECEIVERS</h2>
+<p class="text-line">receivers</p>
+<h3 class="section-heading">EXAMPLE</h3>
+<div class="code-block">
+- name: platform-team
+webhook_configs:
+- url: http://notification-service:8080/alerts
+</div>
+<h2 class="section-heading">28. ALERTMANAGER BEST PRACTICES</h2>
+<p class="text-line">Alertmanager best practices</p>
+<p class="text-line bullet">- route critical alerts to an on-call channel</p>
+<p class="text-line bullet">- group related alerts to avoid notification storms</p>
+<p class="text-line bullet">- define inhibition rules for dependent failures</p>
+<p class="text-line bullet">- configure repeat intervals thoughtfully</p>
+<p class="text-line bullet">- test notification receivers regularly</p>
+<p class="text-line bullet">- avoid putting passwords or tokens directly in YAML</p>
+<h2 class="section-heading">29. END-TO-END ENTERPRISE EXAMPLE</h2>
+<p class="text-line">End-to-end enterprise example</p>
+<h2 class="section-heading">1. A developer pushes Java code to Git.</h2>
+<h2 class="section-heading">2. Jenkins checks out the code.</h2>
+<h2 class="section-heading">3. Gradle compiles the project and runs JUnit tests.</h2>
+<h2 class="section-heading">4. SonarQube evaluates maintainability, bugs, and coverage.</h2>
+<h2 class="section-heading">5. Trivy scans source dependencies and infrastructure files.</h2>
+<h2 class="section-heading">6. Jenkins builds a Docker image.</h2>
+<h2 class="section-heading">7. Trivy scans the final image for HIGH and CRITICAL vulnerabilities.</h2>
+<h2 class="section-heading">8. Jenkins publishes the image only when quality and security gates pass.</h2>
+<h2 class="section-heading">9. Prometheus monitors the deployed service.</h2>
+<h2 class="section-heading">10. Alertmanager routes availability alerts to the operations team.</h2>
+<h2 class="section-heading">30. KEY TOOLS AND COMPONENTS</h2>
+<p class="text-line">This design connects delivery speed with quality, security, and operational feedback.</p>
+<h2 class="section-heading">31. TOOLCHAIN DEEP DIVE</h2>
+<h3 class="section-heading">EXAMPLE</h3>
+<div class="code-block">
+Toolchain deep dive
+Jenkins controllers coordinate jobs but should not perform heavy builds.
+Use agents with labels for workload requirements.
+Prefer ephemeral agents for clean and isolated workspaces.
+Store Jenkinsfiles with application code.
+Use declarative pipelines for visible stage structure.
+Keep credentials in Jenkins Credentials, never in Git.
+Scope credentials to the smallest folder or job.
+Restrict script approval and plugin administration.
+Pin plugin versions and patch Jenkins regularly.
+Archive test, coverage, scan, and deployment reports.
+Use shared libraries for repeated enterprise pipeline logic.
+Protect production stages with environment approvals.
+Use timeouts and retry only transient operations.
+Clean workspaces after builds.
+Gradle Wrapper pins the Gradle runtime for repeatability.
+Use dependency locking for stable resolution.
+Use a private repository mirror when supply chain control matters.
+Keep plugin and dependency versions reviewed.
+Run clean, compile, test, and package tasks in CI.
+Use build scans only under approved data policies.
+Cache Gradle dependencies with safe keys.
+Do not trust caches from untrusted branches.
+Publish immutable JARs with commit metadata.
+Run JUnit tests and publish failures clearly.
+Set coverage thresholds appropriate to critical code.
+SonarQube quality gates should match release risk.
+Store Sonar tokens as Jenkins credentials.
+Analyze after compilation and tests.
+Review new issues separately from legacy debt.
+Use quality profiles with documented exceptions.
+Track technical debt with owners and deadlines.
+Trivy can scan filesystems, repositories, images, and IaC.
+Scan the exact image digest intended for deployment.
+Fail on policy-defined HIGH and CRITICAL findings.
+Review exploitability and reachability before exceptions.
+Keep the vulnerability database current.
+Generate and archive an SBOM.
+Scan base images as well as application layers.
+Do not publish an image before security gates pass.
+Use image signing and admission verification where supported.
+Alertmanager receives Prometheus alerts and routes notifications.
+Group related alerts to prevent notification storms.
+Use inhibition for dependent failures.
+Set repeat intervals according to incident urgency.
+Test email, chat, paging, and webhook receivers.
+Use secrets for receiver credentials.
+Avoid putting tokens directly in YAML.
+Include service, environment, severity, and runbook labels.
+Use silence expiry so temporary suppression ends.
+Protect Alertmanager configuration with review and access controls.
+Connect release markers to Prometheus dashboards.
+Alert on user impact after deployment.
+Use canaries and rollback thresholds for production.
+Keep database migrations backward compatible.
+Record artifact digest, scan result, quality gate, and approver.
+Use least-privilege cloud credentials from Jenkins.
+Prefer short-lived OIDC credentials for deployment.
+Do not expose secrets to untrusted pull request jobs.
+Pin actions and Jenkins plugins where applicable.
+Restrict outbound access from build agents.
+Review dependency licenses and provenance.
+Use separate staging and production credentials.
+Keep emergency deployment paths audited and time-limited.
+Test restoration of Jenkins configuration and job metadata.
+Back up SonarQube and alert configuration according to recovery needs.
+Monitor controller disk, queue, executor, and JVM health.
+Monitor Gradle duration, cache hit rate, and flaky tests.
+Monitor scan duration and database freshness.
+Control artifact, workspace, and log retention costs.
+This toolchain works when every gate produces actionable evidence.
+</div>
+</article></main></body></html>

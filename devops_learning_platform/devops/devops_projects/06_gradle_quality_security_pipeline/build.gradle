@@ -1,0 +1,32 @@
+plugins {
+    id 'java'
+    id 'org.sonarqube' version '5.1.0.4882'
+}
+
+group = 'learning.devops'
+version = '1.0.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.3'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
+
+sonar {
+    properties {
+        property 'sonar.projectKey', 'devops-gradle-app'
+        property 'sonar.projectName', 'DevOps Gradle App'
+    }
+}

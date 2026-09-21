@@ -1,0 +1,253 @@
+Git and GitHub
+========================
+
+PURPOSE / OVERVIEW
+--------------------------------------------------------------------------------
+Git is a distributed version control system used to track code changes. GitHub is a web-based hosting service for Git repositories.
+
+1. GIT CONCEPTS
+--------------------------------------------------------------------------------
+Git concepts
+
+- repository
+- commit
+- branch
+- merge
+- pull request
+- clone
+- fetch
+- pull
+- push
+
+2. COMMON COMMANDS
+--------------------------------------------------------------------------------
+Common commands
+
+- git init
+- git clone <url>
+- git status
+- git add .
+- git commit -m "message"
+- git push origin main
+- git pull origin main
+- git branch
+- git checkout -b feature/login
+- git merge feature/login
+
+3. EXAMPLE
+--------------------------------------------------------------------------------
+Example
+
+EXAMPLE
+----------------------------------------
+git init
+git add .
+git commit -m "Initial project setup"
+git branch -M main
+git remote add origin <repo-url>
+git push -u origin main
+
+4. BRANCHING STRATEGY
+--------------------------------------------------------------------------------
+Branching strategy
+
+- main: production-ready code
+- develop: integration branch
+- feature/*: feature work
+- hotfix/*: urgent production fixes
+
+5. PULL REQUEST WORKFLOW
+--------------------------------------------------------------------------------
+Pull request workflow
+
+1. create feature branch
+2. commit changes
+3. push branch
+4. open pull request
+5. review and approve
+6. merge to main
+
+6. GITHUB BEST PRACTICES
+--------------------------------------------------------------------------------
+GitHub best practices
+[SECURITY] Never commit credentials or other secrets; rotate them immediately if they enter repository history.
+
+- use meaningful commit messages
+- protect main branch
+- use PR reviews
+- enable CI checks
+- use tags for releases
+
+7. TROUBLESHOOTING AND OPERATIONS
+--------------------------------------------------------------------------------
+EXAMPLE
+----------------------------------------
+Git is the backbone of DevOps pipelines and collaborative software development.
+
+8. DEEP-DIVE GIT AND GITHUB
+--------------------------------------------------------------------------------
+EXAMPLE
+----------------------------------------
+Deep-dive Git and GitHub
+Git records snapshots of files and branches provide movable names for history.
+The working tree contains edits that are not staged.
+The index is the proposed content of the next commit.
+Use git status --short before and after every focused change.
+Use git diff to inspect unstaged edits.
+Use git diff --cached to inspect staged content.
+Stage only related changes so each commit has one clear purpose.
+Write commit messages that explain intent and impact.
+Keep commits small enough to review and revert.
+Do not commit credentials, local state, or generated build output.
+Use .gitignore for files that should never be tracked.
+Use git check-ignore -v to identify an ignore rule.
+Use git add -p for deliberate partial staging.
+Use git restore for carefully discarding unstaged edits.
+Avoid rewriting history on shared branches.
+Use git log --oneline --decorate --graph for a compact history view.
+Use git show to inspect a commit and its patch.
+Use git blame to locate when a line changed.
+Treat blame as a starting point, not a way to assign fault.
+Use git log -S or -G to find historical changes.
+Use annotated tags for releases.
+Push tags deliberately because tags can trigger automation.
+Use signed commits or tags when provenance requires them.
+Protect the default branch from direct pushes.
+Require pull requests and passing checks before merging.
+Use CODEOWNERS to route reviews to responsible teams.
+Keep branches descriptive and short-lived.
+Rebase private branches to update them cleanly before review.
+Merge shared branches without rewriting their history.
+Resolve conflicts by understanding both sides.
+Run tests after conflict resolution.
+Use git diff --check to detect whitespace errors.
+Use hooks for fast local feedback.
+Enforce critical policy on the server because hooks can be bypassed.
+Keep pull requests focused on one behavior or cohesive change.
+Explain testing, rollout, risk, and rollback in the pull request.
+Avoid mixing formatting-only edits with behavioral changes.
+Use draft pull requests for early design feedback.
+Keep review comments specific and respectful.
+Require status checks for tests, lint, security, and packaging.
+Make CI checks deterministic and independent of a workstation.
+Cache dependencies carefully and invalidate caches after toolchain changes.
+Pin third-party action versions by immutable references when practical.
+Restrict workflow permissions with least-privilege settings.
+Do not expose secrets to untrusted pull request code.
+Separate trusted release workflows from forked contribution workflows.
+Use environment protection rules for production deployments.
+Require approval for deployments that change customer traffic.
+Use concurrency controls to prevent conflicting deployments.
+Cancel obsolete builds when newer commits supersede them.
+Publish immutable artifacts using commit or digest identifiers.
+Record source revision and tool versions with each artifact.
+Do not rebuild a release from a moving branch.
+Use release notes to communicate behavior and operational changes.
+Use GitHub issues with owners, scope, and acceptance criteria.
+Use labels consistently for priority, type, and lifecycle.
+Keep vulnerability reports private when they contain exploit details.
+Enable secret scanning and push protection where available.
+Rotate a secret immediately when it enters repository history.
+Deleting a secret from the latest commit does not remove historical exposure.
+Review repository administrators and deploy keys regularly.
+Use OIDC federation instead of long-lived cloud keys in CI.
+Review third-party actions before granting them repository access.
+Limit workflow permissions at job scope when possible.
+Use dependency update automation with human review.
+Review automated updates for behavior and transitive risk.
+Run license checks when distribution obligations require them.
+Keep large binaries in an artifact store or Git LFS.
+Avoid storing build outputs in ordinary Git history.
+Use shallow clones only when tooling does not require full history.
+Fetch tags when version calculation depends on them.
+Use sparse checkout for very large monorepos when supported.
+Define ownership and build boundaries inside a monorepo.
+Keep automation configuration versioned with the code it serves.
+Use reusable workflows to reduce duplicated policy logic.
+Document workflow inputs, permissions, and failure behavior.
+Test workflows with fixtures before enabling production effects.
+Use separate credentials for pull requests and releases.
+Capture deployment logs and links in the release record.
+Use rollback commits or artifact redeployment instead of ad hoc edits.
+Keep database migrations backward-compatible across rolling deployments.
+Tag the last known-good release before a risky rollout.
+Use git bisect with a reliable test command to locate regressions.
+Use git worktree for parallel branches without extra clones.
+Use reflog to recover local references after accidental resets.
+Reflog is local and is not a substitute for a remote backup.
+Create a bare mirror when repository backup is required.
+Verify backups by cloning and checking important refs.
+Remove stale branches only after checking open work.
+Keep commit history readable for incident investigation.
+Connect code, build, release, and deployment metadata.
+Treat source control as part of the production control plane.
+Use branch rulesets to centralize protection requirements.
+Use merge queues when many changes compete for a protected branch.
+Re-run checks after queue rebasing because the tested commit changed.
+Keep generated lockfiles updated through reviewed dependency changes.
+Use signed provenance for release artifacts where supply-chain assurance matters.
+Store SBOMs alongside the artifact they describe.
+Record who approved a sensitive production change.
+Separate repository administration from application deployment permission.
+Audit tokens, apps, webhooks, and deploy keys.
+Restrict webhooks to required events and verify signatures.
+Use protected environments for secrets needed only during deployment.
+Do not print workflow contexts because they can contain secrets.
+Use ephemeral runners for untrusted or high-risk workloads.
+Clean workspaces between jobs to prevent cross-build leakage.
+Pin toolchain versions for reproducible builds.
+Document the supported Git version and line-ending policy.
+Use .gitattributes for generated files and platform normalization.
+Review executable-bit changes in diffs.
+Use binary-safe tools for images and archives.
+Keep repository history free of temporary debug data.
+Use pull request templates to collect operational context.
+Link incidents and change records to the responsible pull request.
+Review failed deployments as process feedback, not individual failure.
+GitHub governance works when permissions, automation, and review rules align.
+Review the complete diff before staging.
+Review staged content before committing.
+Keep commits cohesive and reversible.
+Explain risk in pull requests.
+Explain testing in pull requests.
+Explain rollout in pull requests.
+Explain rollback in pull requests.
+Protect release tags from overwrite.
+Use immutable artifact references.
+Keep secrets out of history.
+Rotate exposed credentials immediately.
+Audit deploy keys regularly.
+Limit workflow permissions.
+Separate fork and release trust.
+Pin third-party actions.
+Review action upgrades.
+Clean ephemeral runners.
+Protect environment secrets.
+Use approval gates for production.
+Record deployment provenance.
+Link incidents to changes.
+Keep branches short-lived.
+Remove stale branches safely.
+Verify conflict resolutions with tests.
+Use bisect for regressions.
+Verify repository backups.
+Document recovery commands.
+Source control is operational evidence.
+
+9. REPOSITORY RECOVERY AND RELEASE PRACTICE
+--------------------------------------------------------------------------------
+Repository recovery and release practice
+Record the remote URL, default branch, and required Git version in repository documentation.
+Use git remote -v and git ls-remote to verify that a recovery target is reachable.
+Create a mirror backup when all branches, tags, and notes must be preserved.
+Test recovery by cloning the backup into a clean directory.
+Protect release tags from force pushes and accidental deletion.
+Use a changelog that links user-visible behavior to commit or pull request identifiers.
+Create a release candidate from a reviewed commit, not from an uncommitted workspace.
+Verify the built artifact checksum before publishing release metadata.
+Use git diff --stat and git diff --check as inexpensive review gates.
+Use git clean only after previewing untracked files with a dry run.
+Recover lost local work with reflog before attempting manual object manipulation.
+Treat repository permissions as production permissions when workflows can deploy.
+Review branch protection after changes to teams, applications, or ownership.
+Document how to disable a compromised workflow token and rotate related secrets.

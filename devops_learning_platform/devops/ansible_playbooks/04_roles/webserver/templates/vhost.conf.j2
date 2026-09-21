@@ -1,0 +1,35 @@
+# roles/webserver/templates/vhost.conf.j2
+# Managed by Ansible — do not edit manually
+# Generated: {{ ansible_date_time.iso8601 }}
+
+server {
+    listen {{ http_port }};
+    server_name {{ server_name }};
+
+{% if ssl_enabled %}
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen {{ https_port }} ssl;
+    server_name {{ server_name }};
+    ssl_certificate     /etc/ssl/certs/{{ server_name }}.crt;
+    ssl_certificate_key /etc/ssl/private/{{ server_name }}.key;
+    ssl_protocols       TLSv1.2 TLSv1.3;
+{% endif %}
+
+    root /var/www/{{ server_name }};
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+
+    location /health {
+        return 200 "OK";
+        add_header Content-Type text/plain;
+    }
+
+    access_log /var/log/nginx/{{ server_name }}_access.log;
+    error_log  /var/log/nginx/{{ server_name }}_error.log;
+}

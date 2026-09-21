@@ -1,0 +1,43 @@
+# roles/webserver/tasks/main.yaml — Role tasks
+---
+- name: Install nginx
+  ansible.builtin.apt:
+    name: nginx
+    state: present
+    update_cache: true
+  notify: Restart nginx
+
+- name: Deploy nginx config
+  ansible.builtin.template:
+    src: nginx.conf.j2
+    dest: /etc/nginx/nginx.conf
+    mode: "0644"
+    validate: "nginx -t -c %s"
+  notify: Restart nginx
+
+- name: Deploy virtual host config
+  ansible.builtin.template:
+    src: vhost.conf.j2
+    dest: "/etc/nginx/sites-available/{{ server_name }}"
+    mode: "0644"
+  notify: Reload nginx
+
+- name: Enable virtual host
+  ansible.builtin.file:
+    src: "/etc/nginx/sites-available/{{ server_name }}"
+    dest: "/etc/nginx/sites-enabled/{{ server_name }}"
+    state: link
+  notify: Reload nginx
+
+- name: Ensure nginx is started
+  ansible.builtin.service:
+    name: nginx
+    state: started
+    enabled: true
+
+- name: Open HTTP port in UFW
+  community.general.ufw:
+    rule: allow
+    port: "{{ http_port }}"
+    proto: tcp
+  when: enable_firewall | default(true)

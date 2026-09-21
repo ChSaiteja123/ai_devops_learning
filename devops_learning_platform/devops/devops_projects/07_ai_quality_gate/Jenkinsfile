@@ -1,0 +1,19 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps { checkout scm }
+        }
+        stage('AI Evaluation') {
+            steps { sh 'python3 evaluator.py' }
+        }
+    }
+
+    post {
+        always {
+            archiveArtifacts artifacts: 'evaluation-report.json', allowEmptyArchive: false
+            cleanWs()
+        }
+    }
+}

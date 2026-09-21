@@ -1,0 +1,43 @@
+# 06_variables_facts.yaml — Variables, facts, and conditionals
+# Usage: ansible-playbook -i inventory/hosts.ini 01_basics/06_variables_facts.yaml
+---
+- name: Demonstrate variables and facts
+  hosts: all
+  gather_facts: true   # enables ansible_facts
+
+  vars:
+    app_version: "2.1.0"
+    env: production
+    db_port: 5432
+
+  tasks:
+    - name: Print OS family
+      ansible.builtin.debug:
+        msg: "{{ inventory_hostname }} is running {{ ansible_os_family }} {{ ansible_distribution_version }}"
+
+    - name: Print total memory
+      ansible.builtin.debug:
+        msg: "Total RAM: {{ ansible_memtotal_mb }} MB"
+
+    - name: Run task only on Ubuntu
+      ansible.builtin.debug:
+        msg: "This is Ubuntu!"
+      when: ansible_distribution == "Ubuntu"
+
+    - name: Run task only on RedHat family
+      ansible.builtin.debug:
+        msg: "This is RHEL/CentOS!"
+      when: ansible_os_family == "RedHat"
+
+    - name: Use variable in a command
+      ansible.builtin.debug:
+        msg: "Deploying app version {{ app_version }} to {{ env }}"
+
+    - name: Set a fact dynamically
+      ansible.builtin.set_fact:
+        is_low_memory: "{{ ansible_memtotal_mb < 2048 }}"
+
+    - name: Warn if low memory
+      ansible.builtin.debug:
+        msg: "WARNING: Host has less than 2GB RAM"
+      when: is_low_memory | bool

@@ -1,0 +1,29 @@
+# 19_configmap.yaml — ConfigMap: non-sensitive configuration
+# Usage: kubectl apply -f 19_configmap.yaml -n dev
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: dev
+data:
+  # Simple key-value pairs
+  APP_ENV: "production"
+  LOG_LEVEL: "info"
+  PORT: "8000"
+  # Multi-line config file
+  app.properties: |
+    server.port=8000
+    cache.ttl=300
+    feature.payment=true
+  nginx.conf: |
+    worker_processes auto;
+    events { worker_connections 1024; }
+    http {
+      server {
+        listen 80;
+        location / {
+          proxy_pass http://localhost:8000;
+        }
+      }
+    }

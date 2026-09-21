@@ -1,0 +1,59 @@
+# 19_vault_example.yaml — Ansible Vault: encrypt sensitive data
+# 
+# COMMANDS:
+# Encrypt a file:      ansible-vault encrypt group_vars/production/vault.yml
+# Decrypt a file:      ansible-vault decrypt group_vars/production/vault.yml
+# Edit encrypted:      ansible-vault edit group_vars/production/vault.yml
+# View encrypted:      ansible-vault view group_vars/production/vault.yml
+# Encrypt a string:    ansible-vault encrypt_string 'MyPassword' --name 'db_password'
+# Run with vault:      ansible-playbook --ask-vault-pass playbook.yml
+# Run with vault file: ansible-playbook --vault-password-file .vault_pass playbook.yml
+#
+# Usage: ansible-playbook -i inventory/hosts.ini 05_vault/19_vault_example.yaml --ask-vault-pass
+---
+- name: Use Vault-encrypted secrets
+  hosts: dbservers
+  become: true
+
+  # group_vars/dbservers/vault.yml should be encrypted with:
+  # vault_db_password: "SuperSecretPass123!"
+  # vault_api_key: "sk-xyz-abcdef"
+
+  vars:
+    db_password: "{{ vault_db_password }}"    # loaded from encrypted vault file
+    api_key: "{{ vault_api_key }}"
+
+  tasks:
+    - name: Create DB user with vaulted password
+      community.postgresql.postgresql_user:
+        name: appuser
+        password: "{{ db_password }}"
+        state: present
+      become_user: postgres
+      no_log: true    # never log the password to stdout
+
+    - name: Write API key to config (as a file, not in playbook)
+      ansible.builtin.copy:
+        content: "API_KEY={{ api_key }}"
+        dest: /etc/app/api.env
+        mode: "0600"
+        owner: appuser
+      no_log: true
+
+    - name: Confirm setup (without revealing secrets)
+      ansible.builtin.debug:
+        msg: "DB user and API key configured on {{ inventory_hostname }}"
+
+# ── VAULT FILE STRUCTURE ─────────────────────────────────────────────────────
+# File: group_vars/dbservers/vault.yml  (encrypted)
+# Before encryption, contents look like:
+# ---
+# vault_db_password: "SuperSecretPass123!"
+# vault_api_key: "sk-xyz-abcdef"
+# vault_db_host: "db.internal.example.com"
+#
+# File: group_vars/dbservers/vars.yml  (plain, references vault vars)
+# ---
+# db_password: "{{ vault_db_password }}"
+# api_key: "{{ vault_api_key }}"
+# ─────────────────────────────────────────────────────────────────────────────

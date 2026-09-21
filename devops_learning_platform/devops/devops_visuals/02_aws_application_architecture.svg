@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="900" viewBox="0 0 1500 900">
+  <title>AWS Application Architecture</title>
+  <desc>Users route through Route 53 and an application load balancer to private application services, RDS, ElastiCache, and S3.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff7ed"/><stop offset="1" stop-color="#e0f2fe"/></linearGradient>
+    <filter id="shadow"><feDropShadow dx="0" dy="5" stdDeviation="7" flood-opacity="0.18"/></filter>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 Z" fill="#334155"/></marker>
+  </defs>
+  <rect width="1500" height="900" fill="url(#bg)"/>
+  <text x="70" y="76" fill="#172033" font-family="sans-serif" font-size="38" font-weight="700">AWS application architecture</text>
+  <text x="70" y="115" fill="#475569" font-family="sans-serif" font-size="20">Public entry points stay separate from private application and data tiers.</text>
+  <rect x="55" y="165" width="1390" height="650" rx="24" fill="#ffffff" fill-opacity="0.5" stroke="#94a3b8" stroke-width="2"/>
+  <text x="90" y="215" fill="#334155" font-family="sans-serif" font-size="22" font-weight="700">AWS VPC</text>
+  <rect x="85" y="245" width="500" height="500" rx="18" fill="#dbeafe" stroke="#60a5fa" stroke-width="3"/>
+  <text x="115" y="285" fill="#1e3a8a" font-family="sans-serif" font-size="20" font-weight="700">Public subnets</text>
+  <rect x="130" y="350" width="180" height="110" rx="12" fill="#f97316" filter="url(#shadow)"/><text x="220" y="395" text-anchor="middle" fill="white" font-family="sans-serif" font-size="22" font-weight="700">Route 53</text><text x="220" y="427" text-anchor="middle" fill="#ffedd5" font-family="sans-serif" font-size="16">DNS</text>
+  <rect x="360" y="350" width="180" height="110" rx="12" fill="#ea580c" filter="url(#shadow)"/><text x="450" y="395" text-anchor="middle" fill="white" font-family="sans-serif" font-size="22" font-weight="700">ALB</text><text x="450" y="427" text-anchor="middle" fill="#ffedd5" font-family="sans-serif" font-size="16">load balancer</text>
+  <rect x="630" y="245" width="500" height="500" rx="18" fill="#dcfce7" stroke="#4ade80" stroke-width="3"/>
+  <text x="660" y="285" fill="#166534" font-family="sans-serif" font-size="20" font-weight="700">Private application subnets</text>
+  <rect x="690" y="350" width="180" height="110" rx="12" fill="#0891b2" filter="url(#shadow)"/><text x="780" y="395" text-anchor="middle" fill="white" font-family="sans-serif" font-size="22" font-weight="700">EKS / EC2</text><text x="780" y="427" text-anchor="middle" fill="#cffafe" font-family="sans-serif" font-size="16">application tier</text>
+  <rect x="910" y="350" width="180" height="110" rx="12" fill="#0f766e" filter="url(#shadow)"/><text x="1000" y="395" text-anchor="middle" fill="white" font-family="sans-serif" font-size="22" font-weight="700">RDS</text><text x="1000" y="427" text-anchor="middle" fill="#ccfbf1" font-family="sans-serif" font-size="16">relational data</text>
+  <rect x="690" y="535" width="180" height="110" rx="12" fill="#7c3aed" filter="url(#shadow)"/><text x="780" y="580" text-anchor="middle" fill="white" font-family="sans-serif" font-size="22" font-weight="700">ElastiCache</text><text x="780" y="612" text-anchor="middle" fill="#ede9fe" font-family="sans-serif" font-size="16">low latency</text>
+  <rect x="1180" y="350" width="180" height="110" rx="12" fill="#eab308" filter="url(#shadow)"/><text x="1270" y="395" text-anchor="middle" fill="#422006" font-family="sans-serif" font-size="22" font-weight="700">S3</text><text x="1270" y="427" text-anchor="middle" fill="#713f12" font-family="sans-serif" font-size="16">objects / backups</text>
+  <g stroke="#334155" stroke-width="4" fill="none" marker-end="url(#arrow)"><path d="M310 405 H350"/><path d="M540 405 H680"/><path d="M870 405 H900"/><path d="M870 570 H900"/><path d="M1090 405 H1170"/></g>
+  <text x="90" y="785" fill="#475569" font-family="sans-serif" font-size="18">IAM roles, security groups, private routing, encryption, backups, and CloudWatch complete the production design.</text>
+</svg>

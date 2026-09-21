@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Kubernetes Management</title><link rel="stylesheet" href="style.css"></head>
+<body>
+<header class="site-header"><div class="page"><a class="back-link" href="index.html">Back to project guides</a><h1>13. Kubernetes Management</h1><p>Manage a production-style application namespace with security, resources, scaling, and health controls.</p></div></header>
+<main class="page"><article>
+<h2 class="section-heading">Management scope</h2>
+<p>This project demonstrates Kubernetes day-2 operations: namespace isolation, least-privilege RBAC, configuration, quotas, limits, network policy, rollout health, autoscaling, and disruption protection.</p>
+<h2 class="section-heading">Apply order</h2>
+<div class="code-block">kubectl apply -f namespace.yaml
+kubectl apply -f rbac.yaml
+kubectl apply -f config.yaml
+kubectl apply -f policies.yaml
+kubectl apply -f workload.yaml
+kubectl apply -f service.yaml
+kubectl apply -f autoscaling.yaml</div>
+<h2 class="section-heading">Operate and troubleshoot</h2>
+<div class="code-block">kubectl -n platform-demo get all
+kubectl -n platform-demo rollout status deployment/platform-api
+kubectl -n platform-demo get events --sort-by=.lastTimestamp
+kubectl -n platform-demo describe pod POD_NAME
+kubectl -n platform-demo rollout undo deployment/platform-api</div>
+<div class="callout security"><strong>[SECURITY]</strong> The service account can read only ConfigMaps in its namespace. Expand permissions only for a documented requirement.</div>
+<div class="callout production"><strong>[PRODUCTION]</strong> Add image signing, admission policy, secret management, backups, Pod Security standards, and tested disaster recovery before production use.</div>
+<h2 class="section-heading">Key controls</h2>
+<p class="text-line"><strong>ResourceQuota:</strong> limits namespace consumption. <strong>LimitRange:</strong> supplies safe container defaults. <strong>NetworkPolicy:</strong> reduces network reachability. <strong>HPA:</strong> scales from CPU utilization. <strong>PDB:</strong> protects availability during voluntary disruptions.</p>
+<h2 class="section-heading">Project files</h2>
+<p><a class="back-link" href="../devops_projects/13_kubernetes_management/README.md">Open project README</a></p>
+<p><a class="back-link" href="../devops_projects/13_kubernetes_management/workload.yaml">Open workload manifest</a></p>
+<p><a class="back-link" href="03_kubernetes_application.html">Review the introductory Kubernetes project</a></p>
+</article></main>
+</body></html>

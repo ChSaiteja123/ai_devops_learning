@@ -1,0 +1,8 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Istio Service Mesh</title><link rel="stylesheet" href="style.css"></head><body><header class="site-header"><div class="page"><a class="back-link" href="index.html">Back to project guides</a><h1>14. Istio Service Mesh</h1><p>Route traffic, shift versions, enforce mTLS, and observe service-to-service behavior.</p></div></header><main class="page"><article><h2 class="section-heading">Service-mesh flow</h2><div class="code-block">Client -> Istio Ingress Gateway -> VirtualService -> DestinationRule subset
+                                      |
+                               Envoy sidecars -> service workload</div><h2 class="section-heading">Project controls</h2><p>Two catalog versions receive controlled traffic. The VirtualService defines routing, retries, timeout, and a 90/10 canary split. The DestinationRule defines subsets and outlier detection.</p><p>PeerAuthentication enables STRICT mTLS, while AuthorizationPolicy limits which namespaces may call the catalog service.</p><div class="callout security"><strong>[SECURITY]</strong> Start with explicit authorization policies, verify sidecar injection, and test traffic behavior before enabling strict mTLS across a production mesh.</div><h2 class="section-heading">Apply and inspect</h2><div class="code-block">kubectl apply -f namespace.yaml
+kubectl apply -f workload.yaml
+kubectl apply -f traffic.yaml
+kubectl apply -f security.yaml
+istioctl analyze -n mesh-demo
+kubectl -n mesh-demo get gateway,virtualservice,destinationrule</div><p><a class="back-link" href="../devops_projects/14_istio_service_mesh/README.md">Open project README</a></p></article></main></body></html>

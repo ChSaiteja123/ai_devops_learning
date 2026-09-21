@@ -1,0 +1,260 @@
+AWS S3, IAM, and CloudWatch
+===========================
+
+PURPOSE / OVERVIEW
+--------------------------------------------------------------------------------
+Amazon S3
+S3 is AWS object storage designed for storing files, logs, backups, and static content. It is highly durable and scalable.
+[SECURITY] Keep buckets private by default and grant only the narrowly scoped access required by each workload.
+
+1. USE CASES
+--------------------------------------------------------------------------------
+Use cases
+
+- store application artifacts
+- host static websites
+- log retention
+- backup and archival
+- image and media storage
+
+2. EXAMPLE BUCKET POLICY
+--------------------------------------------------------------------------------
+Example bucket policy
+
+EXAMPLE
+----------------------------------------
+{
+  "Version": "2012-10-17",
+  "Statement": [{
+    "Effect": "Allow",
+    "Principal": "*",
+    "Action": "s3:GetObject",
+    "Resource": "arn:aws:s3:::example-bucket/*"
+  }]
+}
+
+3. IAM
+--------------------------------------------------------------------------------
+IAM
+
+IAM provides identity and access management for AWS users, roles, and policies.
+
+4. CONCEPTS
+--------------------------------------------------------------------------------
+Concepts
+
+- user
+- group
+- role
+- policy
+- permission boundary
+
+5. EXAMPLE IAM POLICY
+--------------------------------------------------------------------------------
+Example IAM policy
+
+EXAMPLE
+----------------------------------------
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": ["s3:GetObject"],
+      "Resource": "arn:aws:s3:::example-bucket/*"
+    }
+  ]
+}
+
+6. CLOUDWATCH
+--------------------------------------------------------------------------------
+CloudWatch
+
+CloudWatch monitors AWS resources and applications by collecting metrics, logs, and alarms.
+
+7. COMMON FEATURES
+--------------------------------------------------------------------------------
+Common features
+
+- metrics collection
+- logs aggregation
+- dashboards
+- alarms
+- alerting
+
+8. EXAMPLE
+--------------------------------------------------------------------------------
+Example
+
+Create an alarm if CPU utilization exceeds 80% for 5 minutes.
+
+9. KEY TOOLS AND COMPONENTS
+--------------------------------------------------------------------------------
+These AWS services are foundational for cloud reliability, security, and monitoring.
+
+10. S3, IAM, AND CLOUDWATCH DEEP DIVE
+--------------------------------------------------------------------------------
+S3, IAM, and CloudWatch deep dive
+S3 stores objects in globally unique bucket names.
+Object keys define logical prefixes but do not create directories.
+Use block public access unless public delivery is intentional.
+Use bucket policies with explicit principals and conditions.
+Use identity policies for caller permissions.
+Enable versioning for recovery from overwrite and deletion.
+Use object lock when retention must resist deletion.
+Encrypt objects with provider-managed or customer-managed keys.
+Restrict KMS key policies as carefully as bucket policies.
+Use TLS-only bucket conditions for transport protection.
+Use access logs or CloudTrail data events where investigation requires them.
+Data events can be expensive at high volume.
+Use lifecycle rules for transition and expiration.
+Use intelligent tiering when access patterns are uncertain.
+Use multipart upload for large objects.
+Abort incomplete multipart uploads automatically.
+Use checksums to verify object integrity.
+Use presigned URLs with short expiry and narrow permissions.
+Never expose presigned URLs in public logs.
+Use CloudFront for cached public content with controlled origin access.
+Keep application buckets private behind an origin access control.
+Use replication for regional recovery and compliance requirements.
+Test replicated object ownership and encryption.
+Define delete marker and version retention behavior.
+Back up critical data outside the primary failure boundary.
+Test restore from a real backup location.
+Use IAM roles rather than long-lived access keys.
+Use federation for human access.
+Require MFA for privileged actions.
+Write least-privilege policies with explicit resources.
+Avoid Action:* and Resource:* in production policies.
+Use conditions for source VPC, encryption, tags, and MFA context.
+Separate administration from data-plane access.
+Use permission boundaries for delegated administrators.
+Use service control policies for organization guardrails.
+Review role trust policies for unintended principals.
+Remove unused users, keys, roles, and policies.
+Rotate credentials and verify consumers after rotation.
+Use Access Analyzer to identify unintended external access.
+Use IAM policy simulation before granting broad permissions.
+Avoid embedding credentials in AMIs, containers, or repositories.
+Use Secrets Manager for application secrets.
+Use KMS grants for controlled service use.
+CloudWatch metrics have namespaces, dimensions, and retention behavior.
+High-cardinality dimensions increase cost and reduce usefulness.
+Publish business and technical metrics together.
+Use dashboards for service health and operational decisions.
+Use log groups with explicit retention.
+Encrypt log groups when required by policy.
+Use structured JSON logs for queryable fields.
+Create metric filters only for stable patterns.
+Use Logs Insights for targeted investigations.
+Create alarms from symptoms and service objectives.
+Use composite alarms to reduce notification noise.
+Set evaluation periods and missing-data behavior intentionally.
+Use anomaly detection when normal variation is meaningful.
+Use CloudWatch Synthetics for critical user journeys.
+Use alarms for certificate, quota, and backup failures.
+Route alarm notifications through SNS or an incident system.
+Include owner and runbook links in alarm metadata.
+Use CloudTrail for API history and governance.
+Centralize CloudTrail logs in a protected account.
+Validate trail delivery and log integrity.
+Review unauthorized calls and unusual regions.
+Use GuardDuty findings as detection signals.
+Use Config rules for resource compliance.
+Automate remediation only when the action is well understood.
+Record remediation decisions and exceptions.
+Tag resources for owner and cost attribution.
+Use budgets for S3 requests, storage, logs, and monitoring.
+Control CloudWatch log ingestion and retention costs.
+Sample high-volume debug telemetry.
+Do not log secrets or unnecessary personal data.
+Restrict read access to sensitive logs.
+Use separate monitoring roles from deployment roles.
+Test monitoring when rotating keys or changing buckets.
+Validate bucket policy changes with a private test object.
+Use deny statements only when their blast radius is understood.
+S3, IAM, and CloudWatch together form a core control loop.
+
+11. S3, IAM, AND CLOUDWATCH OPERATING PATTERNS
+--------------------------------------------------------------------------------
+S3, IAM, and CloudWatch operating patterns
+Start S3 design with data classification, access paths, retention, and recovery objectives.
+Keep buckets private and expose content through controlled CloudFront origin access when needed.
+Use bucket policies with explicit principals, actions, resources, and transport conditions.
+Test policy changes against a private object before applying them to a production bucket.
+Use versioning, object lock, and cross-account replication when deletion recovery is required.
+Define how delete markers, noncurrent versions, and replicated objects are retained.
+Use lifecycle rules for incomplete uploads, old versions, logs, and archive transitions.
+Set multipart upload thresholds and abort incomplete uploads to control storage cost.
+Use checksums and client-side validation for critical artifact transfers.
+Keep presigned URLs short-lived and restrict their method, object, and intended audience.
+Use IAM roles for workloads and federation for people; remove dormant access keys.
+Review role trust policies for external accounts, services, and unexpected principals.
+Use permission boundaries and service control policies for delegated administration.
+Use Access Analyzer and policy simulation before expanding data access.
+Keep administrator permissions separate from application data-plane permissions.
+Store secrets in Secrets Manager and never place credentials in object metadata or logs.
+Use CloudWatch metric filters for stable patterns and Logs Insights for focused investigations.
+Set explicit log retention and encryption rather than accepting indefinite defaults.
+Avoid high-cardinality dimensions and uncontrolled debug logging because both increase cost.
+Use composite alarms to combine dependency signals and reduce paging noise.
+Set missing-data behavior intentionally for each alarm.
+Attach owner, severity, dashboard, and runbook metadata to actionable alarms.
+Test SNS, email, webhook, and incident integrations after routing changes.
+Use CloudTrail management events for governance and data events selectively for investigation.
+Protect centralized audit logs from alteration and validate delivery health.
+Use GuardDuty, Config, and Access Analyzer findings as signals for a documented response.
+Monitor bucket growth, request rates, KMS throttling, log ingestion, and alarm health.
+Set budgets for storage, requests, replication, CloudTrail data events, and log retention.
+Test key rotation, bucket recovery, policy rollback, and monitoring failure scenarios.
+These services are effective when access, evidence, alerting, and retention are designed together.
+
+12. S3 RECOVERY AND DATA LIFECYCLE
+--------------------------------------------------------------------------------
+S3 recovery and data lifecycle
+Classify objects by sensitivity, retention, recovery point, and expected access frequency.
+Enable versioning before storing data that must survive accidental overwrite or deletion.
+Use object lock and retention governance only after legal and operational ownership is clear.
+Replicate critical data across an appropriate account or region and test ownership on the copy.
+Keep replication failure metrics and alerts visible to the data owner.
+Use lifecycle rules for current objects, noncurrent versions, delete markers, and incomplete uploads.
+Choose Standard, Intelligent-Tiering, Glacier classes, or expiration from measured access patterns.
+Use multipart uploads for large objects and abort unfinished uploads automatically.
+Verify checksums and object size after critical uploads and restores.
+Test restore permissions, KMS access, object metadata, and application path from the recovery location.
+Use CloudFront origin access control instead of making an application bucket public.
+Limit presigned URLs by method, object, duration, and intended client.
+
+13. IAM POLICY REVIEW
+--------------------------------------------------------------------------------
+IAM policy review
+Start with the specific principal, action, resource, and condition required by the workflow.
+Use explicit resource ARNs and avoid Action:* or Resource:* in production roles.
+Use conditions for encryption, source VPC, source account, MFA, tags, and secure transport.
+Separate role administration, policy administration, and application data access.
+Review trust policies independently from permission policies.
+Use permission boundaries for delegated role creation and service control policies for organization limits.
+Use Access Analyzer to find unintended external access and policy simulation before rollout.
+Remove inactive users, roles, policies, access keys, and unused permissions.
+Rotate credentials with a tested consumer migration and revocation procedure.
+Keep credentials out of AMIs, images, repositories, object metadata, and logs.
+Record who approved sensitive policy changes and which resources were tested.
+
+14. CLOUDWATCH IMPLEMENTATION
+--------------------------------------------------------------------------------
+CloudWatch implementation
+Name log groups, dashboards, alarms, and metrics with a stable service and environment convention.
+Set log retention and encryption explicitly for each group.
+Use structured JSON logs with correlation and deployment identifiers.
+Create metric filters only for stable patterns and test them against representative logs.
+Use Logs Insights queries saved with the runbook for common incident questions.
+Prefer composite alarms when several low-level signals describe one user-facing failure.
+Set evaluation periods, thresholds, and missing-data treatment from measured behavior.
+Use anomaly detection only when normal variation is stable and a response is defined.
+Monitor alarm actions, SNS delivery, log ingestion, and dashboard availability themselves.
+Control high-cardinality dimensions, verbose debug logging, and long retention to manage cost.
+Keep security and audit events unsampled even when normal application telemetry is sampled.
+Use CloudTrail data events selectively because high-volume object access can be expensive.
+S3, IAM, and CloudWatch are most useful when prevention, detection, recovery, and ownership connect.
+Review object ownership, ACL behavior, and bucket policy interactions before migrations.
+Keep a tested break-glass role for data recovery with separate approval and audit requirements.

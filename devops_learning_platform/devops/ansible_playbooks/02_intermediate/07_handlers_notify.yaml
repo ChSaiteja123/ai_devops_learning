@@ -1,0 +1,57 @@
+# 07_handlers_notify.yaml — Handlers: run tasks only when notified (e.g., restart after config change)
+# Key: handlers only run once at the end, even if notified multiple times
+# Usage: ansible-playbook -i inventory/hosts.ini 02_intermediate/07_handlers_notify.yaml
+---
+- name: Configure nginx with handlers
+  hosts: webservers
+  become: true
+
+  handlers:
+    - name: Restart nginx
+      ansible.builtin.service:
+        name: nginx
+        state: restarted
+
+    - name: Reload nginx
+      ansible.builtin.service:
+        name: nginx
+        state: reloaded
+
+    - name: Reload firewall
+      ansible.builtin.service:
+        name: ufw
+        state: reloaded
+
+  tasks:
+    - name: Install nginx
+      ansible.builtin.apt:
+        name: nginx
+        state: present
+
+    - name: Deploy nginx config
+      ansible.builtin.template:
+        src: templates/nginx.conf.j2
+        dest: /etc/nginx/nginx.conf
+        mode: "0644"
+      notify: Reload nginx          # only restarts if this task CHANGED
+
+    - name: Deploy site config
+      ansible.builtin.copy:
+        src: files/default.conf
+        dest: /etc/nginx/sites-available/default
+      notify: Reload nginx          # notified twice — handler still runs only once
+
+    - name: Open port 80 in firewall
+      community.general.ufw:
+        rule: allow
+        port: "80"
+        proto: tcp
+      notify: Reload firewall
+
+    - name: Flush handlers now (force immediate execution)
+      ansible.builtin.meta: flush_handlers
+
+    - name: Verify nginx responds (after handler ran)
+      ansible.builtin.uri:
+        url: http://localhost
+        status_code: 200

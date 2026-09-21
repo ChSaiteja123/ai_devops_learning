@@ -1,0 +1,68 @@
+# 08_statefulset.yaml — StatefulSet for PostgreSQL
+# Provides: stable network IDs, ordered startup, persistent storage per pod
+# Usage: kubectl apply -f 08_statefulset.yaml -n dev
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres
+  namespace: dev
+spec:
+  serviceName: "postgres"   # headless service name — required
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:15-alpine
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              value: "appdb"
+            - name: POSTGRES_USER
+              value: "appuser"
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: password
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+          volumeMounts:
+            - name: pgdata
+              mountPath: /var/lib/postgresql/data
+  volumeClaimTemplates:         # each pod gets its own PVC automatically
+    - metadata:
+        name: pgdata
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: "gp2"
+        resources:
+          requests:
+            storage: 10Gi
+---
+# Headless service for stable DNS: postgres-0.postgres.dev.svc.cluster.local
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+  namespace: dev
+spec:
+  clusterIP: None             # headless — no cluster IP
+  selector:
+    app: postgres
+  ports:
+    - port: 5432
+      targetPort: 5432

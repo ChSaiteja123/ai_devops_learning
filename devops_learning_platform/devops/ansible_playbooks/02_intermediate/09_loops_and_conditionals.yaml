@@ -1,0 +1,73 @@
+# 09_loops_and_conditionals.yaml — Loops, conditionals, and registered results
+# Usage: ansible-playbook -i inventory/hosts.ini 02_intermediate/09_loops_and_conditionals.yaml
+---
+- name: Loops and conditionals demo
+  hosts: all
+  become: true
+
+  vars:
+    web_packages:
+      - nginx
+      - curl
+      - git
+
+    users:
+      - { name: alice, role: developer, shell: /bin/bash }
+      - { name: bob, role: operator, shell: /bin/bash }
+      - { name: svc-deploy, role: service, shell: /usr/sbin/nologin }
+
+    directories:
+      - { path: /opt/app, mode: "0755" }
+      - { path: /opt/app/logs, mode: "0750" }
+      - { path: /opt/app/config, mode: "0700" }
+
+  tasks:
+    # Loop over a simple list
+    - name: Install web packages
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: present
+      loop: "{{ web_packages }}"
+
+    # Loop over list of dicts
+    - name: Create users
+      ansible.builtin.user:
+        name: "{{ item.name }}"
+        shell: "{{ item.shell }}"
+        state: present
+      loop: "{{ users }}"
+
+    # Loop with conditionals
+    - name: Create directories
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: directory
+        mode: "{{ item.mode }}"
+      loop: "{{ directories }}"
+      when: ansible_os_family == "Debian"   # conditional on fact
+
+    # Register result and use it in next task
+    - name: Check if docker is installed
+      ansible.builtin.command:
+        cmd: which docker
+      register: docker_check
+      failed_when: false      # don't fail if docker not found
+      changed_when: false
+
+    - name: Install Docker if not present
+      ansible.builtin.apt:
+        name: docker.io
+        state: present
+      when: docker_check.rc != 0    # rc=0 means found, nonzero means not found
+
+    # Loop with loop_var (cleaner name than 'item')
+    - name: Enable services
+      ansible.builtin.service:
+        name: "{{ svc }}"
+        state: started
+        enabled: true
+      loop:
+        - nginx
+        - cron
+      loop_control:
+        loop_var: svc

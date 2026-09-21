@@ -1,0 +1,71 @@
+# 08_templates_jinja2.yaml — Jinja2 templates for dynamic config files
+# Usage: ansible-playbook -i inventory/hosts.ini 02_intermediate/08_templates_jinja2.yaml
+# Templates use .j2 extension and go in the templates/ folder
+
+# --- PLAYBOOK ---
+---
+- name: Deploy Nginx config using Jinja2 template
+  hosts: webservers
+  become: true
+
+  vars:
+    server_name: "app.example.com"
+    app_port: 8000
+    ssl_enabled: true
+    worker_processes: "{{ ansible_processor_vcpus }}"   # dynamic from facts
+
+  tasks:
+    - name: Deploy nginx config from template
+      ansible.builtin.template:
+        src: templates/nginx_vhost.conf.j2
+        dest: /etc/nginx/sites-available/app
+        owner: root
+        group: root
+        mode: "0644"
+        validate: "nginx -t -c %s"   # validate before placing file
+      notify: Reload nginx
+
+    - name: Enable the site
+      ansible.builtin.file:
+        src: /etc/nginx/sites-available/app
+        dest: /etc/nginx/sites-enabled/app
+        state: link
+
+  handlers:
+    - name: Reload nginx
+      ansible.builtin.service:
+        name: nginx
+        state: reloaded
+
+# --- TEMPLATE FILE CONTENT (save as templates/nginx_vhost.conf.j2) ---
+# This is what the template file looks like:
+# ---------------------------------------------------------------------------
+# # Managed by Ansible — do not edit manually
+# # Generated: {{ ansible_date_time.iso8601 }} on {{ inventory_hostname }}
+#
+# worker_processes {{ worker_processes }};
+#
+# server {
+#     listen 80;
+#     server_name {{ server_name }};
+#
+#     {% if ssl_enabled %}
+#     listen 443 ssl;
+#     ssl_certificate     /etc/ssl/certs/{{ server_name }}.crt;
+#     ssl_certificate_key /etc/ssl/private/{{ server_name }}.key;
+#     return 301 https://$host$request_uri;
+#     {% endif %}
+#
+#     location / {
+#         proxy_pass http://127.0.0.1:{{ app_port }};
+#         proxy_set_header Host $host;
+#         proxy_set_header X-Real-IP $remote_addr;
+#     }
+#
+#     {% for backend in backends | default([]) %}
+#     upstream backend_{{ loop.index }} {
+#         server {{ backend }};
+#     }
+#     {% endfor %}
+# }
+# ---------------------------------------------------------------------------

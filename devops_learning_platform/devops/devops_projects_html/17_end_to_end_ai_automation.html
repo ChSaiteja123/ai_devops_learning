@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>End-to-End AI DevOps Automation</title><link rel="stylesheet" href="style.css"></head>
+<body>
+<header class="site-header"><div class="page"><a class="back-link" href="index.html">Back to project guides</a><h1>17. End-to-End AI DevOps Automation</h1><p>Connect alerts, AI analysis, policy, approval, deployment planning, and audit evidence.</p></div></header>
+<main class="page"><article>
+<h2 class="section-heading">Complete workflow</h2>
+<div class="code-block">Alert -> validate -> deduplicate -> AI analysis -> policy gate -> approval
+-> dry-run deployment plan -> audit evidence -> separate authorized deployment</div>
+<h2 class="section-heading">Run locally</h2>
+<div class="code-block">python workflow.py incident.json</div>
+<p class="text-line">The local workflow uses deterministic analysis. It creates <strong>automation-audit.json</strong> and never changes a cluster, sends a notification, or executes a rollback.</p>
+<div class="callout important"><strong>[IMPORTANT]</strong> AI analysis is advisory. Policy validation and authorization must happen in ordinary application code before any production action.</div>
+<div class="callout security"><strong>[SECURITY]</strong> Critical incidents require human approval. Keep deployment credentials outside the analysis process and use a separate least-privilege deployment job.</div>
+<h2 class="section-heading">Decision stages</h2>
+<p class="text-line"><strong>Validate:</strong> confirm required incident, alert, and deployment fields.</p>
+<p class="text-line"><strong>Analyze:</strong> produce a hypothesis, evidence list, confidence, and recommended actions.</p>
+<p class="text-line"><strong>Policy:</strong> remove blocked actions and identify whether approval is required.</p>
+<p class="text-line"><strong>Plan:</strong> identify the target version and rollback version without executing either.</p>
+<p class="text-line"><strong>Audit:</strong> record model mode, decision, evidence, approval requirement, and execution state.</p>
+<h2 class="section-heading">Jenkins validation</h2>
+<div class="code-block">python3 -m py_compile workflow.py
+python3 workflow.py incident.json
+assert requires_human_approval is True
+assert deployment_executed is False</div>
+<h2 class="section-heading">Project files</h2>
+<p><a class="back-link" href="../devops_projects/17_end_to_end_ai_automation/README.md">Open project README</a></p>
+<p><a class="back-link" href="../devops_projects/17_end_to_end_ai_automation/workflow.py">Open workflow code</a></p>
+<p><a class="back-link" href="16_observability_automation.html">Related observability automation</a></p>
+</article></main>
+</body></html>

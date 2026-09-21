@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalog-v1
+  namespace: mesh-demo
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: catalog
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: catalog
+        version: v1
+    spec:
+      containers:
+        - name: catalog
+          image: YOUR_REGISTRY/catalog:v1
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalog-v2
+  namespace: mesh-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: catalog
+      version: v2
+  template:
+    metadata:
+      labels:
+        app: catalog
+        version: v2
+    spec:
+      containers:
+        - name: catalog
+          image: YOUR_REGISTRY/catalog:v2
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: catalog
+  namespace: mesh-demo
+spec:
+  selector:
+    app: catalog
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080

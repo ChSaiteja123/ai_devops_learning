@@ -1,0 +1,256 @@
+Terraform
+========================
+
+PURPOSE / OVERVIEW
+--------------------------------------------------------------------------------
+Terraform is an Infrastructure as Code (IaC) tool used to provision and manage cloud resources declaratively.
+
+1. WHY TERRAFORM IS IMPORTANT
+--------------------------------------------------------------------------------
+[IMPORTANT] Why Terraform is important
+
+- version infrastructure
+- repeatable deployments
+- reduce manual cloud configuration
+- manage multi-cloud infrastructure
+
+2. CORE CONCEPTS
+--------------------------------------------------------------------------------
+Core concepts
+
+- provider
+- resource
+- variable
+- output
+- module
+- state
+
+3. EXAMPLE TERRAFORM CODE
+--------------------------------------------------------------------------------
+Example Terraform code
+
+EXAMPLE
+----------------------------------------
+provider "aws" {
+  region = "us-east-1"
+}
+
+4. COMMANDS AND CONFIGURATION
+--------------------------------------------------------------------------------
+EXAMPLE
+----------------------------------------
+resource "aws_s3_bucket" "logs" {
+  bucket = "my-devops-bucket"
+  acl    = "private"
+}
+
+5. SECURITY AND RELIABILITY
+--------------------------------------------------------------------------------
+EXAMPLE
+----------------------------------------
+output "bucket_name" {
+  value = aws_s3_bucket.logs.bucket
+}
+
+6. COMMON COMMANDS
+--------------------------------------------------------------------------------
+Common commands
+
+- terraform init
+- terraform plan
+- terraform apply
+- terraform destroy
+- terraform validate
+
+7. BENEFITS
+--------------------------------------------------------------------------------
+Benefits
+
+- infrastructure becomes code
+- easier approval and review
+- repeatable environments
+- easier disaster recovery
+
+8. CORE CONCEPTS
+--------------------------------------------------------------------------------
+EXAMPLE
+----------------------------------------
+Terraform is one of the most common IaC tools in cloud and DevOps engineering.
+
+9. TERRAFORM DEEP DIVE
+--------------------------------------------------------------------------------
+EXAMPLE
+----------------------------------------
+Terraform deep dive
+Terraform configuration declares desired infrastructure relationships.
+Providers translate resource models into cloud or platform API calls.
+Resources create and manage remote objects.
+Data sources read existing information without owning it.
+Variables expose controlled inputs with types and validation.
+Locals name repeated expressions and clarify intent.
+Outputs expose selected values to callers and automation.
+Modules package reusable infrastructure interfaces.
+State maps configuration addresses to real remote objects.
+The state file can contain sensitive values and requires protection.
+Use a remote encrypted backend for team collaboration.
+Enable state locking to prevent concurrent writes.
+Back up state and test recovery procedures.
+Never commit local state or plan files containing secrets.
+Run terraform fmt before review.
+Run terraform validate in the smallest relevant directory.
+Run terraform init with controlled provider sources.
+Review provider versions and lock checksums.
+Commit .terraform.lock.hcl for reproducible provider selection.
+Run terraform plan before apply and inspect every change.
+Save plans when approval must apply exactly reviewed changes.
+Apply only an approved plan in controlled environments.
+Avoid -auto-approve for sensitive production changes.
+Use workspaces only when their isolation model is understood.
+Separate production state from nonproduction state.
+Use separate cloud accounts for strong environment boundaries.
+Design module inputs around business intent, not provider internals.
+Keep module outputs minimal and stable.
+Document module assumptions, required providers, and examples.
+Avoid deeply nested modules that hide ownership.
+Use version constraints for Terraform and providers.
+Upgrade providers in a branch with plan review.
+Read provider changelogs before accepting major changes.
+Use import to bring existing resources under management carefully.
+Use moved blocks when refactoring resource addresses.
+Use lifecycle prevent_destroy for irreplaceable resources.
+Use create_before_destroy when capacity allows overlap.
+Use ignore_changes only for an intentional external owner.
+Do not use ignore_changes to hide unmanaged drift.
+Use explicit dependencies only when implicit references are insufficient.
+Avoid provisioners because they reduce declarative reliability.
+Prefer cloud-init, images, or configuration management for host setup.
+Use null resources only with a clear replacement plan.
+Pin regions, accounts, and naming conventions.
+Validate CIDR ranges and environment names at the variable boundary.
+Use sensitive variables and outputs to reduce accidental display.
+Remember sensitive does not encrypt values in state.
+Use secret managers and data sources with restricted access.
+Do not place secrets in command-line arguments or plan output.
+Use policy as code to restrict public exposure and weak encryption.
+Scan Terraform with a security tool before apply.
+Require encryption for storage, databases, and transport.
+Require tags for owner, environment, cost center, and expiry.
+Use least-privilege IAM roles for Terraform execution.
+Separate plan identity from apply identity when governance requires it.
+Audit who can read and modify state.
+Treat state locking failures as a coordination problem.
+Never delete a lock by force without checking active operations.
+Use a maintenance window for large state migrations.
+Split oversized state by ownership and lifecycle boundary.
+Avoid splitting state merely to hide dependencies.
+Use remote data carefully because external drift affects plans.
+Detect drift with scheduled plans and alert on unexpected changes.
+Review drift before importing or overwriting remote changes.
+Use targeted plans only for emergency diagnosis, not routine management.
+Understand that targeted apply can leave dependent resources unaddressed.
+Destroy ephemeral environments with explicit approvals and cost checks.
+Use expiration tags and scheduled cleanup for preview environments.
+Estimate cost before creating large or managed services.
+Use quotas and budget alerts to limit accidental spend.
+Use modules for repeated network, identity, and compute patterns.
+Test modules with disposable accounts or emulators where suitable.
+Use static checks for formatting, types, and deprecated arguments.
+Use plan JSON carefully because it may expose sensitive values.
+Publish plan summaries without publishing confidential contents.
+Keep CI credentials short-lived and workload-specific.
+Use OIDC federation to cloud providers from CI.
+Restrict backend access independently from resource access.
+Protect production apply jobs with reviewers.
+Require two-person review for identity and network changes.
+Run policy checks before terraform apply.
+Keep state backend availability within the recovery design.
+Document bootstrap steps for a new backend.
+Test bootstrap and restore with a disposable environment.
+Record provider APIs and quotas that affect deployment.
+Use timeouts for resources with slow asynchronous creation.
+Avoid arbitrary sleep commands in configuration.
+Use eventual consistency-aware provider resources and retries.
+Read error messages for quota, dependency, and authorization causes.
+Use terraform state list and show for state diagnosis.
+Use refresh-only plans to inspect drift without changing resources.
+Do not edit state JSON manually unless recovery procedures require it.
+Keep a copy of state before a risky state operation.
+Review deletions more carefully than additions.
+Use replacement plans only when the data and downtime impact are known.
+Plan rollback for application dependencies before infrastructure changes.
+Remember that infrastructure rollback may not restore data.
+Pair Terraform with tests for configuration contracts.
+Use ephemeral integration environments for module acceptance tests.
+Keep examples executable and free of real credentials.
+Use a changelog for module behavior changes.
+Terraform is a control plane, so its permissions and availability need engineering.
+Review every planned deletion.
+Protect remote state.
+Enable state locking.
+Back up state.
+Test state recovery.
+Commit provider lock files.
+Pin module versions.
+Validate input variables.
+Mark sensitive outputs.
+Avoid secrets in plans.
+Use short-lived credentials.
+Use separate production state.
+Review drift before apply.
+Avoid broad targeted applies.
+Use moved blocks for refactors.
+Use lifecycle rules deliberately.
+Avoid provisioner dependence.
+Test modules in isolation.
+Test upgrade paths.
+Test destroy paths.
+Require approval for production.
+Enforce tags and encryption.
+Enforce private networking.
+Estimate cost before apply.
+Terraform changes should be reviewable and reversible.
+
+10. APPLY VERIFICATION
+--------------------------------------------------------------------------------
+Apply verification
+Confirm that the apply used the approved plan and the intended state backend.
+Check outputs, cloud audit events, tags, encryption, and network exposure after apply.
+Run a refresh-only plan to detect unexpected drift introduced by the change.
+Verify dependent application health before closing the change record.
+Retain the plan summary, provider versions, state backup, approver, and resource identifiers.
+Do not call infrastructure rollback complete until data and service recovery are verified.
+Review cloud audit events when an apply reports success but a resource is unusable.
+Keep provider and module upgrades separate from functional infrastructure changes.
+Use plan exit codes in CI to distinguish no changes, proposed changes, and failures.
+
+11. TERRAFORM WORKFLOW AND FAILURE HANDLING
+--------------------------------------------------------------------------------
+EXAMPLE
+----------------------------------------
+Terraform workflow and failure handling
+Run terraform fmt, validate, and a reviewed plan in every change request.
+Use terraform plan -out only in a protected workspace because plan files may contain secrets.
+Inspect replacements and deletions separately from ordinary in-place updates.
+Confirm the selected account, region, workspace, and backend before planning.
+Use provider aliases when multiple accounts or regions are intentionally managed together.
+Keep backend configuration explicit so a new operator cannot target the wrong state.
+Treat a locked state as evidence of another operation until it is verified otherwise.
+Do not bypass locking during an active apply or destroy.
+Use terraform state list and terraform state show for diagnosis before editing configuration.
+Use refresh-only plans to identify drift without proposing configuration changes.
+Import resources only after deciding which configuration will own every important attribute.
+Use moved blocks for address refactors so Terraform does not destroy and recreate resources.
+Test module upgrades with representative plans and disposable environments.
+Use contract tests for required outputs, tags, encryption, and network boundaries.
+Validate that policy checks reject public storage, broad IAM, and missing backups.
+Separate plan permissions from apply permissions when approvals require independent control.
+Use short-lived workload identity for CI and restrict state reads to the required jobs.
+Back up state before backend migration, provider replacement, or manual state recovery.
+Define what application data does and does not survive infrastructure rollback.
+Use timeouts and provider retry behavior instead of arbitrary sleep resources.
+Check quotas and service limits before applying large changes.
+Estimate monthly cost for compute, storage, NAT, load balancing, backups, and transfer.
+Tag preview resources with an owner and expiration time, then automate cleanup.
+Keep examples free of real account IDs, credentials, and production names.
+Record the exact plan, approver, commit, provider lockfile, and apply result for releases.
+Terraform is safest when ownership, state recovery, and deletion impact are explicit.

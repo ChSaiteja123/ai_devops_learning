@@ -1,0 +1,33 @@
+# 17_pv_pvc.yaml — PersistentVolume + PersistentVolumeClaim
+# Usage: kubectl apply -f 17_pv_pvc.yaml -n dev
+
+# Static PV (manually created by admin — maps to an existing EBS volume)
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: app-pv
+spec:
+  capacity:
+    storage: 20Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce       # one node at a time (block storage)
+  persistentVolumeReclaimPolicy: Retain    # keep data after PVC deleted
+  storageClassName: gp2
+  awsElasticBlockStore:
+    volumeID: vol-0123456789abcdef0
+    fsType: ext4
+---
+# PVC — claim storage from the PV above (or from dynamic provisioner)
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: app-pvc
+  namespace: dev
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: gp2
+  resources:
+    requests:
+      storage: 20Gi

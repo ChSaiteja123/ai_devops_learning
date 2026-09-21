@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JSX Integration - DevOps Notes</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="page">
+      <a class="back-link" href="index.html">Back to DevOps Notes</a>
+      <h1>JSX integration in DevOps</h1>
+      <p>How a React/JSX frontend moves through version control, build, testing, security, and deployment.</p>
+    </div>
+  </header>
+
+  <main class="page">
+    <article>
+      <h2 class="section-heading">Frontend delivery flow</h2>
+      <div class="code-block">JSX source -> npm install -> lint -> test -> build -> artifact -> Docker image -> registry -> deployment</div>
+
+      <h2 class="section-heading">What JSX adds</h2>
+      <p class="text-line">JSX describes component markup inside JavaScript. A bundler transforms JSX into browser-ready JavaScript and CSS assets.</p>
+      <p class="text-line">The DevOps pipeline must therefore manage Node.js versions, lockfiles, npm dependencies, build artifacts, source maps, and frontend security scanning.</p>
+
+      <div class="callout important"><strong>[IMPORTANT]</strong> Pin the Node.js version and commit the package lockfile so local, CI, and production builds use the same dependency graph.</div>
+      <div class="callout security"><strong>[SECURITY]</strong> Never place API secrets in a browser bundle. Frontend environment variables are visible to users after the build.</div>
+
+      <h2 class="section-heading">Jenkins example</h2>
+      <div class="code-block">stage('Frontend checks') {
+    steps {
+        sh 'npm ci'
+        sh 'npm run lint'
+        sh 'npm test -- --runInBand'
+        sh 'npm run build'
+    }
+}
+
+stage('Frontend security') {
+    steps {
+        sh 'npm audit --audit-level=high'
+        sh 'trivy fs --severity HIGH,CRITICAL --exit-code 1 .'
+    }
+}</div>
+
+      <h2 class="section-heading">Container and deployment guidance</h2>
+      <p class="text-line">Build the JSX application in a Node.js build stage, then serve the static output from a small web server image. Do not ship the build toolchain in the runtime image.</p>
+      <p class="text-line">Deploy immutable image tags, configure cache headers for hashed assets, and keep the HTML entry point uncached or short-lived when it references changing asset names.</p>
+
+      <h2 class="section-heading">Related learning material</h2>
+      <p class="text-line"><a class="back-link" href="../../python/course_notes/37_jsx_deep_dive.txt">Read the JSX deep-dive notes</a></p>
+      <p class="text-line"><a class="back-link" href="../../python/examples/32_jsx_deep_dive.jsx">Open the JSX dashboard example</a></p>
+      <p class="text-line"><a class="back-link" href="18_jenkins_gradle_sonarqube_trivy_alertmanager.html">Review the quality and security pipeline</a></p>
+    </article>
+  </main>
+</body>
+</html>

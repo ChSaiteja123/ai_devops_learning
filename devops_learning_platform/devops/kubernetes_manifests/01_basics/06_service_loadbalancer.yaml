@@ -1,0 +1,21 @@
+# 06_service_loadbalancer.yaml — LoadBalancer Service (cloud provider creates ELB/ALB)
+# Usage: kubectl apply -f 06_service_loadbalancer.yaml -n dev
+# Check: kubectl get svc nginx-lb -n dev   (EXTERNAL-IP will be assigned by cloud)
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-lb
+  namespace: dev
+  annotations:
+    # AWS-specific annotation to create an NLB instead of classic ELB
+    service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+    service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: "true"
+spec:
+  type: LoadBalancer
+  selector:
+    app: nginx
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80

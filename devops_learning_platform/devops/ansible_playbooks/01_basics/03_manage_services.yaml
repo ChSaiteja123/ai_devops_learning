@@ -1,0 +1,39 @@
+# 03_manage_services.yaml — Start, stop, enable, and restart systemd services
+# Usage: ansible-playbook -i inventory/hosts.ini 01_basics/03_manage_services.yaml
+---
+- name: Manage nginx service
+  hosts: webservers
+  become: true
+
+  tasks:
+    - name: Ensure nginx is started and enabled on boot
+      ansible.builtin.service:
+        name: nginx
+        state: started
+        enabled: true
+
+    - name: Reload nginx config (graceful — no downtime)
+      ansible.builtin.service:
+        name: nginx
+        state: reloaded
+
+    - name: Restart nginx (only when config changes via handler in real playbooks)
+      ansible.builtin.service:
+        name: nginx
+        state: restarted
+
+    - name: Stop a service that shouldn't be running
+      ansible.builtin.service:
+        name: apache2
+        state: stopped
+        enabled: false
+
+    - name: Check if nginx is running using shell command
+      ansible.builtin.command:
+        cmd: systemctl is-active nginx
+      register: nginx_status
+      changed_when: false   # this task never counts as a change
+
+    - name: Print service status
+      ansible.builtin.debug:
+        msg: "nginx status: {{ nginx_status.stdout }}"

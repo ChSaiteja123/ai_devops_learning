@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI DevOps Incident Automation</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="page">
+      <a class="back-link" href="index.html">Back to project guides</a>
+      <h1>11. AI DevOps Incident Automation</h1>
+      <p>Classify alerts, recommend safe next steps, and publish an auditable incident report.</p>
+    </div>
+  </header>
+  <main class="page"><article>
+    <h2 class="section-heading">Purpose</h2>
+    <p>This project demonstrates AI-assisted incident triage without allowing a model to make destructive production changes automatically.</p>
+
+    <h2 class="section-heading">Workflow</h2>
+    <div class="code-block">Alert JSON -> validate -> rank severity -> summarize -> recommend bounded actions -> audit report</div>
+
+    <h2 class="section-heading">Run locally</h2>
+    <div class="code-block">python automation.py alerts.json</div>
+    <p class="text-line">The command creates <strong>incident-report.json</strong> with priorities, summaries, recommended actions, and an explicit <strong>automated_action_taken</strong> value.</p>
+
+    <div class="callout security"><strong>[SECURITY]</strong> The project only recommends actions. Keep authorization, rollback execution, credentials, and production changes outside the model and require human approval for high-impact operations.</div>
+    <div class="callout production"><strong>[PRODUCTION]</strong> Add PagerDuty, Slack, ticketing, redaction, immutable audit storage, rate limits, and evaluation cases before connecting real integrations.</div>
+
+    <h2 class="section-heading">Jenkins automation</h2>
+    <div class="code-block">stage('Validate automation') {
+    steps {
+        sh 'python3 -m py_compile automation.py'
+        sh 'python3 automation.py alerts.json'
+    }
+}
+
+post {
+    always {
+        archiveArtifacts artifacts: 'incident-report.json'
+    }
+}</div>
+
+    <h2 class="section-heading">Learning outcomes</h2>
+    <p class="text-line">This project teaches structured alert ingestion, validation, priority classification, safe AI boundaries, deterministic fallbacks, CI artifact publication, and incident auditability.</p>
+
+    <h2 class="section-heading">Project files</h2>
+    <p class="text-line"><a class="back-link" href="../devops_projects/11_ai_devops_automation/README.md">Open project README</a></p>
+    <p class="text-line"><a class="back-link" href="../devops_projects/11_ai_devops_automation/automation.py">Open automation code</a></p>
+    <p class="text-line"><a class="back-link" href="21_ai_projects.html">Return to AI project lab</a></p>
+  </article></main>
+</body>
+</html>

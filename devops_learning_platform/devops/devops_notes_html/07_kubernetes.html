@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kubernetes (K8s) - DevOps Notes</title><link rel="stylesheet" href="style.css"></head><body>
+<header class="site-header"><div class="page"><a class="back-link" href="index.html">Back to DevOps Notes</a></div></header><main class="page"><article>
+<h1 class="note-title">Kubernetes (K8s)</h1>
+<p class="note-overview">Formatted learning document with commands, examples, production guidance, and operational callouts.</p>
+<p class="text-line">Kubernetes (K8s)</p>
+<h3 class="section-heading">PURPOSE / OVERVIEW</h3>
+<p class="text-line">Kubernetes is an open-source container orchestration platform used to automate deployment, scaling, and management of containerized applications.</p>
+<h2 class="section-heading">1. BASIC KUBERNETES CONCEPTS</h2>
+<p class="text-line">Basic Kubernetes concepts</p>
+<p class="text-line bullet">- Pod: smallest deployable unit</p>
+<p class="text-line bullet">- Deployment: manages pods and upgrades</p>
+<p class="text-line bullet">- Service: exposes pods internally or externally</p>
+<p class="text-line bullet">- ReplicaSet: ensures desired number of pod replicas</p>
+<p class="text-line bullet">- Namespace: logical cluster partition</p>
+<p class="text-line bullet">- ConfigMap: non-secret configuration</p>
+<p class="text-line bullet">- Secret: sensitive configuration</p>
+<p class="text-line bullet">- Ingress: HTTP routing to services</p>
+<h2 class="section-heading">2. EXAMPLE DEPLOYMENT YAML</h2>
+<p class="text-line">Example deployment YAML</p>
+<h3 class="section-heading">EXAMPLE</h3>
+<div class="code-block">
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+name: myapp
+spec:
+replicas: 2
+selector:
+matchLabels:
+app: myapp
+template:
+metadata:
+labels:
+app: myapp
+spec:
+containers:
+- name: myapp
+image: myapp:latest
+ports:
+- containerPort: 8000
+</div>
+<h2 class="section-heading">3. COMMON COMMANDS</h2>
+<p class="text-line">Common commands</p>
+<h3 class="section-heading">COMMANDS</h3>
+<div class="code-block">
+kubectl get pods
+kubectl apply -f deployment.yaml
+kubectl get svc
+kubectl logs &lt;pod-name&gt;
+kubectl describe pod &lt;pod-name&gt;
+</div>
+<h2 class="section-heading">4. WHY KUBERNETES MATTERS</h2>
+<p class="text-line">Why Kubernetes matters</p>
+<p class="text-line bullet">- automated scaling</p>
+<p class="text-line bullet">- self-healing</p>
+<p class="text-line bullet">- rolling updates and rollbacks</p>
+<p class="text-line bullet">- service discovery and load balancing</p>
+<h2 class="section-heading">5. SECURITY AND RELIABILITY</h2>
+<p class="text-line">Kubernetes is the standard orchestration layer for containerized workloads in modern cloud-native environments.</p>
+<div class="callout security"><strong>[SECURITY]</strong> Treat manifests as production security policy: protect secrets, enforce least privilege, and reject privileged workloads.</div>
+<h2 class="section-heading">6. KUBERNETES DEEP DIVE</h2>
+<p class="text-line">Kubernetes deep dive</p>
+<p class="text-line">The control plane reconciles declared state with observed cluster state.</p>
+<p class="text-line">The API server is the authenticated front door for cluster operations.</p>
+<p class="text-line">etcd stores cluster state and requires backup and access protection.</p>
+<p class="text-line">The scheduler selects nodes using resources, constraints, and affinity.</p>
+<p class="text-line">Controllers continuously create or remove objects to match desired state.</p>
+<p class="text-line">Kubelet runs pods and reports node and container status.</p>
+<p class="text-line">Container runtime executes images through the CRI interface.</p>
+<p class="text-line">Pods share a network namespace and are scheduled as one unit.</p>
+<p class="text-line">Use one main workload concern per pod where practical.</p>
+<p class="text-line">Deployments manage stateless replicas and rolling updates.</p>
+<p class="text-line">StatefulSets provide stable identity and ordered storage behavior.</p>
+<p class="text-line">DaemonSets place one pod on selected nodes.</p>
+<p class="text-line">Jobs run finite work and CronJobs schedule recurring work.</p>
+<p class="text-line">Services provide stable discovery for changing pod addresses.</p>
+<p class="text-line">ClusterIP is internal service access.</p>
+<p class="text-line">NodePort exposes a port on every eligible node.</p>
+<p class="text-line">LoadBalancer requests an external provider load balancer.</p>
+<p class="text-line">Ingress routes HTTP traffic through an ingress controller.</p>
+<p class="text-line">Use Gateway APIs when the platform standard supports them.</p>
+<p class="text-line">ConfigMaps hold non-secret configuration.</p>
+<p class="text-line">Secrets need encryption at rest and strict access controls.</p>
+<p class="text-line">Never place passwords in ConfigMaps or public manifests.</p>
+<p class="text-line">Use namespaces for ownership, quotas, and policy boundaries.</p>
+<p class="text-line">Labels support selection, ownership, and operational queries.</p>
+<p class="text-line">Annotations hold non-selector metadata for controllers and tools.</p>
+<p class="text-line">Set resource requests so scheduling reflects real needs.</p>
+<p class="text-line">Set memory limits to contain runaway processes.</p>
+<p class="text-line">Avoid CPU limits that create latency without understanding workload behavior.</p>
+<p class="text-line">Use LimitRanges and ResourceQuotas for namespace governance.</p>
+<p class="text-line">Use PodDisruptionBudgets during voluntary maintenance.</p>
+<p class="text-line">Use topology spread to avoid correlated replica loss.</p>
+<p class="text-line">Use node affinity only when the placement reason is durable.</p>
+<p class="text-line">Taints and tolerations should express explicit workload boundaries.</p>
+<p class="text-line">Use readiness probes to remove unhealthy pods from traffic.</p>
+<p class="text-line">Use liveness probes only when restart is an appropriate recovery.</p>
+<p class="text-line">Use startup probes for slow initialization.</p>
+<p class="text-line">Set probe timeouts and failure thresholds from measurements.</p>
+<p class="text-line">Use graceful termination and a suitable termination grace period.</p>
+<p class="text-line">Handle preStop behavior without delaying shutdown indefinitely.</p>
+<p class="text-line">Use rolling strategy limits to control unavailable capacity.</p>
+<p class="text-line">Set maxSurge and maxUnavailable for the service risk profile.</p>
+<p class="text-line">Use revision history to support controlled rollback.</p>
+<p class="text-line">Pin images by digest for production deployments.</p>
+<p class="text-line">Never rely on latest for a controlled release.</p>
+<p class="text-line">Use image pull credentials with least privilege.</p>
+<p class="text-line">Use admission policy to reject risky images and settings.</p>
+<p class="text-line">Run containers as non-root whenever possible.</p>
+<p class="text-line">Drop Linux capabilities and use seccomp profiles.</p>
+<p class="text-line">Set read-only root filesystems where compatible.</p>
+<p class="text-line">Prevent privileged pods and host namespace sharing.</p>
+<p class="text-line">Restrict hostPath because it breaks isolation boundaries.</p>
+<p class="text-line">Use NetworkPolicies to define allowed ingress and egress.</p>
+<p class="text-line">Default-deny policies require explicit application flows.</p>
+<p class="text-line">Test policies from each namespace and service account.</p>
+<p class="text-line">Use service accounts per workload instead of the default account.</p>
+<p class="text-line">Apply RBAC with the smallest resource and verb scope.</p>
+<p class="text-line">Audit cluster role bindings and wildcard permissions.</p>
+<p class="text-line">Protect the API server with identity, TLS, and authorization.</p>
+<p class="text-line">Encrypt sensitive objects in etcd.</p>
+<p class="text-line">Back up etcd or managed control-plane state according to platform rules.</p>
+<p class="text-line">Test restore procedures in an isolated cluster.</p>
+<p class="text-line">Separate cluster administration from application deployment roles.</p>
+<p class="text-line">Use GitOps or reviewed manifests for desired state.</p>
+<p class="text-line">Validate YAML schemas before applying changes.</p>
+<p class="text-line">Use kustomize or Helm with controlled values and review.</p>
+<p class="text-line">Avoid templates that hide security-critical behavior.</p>
+<p class="text-line">Keep environment overlays small and auditable.</p>
+<p class="text-line">Use progressive delivery for high-risk workloads.</p>
+<p class="text-line">Observe rollout status rather than trusting apply success.</p>
+<p class="text-line">Use kubectl rollout status and rollout undo deliberately.</p>
+<p class="text-line">Check events when pods remain Pending or fail admission.</p>
+<p class="text-line">Use describe for scheduling, probe, mount, and image errors.</p>
+<p class="text-line">Use logs --previous after a container restart.</p>
+<p class="text-line">Use ephemeral debug containers with controlled permissions.</p>
+<p class="text-line">Inspect endpoints and EndpointSlices when traffic is missing.</p>
+<p class="text-line">Check DNS from inside the relevant namespace.</p>
+<p class="text-line">Check NetworkPolicy before changing application code.</p>
+<p class="text-line">Check requests and node pressure when scheduling fails.</p>
+<p class="text-line">Investigate OOMKilled using limits, usage, and application behavior.</p>
+<p class="text-line">Investigate CrashLoopBackOff using logs, events, and startup dependencies.</p>
+<p class="text-line">Keep persistent volumes separate from disposable pod lifecycle.</p>
+<p class="text-line">Use StorageClasses with explicit performance and retention behavior.</p>
+<p class="text-line">Test volume snapshots and restores for critical data.</p>
+<p class="text-line">Do not assume deleting a PVC deletes or preserves data.</p>
+<p class="text-line">Use backup operators or provider services with tested restore paths.</p>
+<p class="text-line">Keep cluster and node versions in a supported lifecycle.</p>
+<p class="text-line">Upgrade control plane and workloads with compatibility checks.</p>
+<p class="text-line">Use surge capacity for node maintenance when possible.</p>
+<p class="text-line">Drain nodes while respecting disruption budgets.</p>
+<p class="text-line">Monitor API latency, scheduler health, node pressure, and pod restarts.</p>
+<p class="text-line">Monitor workload saturation and user-facing service indicators.</p>
+<p class="text-line">Avoid alerts on every pod replacement without impact context.</p>
+<p class="text-line">Control metrics, logs, and trace cardinality and retention.</p>
+<p class="text-line">Use autoscaling from reliable metrics and realistic stabilization windows.</p>
+<p class="text-line">Horizontal Pod Autoscaler changes replica count.</p>
+<p class="text-line">Vertical recommendations must be reviewed before applying changes.</p>
+<p class="text-line">Cluster autoscaling needs quota, capacity, and cost guardrails.</p>
+<p class="text-line">Use priority classes carefully so critical workloads preempt safely.</p>
+<p class="text-line">Reserve system capacity on shared nodes.</p>
+<p class="text-line">Use separate node pools for incompatible trust or performance needs.</p>
+<p class="text-line">Use spot capacity only for interruptible workloads with recovery design.</p>
+<p class="text-line">Tag cloud resources for owner, environment, and cost center.</p>
+<p class="text-line">Clean abandoned namespaces, images, volumes, and load balancers.</p>
+<p class="text-line">Use policy exceptions with owner and expiry date.</p>
+<p class="text-line">Document every exposed service and its authentication model.</p>
+<p class="text-line">Kubernetes reliability comes from explicit desired state and feedback.</p>
+<p class="text-line">Review manifests before applying.</p>
+<p class="text-line">Pin production image digests.</p>
+<p class="text-line">Set requests from measurements.</p>
+<p class="text-line">Set limits from failure analysis.</p>
+<p class="text-line">Use readiness before traffic.</p>
+<p class="text-line">Use liveness only for recovery.</p>
+<p class="text-line">Use startup probes for slow apps.</p>
+<p class="text-line">Set disruption budgets.</p>
+<p class="text-line">Spread replicas across zones.</p>
+<p class="text-line">Use pod security controls.</p>
+<p class="text-line">Use least-privilege service accounts.</p>
+<p class="text-line">Restrict API permissions.</p>
+<p class="text-line">Use default-deny network policies.</p>
+<p class="text-line">Encrypt sensitive cluster data.</p>
+<p class="text-line">Back up control-plane state.</p>
+<p class="text-line">Test volume restoration.</p>
+<p class="text-line">Monitor pending pods.</p>
+<p class="text-line">Monitor restart loops.</p>
+<p class="text-line">Monitor node pressure.</p>
+<p class="text-line">Monitor API errors.</p>
+<p class="text-line">Monitor rollout progress.</p>
+<p class="text-line">Use staged delivery.</p>
+<p class="text-line">Define rollback thresholds.</p>
+<p class="text-line">Document ownership and escalation.</p>
+<p class="text-line">Kubernetes operations require feedback and discipline.</p>
+<h2 class="section-heading">7. CLUSTER RELEASE VERIFICATION</h2>
+<p class="text-line">Cluster release verification</p>
+<p class="text-line">Check the rendered manifest rather than reviewing only the Helm or Kustomize input.</p>
+<p class="text-line">Confirm the namespace, service account, image digest, requests, limits, probes, and policies.</p>
+<p class="text-line">Verify that rollout progress, endpoint readiness, and user-facing smoke tests all succeed.</p>
+<p class="text-line">Keep the previous ReplicaSet and image digest available until the observation window ends.</p>
+<p class="text-line">Record cluster version, deployment revision, operator, approval, and rollback decision.</p>
+<h2 class="section-heading">8. KUBERNETES DEPLOYMENT AND INCIDENT WORKFLOW</h2>
+<p class="text-line">Kubernetes deployment and incident workflow</p>
+<p class="text-line">Run kubectl diff before applying a reviewed manifest to a shared cluster.</p>
+<p class="text-line">Use a dedicated namespace and service account for each application boundary.</p>
+<p class="text-line">Verify image digests, resource requests, probes, and security context before rollout.</p>
+<p class="text-line">Check kubectl rollout status and deployment conditions after every change.</p>
+<p class="text-line">Use kubectl rollout history and rollout undo for controlled application rollback.</p>
+<p class="text-line">Inspect events sorted by time when a pod is Pending, evicted, or rejected.</p>
+<p class="text-line">Compare requested resources with node allocatable capacity during scheduling failures.</p>
+<p class="text-line">Check image pull secrets, registry reachability, and architecture compatibility for pull errors.</p>
+<p class="text-line">Check previous container logs, exit codes, and probe failures for restart loops.</p>
+<p class="text-line">Confirm Service selectors match pod labels when endpoints are empty.</p>
+<p class="text-line">Inspect EndpointSlices and DNS resolution before changing ingress rules.</p>
+<p class="text-line">Test NetworkPolicies from the source namespace and service account that makes the call.</p>
+<p class="text-line">Use port-forward only for temporary diagnosis and record its operator and duration.</p>
+<p class="text-line">Keep debug containers restricted and remove them after the investigation.</p>
+<p class="text-line">Use PodDisruptionBudgets with enough capacity for upgrades, not as a substitute for replicas.</p>
+<p class="text-line">Drain nodes gradually and observe application saturation during maintenance.</p>
+<p class="text-line">Back up cluster state and persistent data independently of the Kubernetes API.</p>
+<p class="text-line">Test restores in an isolated cluster with matching storage and identity assumptions.</p>
+<p class="text-line">Record cluster version, add-ons, admission policies, and node image versions.</p>
+<p class="text-line">Budget for control-plane, load balancer, storage, logging, and egress charges.</p>
+<p class="text-line">Remove abandoned namespaces and load balancers only after checking ownership and data.</p>
+<p class="text-line">Treat a successful kubectl apply as accepted configuration, not proof of user availability.</p>
+</article></main></body></html>

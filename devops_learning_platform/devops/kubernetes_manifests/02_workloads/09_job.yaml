@@ -1,0 +1,37 @@
+# 09_job.yaml — Job: runs a task to completion (database migration, batch processing)
+# Usage: kubectl apply -f 09_job.yaml -n dev
+# Check: kubectl get jobs -n dev && kubectl logs job/db-migration -n dev
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: db-migration
+  namespace: dev
+spec:
+  completions: 1          # number of successful completions needed
+  parallelism: 1          # pods running in parallel
+  backoffLimit: 3         # retry attempts before marking failed
+  activeDeadlineSeconds: 300   # kill job after 5 minutes
+  template:
+    metadata:
+      labels:
+        job: db-migration
+    spec:
+      restartPolicy: OnFailure   # OnFailure or Never (not Always)
+      containers:
+        - name: migration
+          image: myapp:v1.2
+          command: ["python", "manage.py", "migrate"]
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: app-secret
+                  key: database-url
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "200m"
+              memory: "256Mi"

@@ -1,0 +1,29 @@
+# inventory/hosts.yaml — YAML-format inventory (preferred for complex inventories)
+---
+all:
+  vars:
+    ansible_user: ubuntu
+    ansible_python_interpreter: /usr/bin/python3
+
+  children:
+    webservers:
+      hosts:
+        web01:
+          ansible_host: 10.0.1.10
+        web02:
+          ansible_host: 10.0.1.11
+      vars:
+        http_port: 80
+        app_dir: /opt/webapp
+
+    dbservers:
+      hosts:
+        db01:
+          ansible_host: 10.0.2.10
+          db_name: appdb
+          db_port: 5432
+
+    monitoring:
+      hosts:
+        mon01:
+          ansible_host: 10.0.3.10

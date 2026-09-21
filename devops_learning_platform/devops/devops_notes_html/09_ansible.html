@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ansible - DevOps Notes</title><link rel="stylesheet" href="style.css"></head><body>
+<header class="site-header"><div class="page"><a class="back-link" href="index.html">Back to DevOps Notes</a></div></header><main class="page"><article>
+<h1 class="note-title">Ansible</h1>
+<p class="note-overview">Formatted learning document with commands, examples, production guidance, and operational callouts.</p>
+<p class="text-line">Ansible</p>
+<h3 class="section-heading">PURPOSE / OVERVIEW</h3>
+<p class="text-line">Ansible is an automation tool used for configuration management, application deployment, and orchestration.</p>
+<h2 class="section-heading">1. KEY FEATURES</h2>
+<p class="text-line">Key features</p>
+<p class="text-line bullet">- agentless architecture</p>
+<p class="text-line bullet">- simple YAML-based playbooks</p>
+<p class="text-line bullet">- idempotent operations</p>
+<p class="text-line bullet">- good for infrastructure automation</p>
+<h2 class="section-heading">2. EXAMPLE PLAYBOOK</h2>
+<p class="text-line">Example playbook</p>
+<h3 class="section-heading">EXAMPLE</h3>
+<div class="code-block">
+---
+- hosts: webservers
+become: true
+tasks:
+- name: Install nginx
+apt:
+name: nginx
+state: present
+</div>
+<h2 class="section-heading">3. WORKFLOWS AND PRACTICES</h2>
+<h3 class="section-heading">EXAMPLE</h3>
+<div class="code-block">
+- name: Start nginx
+service:
+name: nginx
+state: started
+</div>
+<h2 class="section-heading">4. COMMON COMMANDS</h2>
+<p class="text-line">Common commands</p>
+<p class="text-line bullet">- ansible-playbook playbook.yml</p>
+<p class="text-line bullet">- ansible all -m ping</p>
+<p class="text-line bullet">- ansible-vault encrypt secret.yml</p>
+<h2 class="section-heading">5. USE CASES</h2>
+<p class="text-line">Use cases</p>
+<p class="text-line bullet">- install packages</p>
+<p class="text-line bullet">- manage OS config</p>
+<p class="text-line bullet">- deploy code</p>
+<p class="text-line bullet">- orchestrate tasks across hosts</p>
+<h2 class="section-heading">6. PRODUCTION GUIDANCE</h2>
+<h3 class="section-heading">EXAMPLE</h3>
+<div class="code-block">
+Ansible complements Terraform by handling configuration and software provisioning after infrastructure is created.
+</div>
+<div class="callout production"><strong>[PRODUCTION]</strong> Use check mode, narrow limits, and canary hosts before applying fleet-wide changes.</div>
+<h2 class="section-heading">7. ANSIBLE DEEP DIVE</h2>
+<h3 class="section-heading">EXAMPLE</h3>
+<div class="code-block">
+Ansible deep dive
+Ansible declares desired host state in YAML playbooks.
+The controller connects to managed nodes, commonly over SSH.
+Inventory defines hosts, groups, variables, and connection settings.
+Use separate inventories for development, staging, and production.
+Keep passwords out of inventory files.
+Use Vault or an external secret manager for sensitive variables.
+Roles organize tasks, handlers, templates, files, and defaults.
+Keep roles focused on one reusable capability.
+Pin collection versions for repeatable automation.
+Use fully qualified module names in shared playbooks.
+Prefer idempotent modules over shell commands.
+Use command only when no suitable module exists.
+Add creates or removes guards to command tasks.
+Use changed_when and failed_when to model outcomes.
+Handlers restart services only after relevant changes.
+Use check mode to preview supported changes.
+Use diff mode carefully because it may expose secrets.
+Run ansible-lint and YAML lint in CI.
+Use tags for focused diagnosis and maintenance.
+Use serial for rolling fleet changes.
+Set batch sizes that preserve service capacity.
+Drain traffic before changing a host when necessary.
+Verify health before returning a host to service.
+Assert operating system and required variables early.
+Fail clearly when a host is outside the supported baseline.
+Use become for narrowly scoped privileged tasks.
+Avoid running every task as root.
+Use SSH host key verification.
+Protect controller credentials and callback logs.
+Use no_log for tasks handling secrets.
+Use templates for validated configuration values.
+Validate rendered configuration before restarting services.
+Set file owner, group, and mode explicitly.
+Use package modules rather than distribution-specific shell commands.
+Pin package versions when reproducibility matters.
+Use service modules for enablement and startup.
+Use systemd drop-ins instead of editing vendor units.
+Manage users and directories declaratively.
+Remove obsolete files only with explicit ownership.
+Use facts for platform decisions.
+Avoid collecting unnecessary sensitive facts.
+Cache facts when freshness permits it.
+Use delegated tasks for load balancer operations.
+Protect delegation with clear inventory groups.
+Use asynchronous tasks for long operations.
+Set timeouts for unreachable hosts.
+Throttle expensive operations to protect shared services.
+Use blocks, rescue, and always for recovery.
+Do not hide failures with ignore_errors without justification.
+Register outputs only when later decisions need them.
+Avoid registering secret command output.
+Use assertions to verify service health.
+Test playbooks in disposable environments.
+Test both changed and already-correct hosts.
+Test failure and rollback paths.
+Use source control for playbooks and inventories.
+Review production inventory changes like code.
+Require pull requests and automated checks.
+Store execution reports and change summaries.
+Use automation platforms for RBAC and audit trails.
+Separate production execution credentials.
+Require approval for destructive fleet operations.
+Use maintenance windows for migrations and kernel changes.
+Define rollback tasks before replacing services.
+Make deployment steps safe after interruption.
+Verify downloaded artifacts by checksum.
+Do not execute unverified remote scripts.
+Restrict outbound network access from managed hosts.
+Document Python and Ansible version requirements.
+Upgrade collections in a test environment first.
+Read module changelogs for changed defaults.
+Control interpreter discovery explicitly.
+Track drift with scheduled check-mode runs.
+Investigate drift before overwriting manual changes.
+Remove decommissioned hosts from inventory promptly.
+Monitor duration, failures, and unreachable hosts.
+Turn repeated manual fixes into idempotent tasks.
+Keep variable indirection understandable.
+Document supported distributions and privileges.
+Ansible is reliable when state ownership is explicit.
+</div>
+<h2 class="section-heading">8. ANSIBLE OPERATIONS AND TROUBLESHOOTING</h2>
+<h3 class="section-heading">EXAMPLE</h3>
+<div class="code-block">
+Ansible operations and troubleshooting
+Start each playbook with assertions for supported operating system and Ansible version.
+Use inventory groups that reflect service ownership and maintenance boundaries.
+Keep group variables and host variables small enough to review without hidden precedence surprises.
+Use ansible-inventory --graph to verify that hosts are in the expected groups.
+Use ansible-inventory --host to inspect the variables resolved for one host.
+Run ansible-playbook --syntax-check before connecting to managed nodes.
+Use --check for a preview, then use --diff only where the output is safe to disclose.
+Run a focused tag or limit during diagnosis instead of changing the whole fleet.
+Use --limit and --serial to reduce blast radius during production work.
+Capture the playbook revision, inventory revision, operator, and target group in execution records.
+Keep SSH keys, Vault passwords, and callback logs outside the repository.
+Use host key verification and fail closed when a host identity changes unexpectedly.
+Set connection and task timeouts so unreachable nodes do not block the full run.
+Use retries with until for services that become ready asynchronously.
+Bound retries and include the last result in a failure message.
+Use wait_for or module-level readiness checks instead of arbitrary sleeps.
+Use handlers for restarts so unchanged configuration does not cause disruption.
+Validate configuration syntax before notifying a service restart.
+Drain a host from a load balancer before package or kernel maintenance.
+Return a host to service only after application health and dependency checks pass.
+Use block, rescue, and always to restore temporary maintenance state.
+Never hide a failed task with ignore_errors without recording the reason and follow-up.
+Use changed_when and failed_when to make command task behavior explicit.
+Prefer modules for users, packages, files, services, mounts, and cloud resources.
+Use shell only when shell features are required, and quote variables carefully.
+Add creates or removes guards when a command must run only once.
+Use templates with strict variable validation and explicit file modes.
+Do not render secrets into debug output, diffs, or controller logs.
+Use no_log around secret-handling tasks, while preserving a safe failure summary.
+Pin collections and test upgrades before changing production automation.
+Run ansible-lint, YAML lint, and role tests in CI.
+Test a role on a clean host and on an already configured host.
+Test failed downloads, missing packages, permission errors, and interrupted execution.
+Verify idempotence by running the playbook twice and reviewing the second result.
+Keep rollback tasks beside forward changes and test both paths.
+Use check-mode reports to detect configuration drift on a schedule.
+Investigate manual drift before overwriting changes owned by another team.
+Document required privileges, network access, Python interpreter, and supported distributions.
+Ansible fleet safety depends on narrow targeting, idempotence, and observable recovery.
+</div>
+<h2 class="section-heading">9. INVENTORY AND ROLE DESIGN</h2>
+<p class="text-line">Inventory and role design</p>
+<p class="text-line">Use YAML inventory for simple environments and a dynamic inventory plugin for authoritative cloud data.</p>
+<p class="text-line">Cache dynamic inventory only when stale membership cannot create a safety problem.</p>
+<p class="text-line">Use inventory names that identify environment, region, and service without exposing secrets.</p>
+<p class="text-line">Keep connection variables separate from application configuration.</p>
+<p class="text-line">Use ansible_group_priority sparingly because hidden variable precedence is difficult to troubleshoot.</p>
+<p class="text-line">Document which team owns each inventory group and who approves membership changes.</p>
+<p class="text-line">Use role defaults for safe, overridable values and role vars only for values that must not change.</p>
+<p class="text-line">Keep handlers named by outcome, such as restart web service, rather than by implementation detail.</p>
+<p class="text-line">Use include_tasks for runtime decisions and import_tasks for static, reviewable structure.</p>
+<p class="text-line">Avoid deeply nested includes that make execution order difficult to determine.</p>
+<p class="text-line">Use loop_control labels so logs identify an item without printing secret values.</p>
+<p class="text-line">Prefer loop over legacy with_items for consistent data handling.</p>
+<p class="text-line">Normalize package names and service names per distribution in variables, not repeated task branches.</p>
+<p class="text-line">Use notify only after a configuration file has changed and passed validation.</p>
+<p class="text-line">Keep templates deterministic so repeated runs do not create meaningless diffs.</p>
+<p class="text-line">Set directory modes before placing files that inherit permissions.</p>
+<p class="text-line">Use synchronize with care because deletion behavior can remove unmanaged destination files.</p>
+<p class="text-line">Use archive and unarchive with checksum validation for application packages.</p>
+<p class="text-line">Download artifacts to a temporary path and verify checksums before installation.</p>
+<p class="text-line">Do not use get_url with certificate validation disabled in production.</p>
+<p class="text-line">Use uri for health checks with explicit status codes and timeouts.</p>
+<p class="text-line">Use systemd_service with daemon_reload when managing unit files or drop-ins.</p>
+<p class="text-line">Use reboot only with a defined serial strategy and post-reboot health verification.</p>
+<p class="text-line">Record kernel, package, and service versions after maintenance.</p>
+<h2 class="section-heading">10. FLEET CHANGE CONTROL</h2>
+<h3 class="section-heading">EXAMPLE</h3>
+<div class="code-block">
+Fleet change control
+Start with one canary host, then expand by batches after checking service indicators.
+Use serial percentages when host counts vary between environments.
+Set max_fail_percentage only when the business impact of partial failure is understood.
+Pause a rolling change when error rate, latency, or capacity crosses the release threshold.
+Drain connections before stopping a service and restore routing after health checks pass.
+Keep a host out of rotation when a rescue task cannot verify its state.
+Use delegated tasks for DNS or load balancer changes and record the delegation target.
+Protect delegated operations with an explicit group assertion to avoid wrong-environment changes.
+Use run_once only when the action truly belongs to one coordinator host.
+Avoid fact-dependent decisions when facts were gathered with an incompatible privilege or filter.
+Use become_user for the application account instead of running application files as root.
+Set ownership on deployed files so the application cannot modify its own release unexpectedly.
+Keep release directories immutable and switch a stable symlink after verification.
+Retain the previous release directory until smoke tests and the rollback window complete.
+Use a release manifest containing commit, artifact checksum, dependencies, and migration version.
+Test rollback after a failed health check, interrupted play, and partially completed batch.
+Use rescue to restore load balancer membership or temporary firewall state.
+Use always to remove temporary credentials, files, and maintenance markers.
+Keep execution logs long enough to investigate a fleet-wide change.
+Review unreachable hosts separately because they may still have an old configuration.
+Do not report a fleet change complete while required hosts remain unreachable.
+Schedule check-mode drift reports and route unexpected changes to the owning team.
+Ansible changes should be reversible, attributable, and safe to stop between hosts.
+</div>
+</article></main></body></html>

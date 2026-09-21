@@ -1,0 +1,15 @@
+# 01_ping_all.yaml — Verify connectivity to all hosts
+# Usage: ansible-playbook -i inventory/hosts.ini 01_basics/01_ping_all.yaml
+# CLI equivalent: ansible all -m ping -i inventory/hosts.ini
+---
+- name: Ping all managed hosts
+  hosts: all
+  gather_facts: false   # skip fact collection for speed
+
+  tasks:
+    - name: Test connectivity
+      ansible.builtin.ping:
+
+    - name: Show remote host info
+      ansible.builtin.debug:
+        msg: "Connected to {{ inventory_hostname }} ({{ ansible_host }})"

@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AWS S3, IAM, and CloudWatch - DevOps Notes</title><link rel="stylesheet" href="style.css"></head><body>
+<header class="site-header"><div class="page"><a class="back-link" href="index.html">Back to DevOps Notes</a></div></header><main class="page"><article>
+<h1 class="note-title">AWS S3, IAM, and CloudWatch</h1>
+<p class="note-overview">Formatted learning document with commands, examples, production guidance, and operational callouts.</p>
+<p class="text-line">AWS S3, IAM, and CloudWatch</p>
+<h3 class="section-heading">PURPOSE / OVERVIEW</h3>
+<p class="text-line">Amazon S3</p>
+<p class="text-line">S3 is AWS object storage designed for storing files, logs, backups, and static content. It is highly durable and scalable.</p>
+<div class="callout security"><strong>[SECURITY]</strong> Keep buckets private by default and grant only the narrowly scoped access required by each workload.</div>
+<h2 class="section-heading">1. USE CASES</h2>
+<p class="text-line">Use cases</p>
+<p class="text-line bullet">- store application artifacts</p>
+<p class="text-line bullet">- host static websites</p>
+<p class="text-line bullet">- log retention</p>
+<p class="text-line bullet">- backup and archival</p>
+<p class="text-line bullet">- image and media storage</p>
+<h2 class="section-heading">2. EXAMPLE BUCKET POLICY</h2>
+<p class="text-line">Example bucket policy</p>
+<h3 class="section-heading">EXAMPLE</h3>
+<div class="code-block">
+{
+&quot;Version&quot;: &quot;2012-10-17&quot;,
+&quot;Statement&quot;: [{
+&quot;Effect&quot;: &quot;Allow&quot;,
+&quot;Principal&quot;: &quot;*&quot;,
+&quot;Action&quot;: &quot;s3:GetObject&quot;,
+&quot;Resource&quot;: &quot;arn:aws:s3:::example-bucket/*&quot;
+}]
+}
+</div>
+<h2 class="section-heading">3. IAM</h2>
+<p class="text-line">IAM</p>
+<p class="text-line">IAM provides identity and access management for AWS users, roles, and policies.</p>
+<h2 class="section-heading">4. CONCEPTS</h2>
+<p class="text-line">Concepts</p>
+<p class="text-line bullet">- user</p>
+<p class="text-line bullet">- group</p>
+<p class="text-line bullet">- role</p>
+<p class="text-line bullet">- policy</p>
+<p class="text-line bullet">- permission boundary</p>
+<h2 class="section-heading">5. EXAMPLE IAM POLICY</h2>
+<p class="text-line">Example IAM policy</p>
+<h3 class="section-heading">EXAMPLE</h3>
+<div class="code-block">
+{
+&quot;Version&quot;: &quot;2012-10-17&quot;,
+&quot;Statement&quot;: [
+{
+&quot;Effect&quot;: &quot;Allow&quot;,
+&quot;Action&quot;: [&quot;s3:GetObject&quot;],
+&quot;Resource&quot;: &quot;arn:aws:s3:::example-bucket/*&quot;
+}
+]
+}
+</div>
+<h2 class="section-heading">6. CLOUDWATCH</h2>
+<p class="text-line">CloudWatch</p>
+<p class="text-line">CloudWatch monitors AWS resources and applications by collecting metrics, logs, and alarms.</p>
+<h2 class="section-heading">7. COMMON FEATURES</h2>
+<p class="text-line">Common features</p>
+<p class="text-line bullet">- metrics collection</p>
+<p class="text-line bullet">- logs aggregation</p>
+<p class="text-line bullet">- dashboards</p>
+<p class="text-line bullet">- alarms</p>
+<p class="text-line bullet">- alerting</p>
+<h2 class="section-heading">8. EXAMPLE</h2>
+<h3 class="section-heading">Example</h3>
+<div class="code-block">
+</div>
+<p class="text-line">Create an alarm if CPU utilization exceeds 80% for 5 minutes.</p>
+<h2 class="section-heading">9. KEY TOOLS AND COMPONENTS</h2>
+<p class="text-line">These AWS services are foundational for cloud reliability, security, and monitoring.</p>
+<h2 class="section-heading">10. S3, IAM, AND CLOUDWATCH DEEP DIVE</h2>
+<p class="text-line">S3, IAM, and CloudWatch deep dive</p>
+<p class="text-line">S3 stores objects in globally unique bucket names.</p>
+<p class="text-line">Object keys define logical prefixes but do not create directories.</p>
+<p class="text-line">Use block public access unless public delivery is intentional.</p>
+<p class="text-line">Use bucket policies with explicit principals and conditions.</p>
+<p class="text-line">Use identity policies for caller permissions.</p>
+<p class="text-line">Enable versioning for recovery from overwrite and deletion.</p>
+<p class="text-line">Use object lock when retention must resist deletion.</p>
+<p class="text-line">Encrypt objects with provider-managed or customer-managed keys.</p>
+<p class="text-line">Restrict KMS key policies as carefully as bucket policies.</p>
+<p class="text-line">Use TLS-only bucket conditions for transport protection.</p>
+<p class="text-line">Use access logs or CloudTrail data events where investigation requires them.</p>
+<p class="text-line">Data events can be expensive at high volume.</p>
+<p class="text-line">Use lifecycle rules for transition and expiration.</p>
+<p class="text-line">Use intelligent tiering when access patterns are uncertain.</p>
+<p class="text-line">Use multipart upload for large objects.</p>
+<p class="text-line">Abort incomplete multipart uploads automatically.</p>
+<p class="text-line">Use checksums to verify object integrity.</p>
+<p class="text-line">Use presigned URLs with short expiry and narrow permissions.</p>
+<p class="text-line">Never expose presigned URLs in public logs.</p>
+<p class="text-line">Use CloudFront for cached public content with controlled origin access.</p>
+<p class="text-line">Keep application buckets private behind an origin access control.</p>
+<p class="text-line">Use replication for regional recovery and compliance requirements.</p>
+<p class="text-line">Test replicated object ownership and encryption.</p>
+<p class="text-line">Define delete marker and version retention behavior.</p>
+<p class="text-line">Back up critical data outside the primary failure boundary.</p>
+<p class="text-line">Test restore from a real backup location.</p>
+<p class="text-line">Use IAM roles rather than long-lived access keys.</p>
+<p class="text-line">Use federation for human access.</p>
+<p class="text-line">Require MFA for privileged actions.</p>
+<p class="text-line">Write least-privilege policies with explicit resources.</p>
+<p class="text-line">Avoid Action:* and Resource:* in production policies.</p>
+<p class="text-line">Use conditions for source VPC, encryption, tags, and MFA context.</p>
+<p class="text-line">Separate administration from data-plane access.</p>
+<p class="text-line">Use permission boundaries for delegated administrators.</p>
+<p class="text-line">Use service control policies for organization guardrails.</p>
+<p class="text-line">Review role trust policies for unintended principals.</p>
+<p class="text-line">Remove unused users, keys, roles, and policies.</p>
+<p class="text-line">Rotate credentials and verify consumers after rotation.</p>
+<p class="text-line">Use Access Analyzer to identify unintended external access.</p>
+<p class="text-line">Use IAM policy simulation before granting broad permissions.</p>
+<p class="text-line">Avoid embedding credentials in AMIs, containers, or repositories.</p>
+<p class="text-line">Use Secrets Manager for application secrets.</p>
+<p class="text-line">Use KMS grants for controlled service use.</p>
+<p class="text-line">CloudWatch metrics have namespaces, dimensions, and retention behavior.</p>
+<p class="text-line">High-cardinality dimensions increase cost and reduce usefulness.</p>
+<p class="text-line">Publish business and technical metrics together.</p>
+<p class="text-line">Use dashboards for service health and operational decisions.</p>
+<p class="text-line">Use log groups with explicit retention.</p>
+<p class="text-line">Encrypt log groups when required by policy.</p>
+<p class="text-line">Use structured JSON logs for queryable fields.</p>
+<p class="text-line">Create metric filters only for stable patterns.</p>
+<p class="text-line">Use Logs Insights for targeted investigations.</p>
+<p class="text-line">Create alarms from symptoms and service objectives.</p>
+<p class="text-line">Use composite alarms to reduce notification noise.</p>
+<p class="text-line">Set evaluation periods and missing-data behavior intentionally.</p>
+<p class="text-line">Use anomaly detection when normal variation is meaningful.</p>
+<p class="text-line">Use CloudWatch Synthetics for critical user journeys.</p>
+<p class="text-line">Use alarms for certificate, quota, and backup failures.</p>
+<p class="text-line">Route alarm notifications through SNS or an incident system.</p>
+<p class="text-line">Include owner and runbook links in alarm metadata.</p>
+<p class="text-line">Use CloudTrail for API history and governance.</p>
+<p class="text-line">Centralize CloudTrail logs in a protected account.</p>
+<p class="text-line">Validate trail delivery and log integrity.</p>
+<p class="text-line">Review unauthorized calls and unusual regions.</p>
+<p class="text-line">Use GuardDuty findings as detection signals.</p>
+<p class="text-line">Use Config rules for resource compliance.</p>
+<p class="text-line">Automate remediation only when the action is well understood.</p>
+<p class="text-line">Record remediation decisions and exceptions.</p>
+<p class="text-line">Tag resources for owner and cost attribution.</p>
+<p class="text-line">Use budgets for S3 requests, storage, logs, and monitoring.</p>
+<p class="text-line">Control CloudWatch log ingestion and retention costs.</p>
+<p class="text-line">Sample high-volume debug telemetry.</p>
+<p class="text-line">Do not log secrets or unnecessary personal data.</p>
+<p class="text-line">Restrict read access to sensitive logs.</p>
+<p class="text-line">Use separate monitoring roles from deployment roles.</p>
+<p class="text-line">Test monitoring when rotating keys or changing buckets.</p>
+<p class="text-line">Validate bucket policy changes with a private test object.</p>
+<p class="text-line">Use deny statements only when their blast radius is understood.</p>
+<p class="text-line">S3, IAM, and CloudWatch together form a core control loop.</p>
+<h2 class="section-heading">11. S3, IAM, AND CLOUDWATCH OPERATING PATTERNS</h2>
+<p class="text-line">S3, IAM, and CloudWatch operating patterns</p>
+<p class="text-line">Start S3 design with data classification, access paths, retention, and recovery objectives.</p>
+<p class="text-line">Keep buckets private and expose content through controlled CloudFront origin access when needed.</p>
+<p class="text-line">Use bucket policies with explicit principals, actions, resources, and transport conditions.</p>
+<p class="text-line">Test policy changes against a private object before applying them to a production bucket.</p>
+<p class="text-line">Use versioning, object lock, and cross-account replication when deletion recovery is required.</p>
+<p class="text-line">Define how delete markers, noncurrent versions, and replicated objects are retained.</p>
+<p class="text-line">Use lifecycle rules for incomplete uploads, old versions, logs, and archive transitions.</p>
+<p class="text-line">Set multipart upload thresholds and abort incomplete uploads to control storage cost.</p>
+<p class="text-line">Use checksums and client-side validation for critical artifact transfers.</p>
+<p class="text-line">Keep presigned URLs short-lived and restrict their method, object, and intended audience.</p>
+<p class="text-line">Use IAM roles for workloads and federation for people; remove dormant access keys.</p>
+<p class="text-line">Review role trust policies for external accounts, services, and unexpected principals.</p>
+<p class="text-line">Use permission boundaries and service control policies for delegated administration.</p>
+<p class="text-line">Use Access Analyzer and policy simulation before expanding data access.</p>
+<p class="text-line">Keep administrator permissions separate from application data-plane permissions.</p>
+<p class="text-line">Store secrets in Secrets Manager and never place credentials in object metadata or logs.</p>
+<p class="text-line">Use CloudWatch metric filters for stable patterns and Logs Insights for focused investigations.</p>
+<p class="text-line">Set explicit log retention and encryption rather than accepting indefinite defaults.</p>
+<p class="text-line">Avoid high-cardinality dimensions and uncontrolled debug logging because both increase cost.</p>
+<p class="text-line">Use composite alarms to combine dependency signals and reduce paging noise.</p>
+<p class="text-line">Set missing-data behavior intentionally for each alarm.</p>
+<p class="text-line">Attach owner, severity, dashboard, and runbook metadata to actionable alarms.</p>
+<p class="text-line">Test SNS, email, webhook, and incident integrations after routing changes.</p>
+<p class="text-line">Use CloudTrail management events for governance and data events selectively for investigation.</p>
+<p class="text-line">Protect centralized audit logs from alteration and validate delivery health.</p>
+<p class="text-line">Use GuardDuty, Config, and Access Analyzer findings as signals for a documented response.</p>
+<p class="text-line">Monitor bucket growth, request rates, KMS throttling, log ingestion, and alarm health.</p>
+<p class="text-line">Set budgets for storage, requests, replication, CloudTrail data events, and log retention.</p>
+<p class="text-line">Test key rotation, bucket recovery, policy rollback, and monitoring failure scenarios.</p>
+<p class="text-line">These services are effective when access, evidence, alerting, and retention are designed together.</p>
+<h2 class="section-heading">12. S3 RECOVERY AND DATA LIFECYCLE</h2>
+<p class="text-line">S3 recovery and data lifecycle</p>
+<p class="text-line">Classify objects by sensitivity, retention, recovery point, and expected access frequency.</p>
+<p class="text-line">Enable versioning before storing data that must survive accidental overwrite or deletion.</p>
+<p class="text-line">Use object lock and retention governance only after legal and operational ownership is clear.</p>
+<p class="text-line">Replicate critical data across an appropriate account or region and test ownership on the copy.</p>
+<p class="text-line">Keep replication failure metrics and alerts visible to the data owner.</p>
+<p class="text-line">Use lifecycle rules for current objects, noncurrent versions, delete markers, and incomplete uploads.</p>
+<p class="text-line">Choose Standard, Intelligent-Tiering, Glacier classes, or expiration from measured access patterns.</p>
+<p class="text-line">Use multipart uploads for large objects and abort unfinished uploads automatically.</p>
+<p class="text-line">Verify checksums and object size after critical uploads and restores.</p>
+<p class="text-line">Test restore permissions, KMS access, object metadata, and application path from the recovery location.</p>
+<p class="text-line">Use CloudFront origin access control instead of making an application bucket public.</p>
+<p class="text-line">Limit presigned URLs by method, object, duration, and intended client.</p>
+<h2 class="section-heading">13. IAM POLICY REVIEW</h2>
+<p class="text-line">IAM policy review</p>
+<p class="text-line">Start with the specific principal, action, resource, and condition required by the workflow.</p>
+<p class="text-line">Use explicit resource ARNs and avoid Action:* or Resource:* in production roles.</p>
+<p class="text-line">Use conditions for encryption, source VPC, source account, MFA, tags, and secure transport.</p>
+<p class="text-line">Separate role administration, policy administration, and application data access.</p>
+<p class="text-line">Review trust policies independently from permission policies.</p>
+<p class="text-line">Use permission boundaries for delegated role creation and service control policies for organization limits.</p>
+<p class="text-line">Use Access Analyzer to find unintended external access and policy simulation before rollout.</p>
+<p class="text-line">Remove inactive users, roles, policies, access keys, and unused permissions.</p>
+<p class="text-line">Rotate credentials with a tested consumer migration and revocation procedure.</p>
+<p class="text-line">Keep credentials out of AMIs, images, repositories, object metadata, and logs.</p>
+<p class="text-line">Record who approved sensitive policy changes and which resources were tested.</p>
+<h2 class="section-heading">14. CLOUDWATCH IMPLEMENTATION</h2>
+<p class="text-line">CloudWatch implementation</p>
+<p class="text-line">Name log groups, dashboards, alarms, and metrics with a stable service and environment convention.</p>
+<p class="text-line">Set log retention and encryption explicitly for each group.</p>
+<p class="text-line">Use structured JSON logs with correlation and deployment identifiers.</p>
+<p class="text-line">Create metric filters only for stable patterns and test them against representative logs.</p>
+<p class="text-line">Use Logs Insights queries saved with the runbook for common incident questions.</p>
+<p class="text-line">Prefer composite alarms when several low-level signals describe one user-facing failure.</p>
+<p class="text-line">Set evaluation periods, thresholds, and missing-data treatment from measured behavior.</p>
+<p class="text-line">Use anomaly detection only when normal variation is stable and a response is defined.</p>
+<p class="text-line">Monitor alarm actions, SNS delivery, log ingestion, and dashboard availability themselves.</p>
+<p class="text-line">Control high-cardinality dimensions, verbose debug logging, and long retention to manage cost.</p>
+<p class="text-line">Keep security and audit events unsampled even when normal application telemetry is sampled.</p>
+<p class="text-line">Use CloudTrail data events selectively because high-volume object access can be expensive.</p>
+<p class="text-line">S3, IAM, and CloudWatch are most useful when prevention, detection, recovery, and ownership connect.</p>
+<p class="text-line">Review object ownership, ACL behavior, and bucket policy interactions before migrations.</p>
+<p class="text-line">Keep a tested break-glass role for data recovery with separate approval and audit requirements.</p>
+</article></main></body></html>

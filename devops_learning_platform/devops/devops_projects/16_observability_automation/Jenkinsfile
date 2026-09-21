@@ -1,0 +1,25 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Validate') {
+            steps {
+                sh 'python3 -m py_compile alert_router.py'
+                sh 'python3 alert_router.py sample-alerts.json'
+            }
+        }
+
+        stage('Check deduplication') {
+            steps {
+                sh 'python3 -c "import json; report=json.load(open(\"notification-plan.json\")); assert report[\"duplicate_count\"] == 1; assert report[\"unique_alert_count\"] == 2"'
+            }
+        }
+    }
+
+    post {
+        always {
+            archiveArtifacts artifacts: 'notification-plan.json', allowEmptyArchive: false
+            cleanWs()
+        }
+    }
+}

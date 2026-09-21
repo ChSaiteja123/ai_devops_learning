@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI and MLOps Deep Dive - DevOps Notes</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="page">
+      <a class="back-link" href="index.html">Back to DevOps Notes</a>
+      <h1>AI and MLOps deep dive</h1>
+      <p>Production delivery, evaluation, monitoring, and governance for machine-learning systems.</p>
+    </div>
+  </header>
+  <main class="page"><article>
+    <h2 class="section-heading">AI system lifecycle</h2>
+    <div class="code-block">Problem definition -> data -> training -> evaluation -> registry -> deployment -> monitoring -> retraining</div>
+    <p class="text-line">MLOps extends DevOps with data versioning, experiment tracking, model artifacts, feature pipelines, drift detection, and model governance.</p>
+
+    <h2 class="section-heading">Core components</h2>
+    <p class="text-line">A production platform commonly contains source control, data storage, feature or embedding pipelines, experiment tracking, a model registry, CI/CD, serving infrastructure, monitoring, and an approval workflow.</p>
+    <p class="text-line">Keep code, data, configuration, model versions, and evaluation results identifiable and reproducible. A model file without its training data, parameters, and evaluation context is not a complete release artifact.</p>
+
+    <div class="callout important"><strong>[IMPORTANT]</strong> Define success and failure metrics before training. A model that is accurate on a benchmark can still be unsafe, slow, expensive, or unfair in production.</div>
+    <div class="callout security"><strong>[SECURITY]</strong> Treat training data, feature stores, model registries, and inference endpoints as protected systems. Enforce tenant boundaries and audit access.</div>
+
+    <h2 class="section-heading">CI/CD for models</h2>
+    <div class="code-block">stage('Data validation') {
+    steps { sh 'python validate_dataset.py' }
+}
+stage('Train and evaluate') {
+    steps { sh 'python train.py && python evaluate.py' }
+}
+stage('Register candidate') {
+    steps { sh 'python register_model.py --version $BUILD_NUMBER' }
+}</div>
+    <p class="text-line">Model pipelines should validate schemas, check data quality, run reproducible training, compare against a baseline, scan dependencies, and require approval before promotion.</p>
+
+    <h2 class="section-heading">Model monitoring</h2>
+    <p class="text-line">Monitor service latency, throughput, errors, resource usage, prediction distributions, data drift, feature freshness, model quality, and business outcomes. For generative systems also monitor token usage, refusal behavior, groundedness, and safety events.</p>
+    <p class="text-line">Separate infrastructure alerts from model-quality alerts. A healthy container can still serve deteriorating predictions.</p>
+
+    <h2 class="section-heading">Governance and rollback</h2>
+    <p class="text-line">Record model owner, training data version, code commit, dependency versions, evaluation set, approval decision, intended use, limitations, and rollback artifact. Use canary deployment or shadow traffic for high-risk changes.</p>
+    <p class="text-line">Rollback must restore both serving code and the previous model version. Keep schema compatibility and feature availability in the rollback design.</p>
+
+    <h2 class="section-heading">Related material</h2>
+    <p class="text-line"><a class="back-link" href="../../python/course_notes/30_generative_ai.txt">Python Generative AI notes</a></p>
+    <p class="text-line"><a class="back-link" href="../../python/course_notes/36_generative_ai_deep_dive.txt">Advanced Generative AI reference</a></p>
+    <p class="text-line"><a class="back-link" href="21_ai_projects.html">Open AI and MLOps projects</a></p>
+  </article></main>
+</body>
+</html>

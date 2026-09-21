@@ -1,0 +1,10 @@
+# roles/webserver/defaults/main.yaml — Default variables (lowest precedence, safely overridable)
+---
+server_name: "localhost"
+http_port: 80
+https_port: 443
+worker_processes: "auto"
+worker_connections: 1024
+keepalive_timeout: 65
+enable_firewall: true
+ssl_enabled: false

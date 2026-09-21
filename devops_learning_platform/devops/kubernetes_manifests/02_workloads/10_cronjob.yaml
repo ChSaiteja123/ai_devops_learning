@@ -1,0 +1,41 @@
+# 10_cronjob.yaml — CronJob: scheduled recurring task
+# Usage: kubectl apply -f 10_cronjob.yaml -n dev
+# Check: kubectl get cronjobs -n dev
+
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: db-backup
+  namespace: dev
+spec:
+  schedule: "0 2 * * *"          # 2 AM daily (cron syntax)
+  concurrencyPolicy: Forbid       # don't start new if previous is still running
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: backup
+              image: postgres:15-alpine
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  pg_dump $DATABASE_URL | gzip > /backup/db-$(date +%Y%m%d).sql.gz
+                  echo "Backup completed: $(date)"
+              env:
+                - name: DATABASE_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: app-secret
+                      key: database-url
+              volumeMounts:
+                - name: backup-storage
+                  mountPath: /backup
+          volumes:
+            - name: backup-storage
+              persistentVolumeClaim:
+                claimName: backup-pvc

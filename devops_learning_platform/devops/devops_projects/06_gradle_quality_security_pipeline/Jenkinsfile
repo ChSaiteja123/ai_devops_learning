@@ -1,0 +1,71 @@
+pipeline {
+    agent any
+
+    tools {
+        jdk 'jdk17'
+        gradle 'gradle8'
+    }
+
+    environment {
+        SONARQUBE_SERVER = 'sonarqube'
+        IMAGE_NAME = 'devops-gradle-app'
+        IMAGE_TAG = "${BUILD_NUMBER}"
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Gradle Test') {
+            steps {
+                sh 'gradle clean test'
+            }
+            post {
+                always {
+                    junit testResults: 'build/test-results/test/*.xml', allowEmptyResults: false
+                }
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv(SONARQUBE_SERVER) {
+                    sh 'gradle sonar'
+                }
+            }
+        }
+
+        stage('Trivy Filesystem Scan') {
+            steps {
+                sh 'trivy fs --exit-code 1 --severity HIGH,CRITICAL --ignore-unfixed .'
+            }
+        }
+
+        stage('Build Container') {
+            steps {
+                sh 'docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .'
+            }
+        }
+
+        stage('Trivy Image Scan') {
+            steps {
+                sh 'trivy image --exit-code 1 --severity HIGH,CRITICAL --ignore-unfixed ${IMAGE_NAME}:${IMAGE_TAG}'
+            }
+        }
+    }
+
+    post {
+        always {
+            cleanWs()
+        }
+        success {
+            echo 'Gradle quality and security pipeline completed successfully.'
+        }
+        failure {
+            echo 'Pipeline failed. Review Gradle, SonarQube, or Trivy output.'
+        }
+    }
+}

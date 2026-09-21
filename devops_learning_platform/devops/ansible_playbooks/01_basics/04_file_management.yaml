@@ -1,0 +1,59 @@
+# 04_file_management.yaml — Create, copy, template, and manage files and directories
+# Usage: ansible-playbook -i inventory/hosts.ini 01_basics/04_file_management.yaml
+---
+- name: File management on web servers
+  hosts: webservers
+  become: true
+
+  vars:
+    app_dir: /opt/webapp
+    app_user: appuser
+
+  tasks:
+    - name: Create application directory
+      ansible.builtin.file:
+        path: "{{ app_dir }}"
+        state: directory
+        owner: "{{ app_user }}"
+        group: "{{ app_user }}"
+        mode: "0755"
+
+    - name: Create nested directories
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        mode: "0755"
+      loop:
+        - "{{ app_dir }}/logs"
+        - "{{ app_dir }}/config"
+        - "{{ app_dir }}/uploads"
+
+    - name: Copy a local file to remote
+      ansible.builtin.copy:
+        src: files/app.conf          # relative to playbook dir
+        dest: /etc/nginx/sites-available/app
+        owner: root
+        group: root
+        mode: "0644"
+        backup: true                 # keep backup of old file
+
+    - name: Create a file with inline content
+      ansible.builtin.copy:
+        content: |
+          # Managed by Ansible — do not edit manually
+          APP_ENV=production
+          LOG_LEVEL=info
+        dest: "{{ app_dir }}/config/.env"
+        owner: "{{ app_user }}"
+        mode: "0600"
+
+    - name: Delete a file
+      ansible.builtin.file:
+        path: /tmp/temp_install.sh
+        state: absent
+
+    - name: Create a symlink
+      ansible.builtin.file:
+        src: /etc/nginx/sites-available/app
+        dest: /etc/nginx/sites-enabled/app
+        state: link

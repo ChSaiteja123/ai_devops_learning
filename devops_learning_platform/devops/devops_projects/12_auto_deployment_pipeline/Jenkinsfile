@@ -1,0 +1,46 @@
+pipeline {
+    agent any
+
+    parameters {
+        choice(name: 'TARGET_ENVIRONMENT', choices: ['staging', 'production'], description: 'Deployment target')
+        string(name: 'IMAGE', defaultValue: 'registry.example.com/app:BUILD_NUMBER', description: 'Immutable image tag or digest')
+    }
+
+    stages {
+        stage('Validate') {
+            steps {
+                sh 'python3 -m py_compile deploy.py'
+            }
+        }
+
+        stage('Deploy to staging') {
+            when { expression { params.TARGET_ENVIRONMENT == 'staging' } }
+            steps {
+                sh 'python3 deploy.py --environment staging --image "${IMAGE}" --execute'
+            }
+        }
+
+        stage('Approve production') {
+            when { expression { params.TARGET_ENVIRONMENT == 'production' } }
+            steps {
+                input message: 'Approve production deployment?', ok: 'Deploy'
+            }
+        }
+
+        stage('Deploy to production') {
+            when { expression { params.TARGET_ENVIRONMENT == 'production' } }
+            steps {
+                sh 'python3 deploy.py --environment production --image "${IMAGE}" --execute'
+            }
+        }
+    }
+
+    post {
+        failure {
+            echo 'Deployment failed. Keep the previous version available for rollback.'
+        }
+        success {
+            echo 'Deployment and smoke test completed.'
+        }
+    }
+}

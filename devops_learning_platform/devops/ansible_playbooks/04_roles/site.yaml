@@ -1,0 +1,18 @@
+# site.yaml — Main site playbook using roles
+# Usage: ansible-playbook -i inventory/hosts.ini 04_roles/site.yaml
+---
+- name: Configure web servers
+  hosts: webservers
+  become: true
+  roles:
+    - role: webserver
+      vars:
+        server_name: "app.example.com"
+        http_port: 80
+        ssl_enabled: false
+
+- name: Configure database servers
+  hosts: dbservers
+  become: true
+  roles:
+    - role: common         # hypothetical common role (security, ntp, etc.)

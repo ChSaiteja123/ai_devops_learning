@@ -1,0 +1,82 @@
+# 10_deploy_nodejs_app.yaml — Deploy a Node.js application with rolling update
+# Usage: ansible-playbook -i inventory/hosts.ini 02_intermediate/10_deploy_nodejs_app.yaml
+---
+- name: Deploy Node.js application
+  hosts: webservers
+  become: true
+  serial: 1           # rolling update: one host at a time
+
+  vars:
+    app_name: nodeapp
+    app_version: "2.1.0"
+    app_dir: "/opt/{{ app_name }}"
+    app_user: nodeuser
+    repo_url: "https://github.com/myorg/nodeapp.git"
+    node_port: 3000
+
+  pre_tasks:
+    - name: Remove host from load balancer
+      ansible.builtin.debug:
+        msg: "Draining {{ inventory_hostname }} from LB before update"
+
+  tasks:
+    - name: Ensure Node.js is installed
+      ansible.builtin.apt:
+        name: nodejs
+        state: present
+
+    - name: Create app user
+      ansible.builtin.user:
+        name: "{{ app_user }}"
+        shell: /usr/sbin/nologin
+        system: true
+
+    - name: Clone / update application repo
+      ansible.builtin.git:
+        repo: "{{ repo_url }}"
+        dest: "{{ app_dir }}"
+        version: "v{{ app_version }}"
+        force: true
+      notify: Restart Node App
+
+    - name: Install npm dependencies (production only)
+      ansible.builtin.npm:
+        path: "{{ app_dir }}"
+        production: true
+
+    - name: Copy systemd service unit
+      ansible.builtin.template:
+        src: templates/nodeapp.service.j2
+        dest: "/etc/systemd/system/{{ app_name }}.service"
+        mode: "0644"
+      notify: Reload systemd
+
+    - name: Ensure app service is enabled and started
+      ansible.builtin.service:
+        name: "{{ app_name }}"
+        state: started
+        enabled: true
+
+    - name: Wait for app to be ready
+      ansible.builtin.uri:
+        url: "http://localhost:{{ node_port }}/health"
+        status_code: 200
+      retries: 10
+      delay: 3
+      register: health_result
+      until: health_result.status == 200
+
+  handlers:
+    - name: Restart Node App
+      ansible.builtin.service:
+        name: "{{ app_name }}"
+        state: restarted
+
+    - name: Reload systemd
+      ansible.builtin.systemd:
+        daemon_reload: true
+
+  post_tasks:
+    - name: Return host to load balancer
+      ansible.builtin.debug:
+        msg: "{{ inventory_hostname }} passed health check — returning to LB"

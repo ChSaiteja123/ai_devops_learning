@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Linux Practice Workspace - DevOps Notes</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .practice-section { margin: 2rem 0; }
+    .practice-label {
+      font-size: .8rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: .35rem;
+    }
+    .answer-block {
+      display: none;
+      margin-top: .5rem;
+      padding: .85rem 1rem;
+      background: #f0fdfa;
+      border-left: 5px solid var(--teal);
+      font-family: Consolas, "Courier New", monospace;
+      font-size: .92rem;
+      white-space: pre-wrap;
+    }
+    .toggle-btn {
+      cursor: pointer;
+      margin-top: .5rem;
+      padding: .4rem .9rem;
+      font-size: .88rem;
+      font-family: inherit;
+      border: 1px solid var(--teal);
+      border-radius: 3px;
+      background: #f0fdfa;
+      color: var(--teal);
+    }
+    .toggle-btn:hover { background: var(--teal); color: #fff; }
+    .task-input {
+      width: 100%;
+      padding: .6rem .8rem;
+      margin-top: .4rem;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: .92rem;
+      border: 1px solid var(--line);
+      border-radius: 3px;
+      resize: vertical;
+      min-height: 64px;
+    }
+    .topic-badge {
+      display: inline-block;
+      padding: .18rem .65rem;
+      font-size: .78rem;
+      font-weight: 700;
+      border-radius: 999px;
+      background: #dbeafe;
+      color: var(--blue);
+      margin-bottom: .5rem;
+    }
+    .progress-bar-wrap {
+      background: #e2e8f0;
+      border-radius: 999px;
+      height: 10px;
+      margin: 1rem 0 2rem;
+    }
+    .progress-bar {
+      height: 10px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--teal), var(--blue));
+      width: 0%;
+      transition: width .4s;
+    }
+    #progress-label { font-size: .9rem; color: var(--muted); margin-bottom: .3rem; }
+    .section-divider {
+      border: none;
+      border-top: 2px solid #dbeafe;
+      margin: 2.5rem 0;
+    }
+  </style>
+</head>
+<body>
+<header class="site-header">
+  <div class="page">
+    <a class="back-link" href="index.html">← Back to DevOps Notes</a>
+  </div>
+</header>
+<main class="page">
+<article>
+  <h1 class="note-title">Linux Practice Workspace</h1>
+  <p class="note-overview">Hands-on exercises covering file system, permissions, processes, networking, and shell operations. Write your answer, then reveal the solution.</p>
+
+  <p id="progress-label">Progress: 0 of 20 answered</p>
+  <div class="progress-bar-wrap"><div class="progress-bar" id="progress-bar"></div></div>
+
+  <!-- ── SECTION 1: FILE SYSTEM ─────────────────────────── -->
+  <h2 class="section-heading">1. FILE SYSTEM NAVIGATION</h2>
+
+  <div class="practice-section">
+    <span class="topic-badge">ls / cd / pwd</span>
+    <p class="practice-label">Q1 — List all files including hidden ones in the current directory with details.</p>
+    <textarea class="task-input" placeholder="Type your command here…" oninput="updateProgress()"></textarea>
+    <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+    <div class="answer-block">ls -la</div>
+  </div>
+
+  <div class="practice-section">
+    <span class="topic-badge">find</span>
+    <p class="practice-label">Q2 — Find all <code>.log</code> files under <code>/var/log</code> modified in the last 2 days.</p>
+    <textarea class="task-input" placeholder="Type your command here…" oninput="updateProgress()"></textarea>
+    <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+    <div class="answer-block">find /var/log -name "*.log" -mtime -2</div>
+  </div>
+
+  <div class="practice-section">
+    <span class="topic-badge">du / df</span>
+    <p class="practice-label">Q3 — Show disk usage of the <code>/home</code> directory in human-readable format, one level deep.</p>
+    <textarea class="task-input" placeholder="Type your command here…" oninput="updateProgress()"></textarea>
+    <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+    <div class="answer-block">du -h --max-depth=1 /home</div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- ── SECTION 2: PERMISSIONS ─────────────────────────── -->
+  <h2 class="section-heading">2. PERMISSIONS AND OWNERSHIP</h2>
+
+  <div class="practice-section">
+    <span class="topic-badge">chmod</span>
+    <p class="practice-label">Q4 — Make a script <code>deploy.sh</code> executable by owner only, readable/not executable by group and others.</p>
+    <textarea class="task-input" placeholder="Type your command here…" oninput="updateProgress()"></textarea>
+    <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+    <div class="answer-block">chmod 744 deploy.sh</div>
+  </div>
+
+  <div class="practice-section">
+    <span class="topic-badge">chown</span>
+    <p class="practice-label">Q5 — Recursively change the owner and group of <code>/opt/app</code> to <code>appuser:appgroup</code>.</p>
+    <textarea class="task-input" placeholder="Type your command here…" oninput="updateProgress()"></textarea>
+    <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+    <div class="answer-block">chown -R appuser:appgroup /opt/app</div>
+  </div>
+
+  <div class="practice-section">
+    <span class="topic-badge">umask / special bits</span>
+    <p class="practice-label">Q6 — Set the SUID bit on <code>/usr/local/bin/mytool</code> so it runs as its owner.</p>
+    <textarea class="task-input" placeholder="Type your command here…" oninput="updateProgress()"></textarea>
+    <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+    <div class="answer-block">chmod u+s /usr/local/bin/mytool</div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- ── SECTION 3: PROCESS MANAGEMENT ─────────────────── -->
+  <h2 class="section-heading">3. PROCESS MANAGEMENT</h2>
+
+  <div class="practice-section">
+    <span class="topic-badge">ps / grep</span>
+    <p class="practice-label">Q7 — Find the PID of all processes named <code>nginx</code>.</p>
+    <textarea class="task-input" placeholder="Type your command here…" oninput="updateProgress()"></textarea>
+    <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+    <div class="answer-block">ps aux | grep nginx
+# or
+pgrep nginx</div>
+  </div>
+
+  <div class="practice-section">
+    <span class="topic-badge">kill / signals</span>
+    <p class="practice-label">Q8 — Gracefully reload nginx (send SIGHUP) using its PID 1234.</p>
+    <textarea class="task-input" placeholder="Type your command here…" oninput="updateProgress()"></textarea>
+    <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+    <div class="answer-block">kill -HUP 1234
+# or
+kill -1 1234</div>
+  </div>
+
+  <div class="practice-section">
+    <span class="topic-badge">systemctl</span>
+    <p class="practice-label">Q9 — Enable and start the <code>docker</code> service, then verify its status.</p>
+    <textarea class="task-input" placeholder="Type your command here…" oninput="updateProgress()"></textarea>
+    <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+    <div class="answer-block">systemctl enable docker
+systemctl start docker
+systemctl status docker</div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- ── SECTION 4: TEXT PROCESSING ─────────────────────── -->
+  <h2 class="section-heading">4. TEXT PROCESSING</h2>
+
+  <div class="practice-section">
+    <span class="topic-badge">grep / awk</span>
+    <p class="practice-label">Q10 — Extract only lines containing "ERROR" from <code>app.log</code> and count them.</p>
+    <textarea class="task-input" placeholder="Type your command here…" oninput="updateProgress()"></textarea>
+    <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+    <div class="answer-block">grep -c "ERROR" app.log
+# or to see and count
+grep "ERROR" app.log | wc -l</div>
+  </div>
+
+  <div class="practice-section">
+    <span class="topic-badge">awk</span>
+    <p class="practice-label">Q11 — Print only the 2nd and 5th columns from a space-delimited file <code>data.txt</code>.</p>
+    <textarea class="task-input" placeholder="Type your command here…" oninput="updateProgress()"></textarea>
+    <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+    <div class="answer-block">awk '{print $2, $5}' data.txt</div>
+  </div>
+
+  <div class="practice-section">
+    <span class="topic-badge">sed</span>
+    <p class="practice-label">Q12 — Replace all occurrences of <code>localhost</code> with <code>prod-db.internal</code> in <code>config.conf</code> in-place.</p>
+    <textarea class="task-input" placeholder="Type your command here…" oninput="updateProgress()"></textarea>
+    <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+    <div class="answer-block">sed -i 's/localhost/prod-db.internal/g' config.conf</div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- ── SECTION 5: NETWORKING ──────────────────────────── -->
+  <h2 class="section-heading">5. NETWORKING</h2>
+
+  <div class="practice-section">
+    <span class="topic-badge">ss / netstat</span>
+    <p class="practice-label">Q13 — Show all TCP ports currently listening on the machine.</p>
+    <textarea class="task-input" placeholder="Type your command here…" oninput="updateProgress()"></textarea>
+    <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+    <div class="answer-block">ss -tlnp
+# or older systems
+netstat -tlnp</div>
+  </div>
+
+  <div class="practice-section">
+    <span class="topic-badge">curl</span>
+    <p class="practice-label">Q14 — Send a POST request to <code>http://api.local/health</code> with JSON body <code>{"status":"ok"}</code>.</p>
+    <textarea class="task-input" placeholder="Type your command here…" oninput="updateProgress()"></textarea>
+    <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+    <div class="answer-block">curl -X POST http://api.local/health \
+  -H "Content-Type: application/json" \
+  -d '{"status":"ok"}'</div>
+  </div>
+
+  <div class="practice-section">
+    <span class="topic-badge">iptables / ufw</span>
+    <p class="practice-label">Q15 — Allow inbound TCP traffic on port 8080 using ufw.</p>
+    <textarea class="task-input" placeholder="Type your command here…" oninput="updateProgress()"></textarea>
+    <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+    <div class="answer-block">ufw allow 8080/tcp</div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- ── SECTION 6: USERS & GROUPS ─────────────────────── -->
+  <h2 class="section-heading">6. USERS AND GROUPS</h2>
+
+  <div class="practice-section">
+    <span class="topic-badge">useradd / usermod</span>
+    <p class="practice-label">Q16 — Create a system user <code>svcapp</code> with no login shell and home directory <code>/opt/svcapp</code>.</p>
+    <textarea class="task-input" placeholder="Type your command here…" oninput="updateProgress()"></textarea>
+    <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+    <div class="answer-block">useradd --system --shell /usr/sbin/nologin --home /opt/svcapp --create-home svcapp</div>
+  </div>
+
+  <div class="practice-section">
+    <span class="topic-badge">sudo / sudoers</span>
+    <p class="practice-label">Q17 — Add user <code>devops</code> to the <code>sudo</code> group.</p>
+    <textarea class="task-input" placeholder="Type your command here…" oninput="updateProgress()"></textarea>
+    <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+    <div class="answer-block">usermod -aG sudo devops</div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- ── SECTION 7: PACKAGE MANAGEMENT ─────────────────── -->
+  <h2 class="section-heading">7. PACKAGE MANAGEMENT</h2>
+
+  <div class="practice-section">
+    <span class="topic-badge">apt</span>
+    <p class="practice-label">Q18 — Update package lists, upgrade all packages, then install <code>htop</code> non-interactively on Ubuntu.</p>
+    <textarea class="task-input" placeholder="Type your command here…" oninput="updateProgress()"></textarea>
+    <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+    <div class="answer-block">apt update && apt upgrade -y && apt install -y htop</div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- ── SECTION 8: SCENARIO CHALLENGES ────────────────── -->
+  <h2 class="section-heading">8. SCENARIO CHALLENGES</h2>
+
+  <div class="practice-section">
+    <span class="topic-badge">Scenario</span>
+    <p class="practice-label">Q19 — A web server is not responding on port 80. Write the sequence of commands you would use to diagnose the issue.</p>
+    <textarea class="task-input" style="min-height: 120px;" placeholder="Type your diagnostic steps here…" oninput="updateProgress()"></textarea>
+    <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+    <div class="answer-block"># 1. Check if the service is running
+systemctl status nginx
+
+# 2. Check if port 80 is listening
+ss -tlnp | grep :80
+
+# 3. Check firewall
+ufw status
+iptables -L -n
+
+# 4. Check logs
+tail -50 /var/log/nginx/error.log
+
+# 5. Try connecting locally
+curl -v http://localhost
+
+# 6. Check system resources
+free -h
+df -h
+top</div>
+  </div>
+
+  <div class="practice-section">
+    <span class="topic-badge">Scenario</span>
+    <p class="practice-label">Q20 — Write a one-liner to find the top 5 largest files anywhere under <code>/var</code>.</p>
+    <textarea class="task-input" placeholder="Type your command here…" oninput="updateProgress()"></textarea>
+    <button class="toggle-btn" onclick="toggleAnswer(this)">Show Answer</button>
+    <div class="answer-block">find /var -type f -printf '%s %p\n' 2>/dev/null | sort -rn | head -5</div>
+  </div>
+
+  <div class="callout production" style="margin-top:2rem;">
+    <strong>[PRODUCTION TIP]</strong> Always test destructive commands (rm, sed -i, chmod -R) in a non-production environment first. Use <code>--dry-run</code> or echo substitutions when available.
+  </div>
+
+</article>
+</main>
+
+<script>
+  function toggleAnswer(btn) {
+    const block = btn.nextElementSibling;
+    const isVisible = block.style.display === 'block';
+    block.style.display = isVisible ? 'none' : 'block';
+    btn.textContent = isVisible ? 'Show Answer' : 'Hide Answer';
+  }
+
+  function updateProgress() {
+    const inputs = document.querySelectorAll('.task-input');
+    const filled = Array.from(inputs).filter(t => t.value.trim().length > 0).length;
+    const total = inputs.length;
+    document.getElementById('progress-label').textContent =
+      'Progress: ' + filled + ' of ' + total + ' answered';
+    document.getElementById('progress-bar').style.width =
+      Math.round((filled / total) * 100) + '%';
+  }
+</script>
+</body>
+</html>

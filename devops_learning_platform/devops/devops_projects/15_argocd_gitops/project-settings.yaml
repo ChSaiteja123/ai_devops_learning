@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: platform-team
+  namespace: argocd
+spec:
+  description: Platform team application boundary
+  sourceRepos:
+    - https://github.com/YOUR_ORG/YOUR_REPO.git
+  destinations:
+    - namespace: platform-demo
+      server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+    - group: ""
+      kind: Namespace
+  namespaceResourceWhitelist:
+    - group: "*"
+      kind: "*"

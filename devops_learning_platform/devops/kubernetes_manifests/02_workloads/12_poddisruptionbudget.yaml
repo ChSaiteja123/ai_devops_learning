@@ -1,0 +1,17 @@
+# 12_poddisruptionbudget.yaml — PodDisruptionBudget: protect availability during maintenance
+# Usage: kubectl apply -f 12_poddisruptionbudget.yaml -n dev
+# Purpose: ensures at least 2 pods always available during node drain/upgrades
+
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: nginx-pdb
+  namespace: dev
+spec:
+  # Option A: minimum available pods
+  minAvailable: 2
+  # Option B (use one or the other): max unavailable
+  # maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: nginx

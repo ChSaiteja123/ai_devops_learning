@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Generative AI Engineering Deep Dive - DevOps Notes</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="page">
+      <a class="back-link" href="index.html">Back to DevOps Notes</a>
+      <h1>Generative AI engineering deep dive</h1>
+      <p>Designing reliable, secure, observable, and cost-aware AI applications.</p>
+    </div>
+  </header>
+  <main class="page"><article>
+    <h2 class="section-heading">Production architecture</h2>
+    <div class="code-block">Client -> API gateway -> validation -> model router -> retrieval/tools -> output checks -> response
+                                      |
+                              metrics, traces, audit, cost</div>
+    <p class="text-line">Keep provider-specific code behind an adapter. Separate request validation, authorization, retrieval, tool execution, output validation, and observability so each control can be tested independently.</p>
+
+    <h2 class="section-heading">Prompt and context engineering</h2>
+    <p class="text-line">Define role, task, trusted instructions, untrusted content, constraints, output schema, and refusal behavior. Retrieve only relevant context and preserve source identifiers for citations.</p>
+    <p class="text-line">Use low variation for extraction and tool arguments. Use evaluation data to choose model and decoding settings rather than relying on intuition.</p>
+
+    <div class="callout security"><strong>[SECURITY]</strong> Prompt instructions are not authorization. Validate permissions in application code before retrieval or tool execution.</div>
+    <div class="callout warning"><strong>[WARNING]</strong> Retrieved documents and web pages can contain prompt injection. Treat them as data, not as system instructions.</div>
+
+    <h2 class="section-heading">RAG quality</h2>
+    <p class="text-line">A robust RAG pipeline cleans documents, preserves headings, chunks complete ideas, stores metadata, filters by tenant and permissions, retrieves candidates, optionally reranks them, and evaluates grounded answers.</p>
+    <p class="text-line">Measure retrieval recall and precision independently from response quality. Re-index when source documents, permissions, or embedding models change.</p>
+
+    <h2 class="section-heading">Tools and agents</h2>
+    <div class="code-block">Receive request -> classify risk -> retrieve -> plan allowed action -> approval if needed
+-> validate tool arguments -> execute one tool -> validate result -> respond -> audit</div>
+    <p class="text-line">Bound the number of steps, time, tokens, retries, and tool permissions. Prefer deterministic workflows for known business processes.</p>
+
+    <h2 class="section-heading">Evaluation and observability</h2>
+    <p class="text-line">Track correctness, groundedness, refusal behavior, tool-call accuracy, latency, token cost, provider failures, and sensitive-data incidents. Store prompt version, model version, source versions, and safe trace identifiers.</p>
+    <p class="text-line">Test normal, ambiguous, adversarial, oversized, and unauthorized requests. Include direct and indirect prompt injection in red-team testing.</p>
+
+    <h2 class="section-heading">Deployment checklist</h2>
+    <p class="text-line">Use timeouts, bounded retries, rate limits, redaction, schema validation, secret management, human approval for high-impact actions, cost budgets, provider failover policy, and a rollback path for prompt, model, index, and policy changes.</p>
+
+    <h2 class="section-heading">Related material</h2>
+    <p class="text-line"><a class="back-link" href="../../python/course_notes/30_generative_ai.txt">Generative AI course notes</a></p>
+    <p class="text-line"><a class="back-link" href="../../python/examples/30_generative_ai_deep_dive.py">Prompt validation example</a></p>
+    <p class="text-line"><a class="back-link" href="21_ai_projects.html">Open AI and MLOps projects</a></p>
+  </article></main>
+</body>
+</html>

@@ -1,0 +1,54 @@
+# 22_rbac.yaml — RBAC: ServiceAccount, Role, RoleBinding
+# Usage: kubectl apply -f 22_rbac.yaml -n dev
+# Principle: least privilege — grant only what's needed
+
+# ServiceAccount for the app (never use default SA for apps)
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: webapp-sa
+  namespace: dev
+  annotations:
+    # AWS: bind to IAM role for pod-level AWS access (IRSA)
+    eks.amazonaws.com/role-arn: "arn:aws:iam::123456789:role/webapp-role"
+automountServiceAccountToken: false   # opt-in, not automatic
+---
+# Role: what can webapp-sa do in 'dev' namespace
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: webapp-role
+  namespace: dev
+rules:
+  - apiGroups: [""]
+    resources: ["pods", "services"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    verbs: ["get", "list"]
+  # Explicitly deny secrets — don't add secrets here unless required
+---
+# RoleBinding: attach role to serviceaccount
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: webapp-rolebinding
+  namespace: dev
+subjects:
+  - kind: ServiceAccount
+    name: webapp-sa
+    namespace: dev
+roleRef:
+  kind: Role
+  apiGroup: rbac.authorization.k8s.io
+  name: webapp-role
+---
+# ClusterRole: read-only access to nodes (admin use case)
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: node-reader
+rules:
+  - apiGroups: [""]
+    resources: ["nodes"]
+    verbs: ["get", "list", "watch"]

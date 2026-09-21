@@ -1,0 +1,257 @@
+Linux Fundamentals
+========================
+
+PURPOSE / OVERVIEW
+--------------------------------------------------------------------------------
+Linux is the foundation for most DevOps and cloud workloads. It is used in servers, containers, automation, and CI/CD systems.
+
+1. IMPORTANT LINUX CONCEPTS
+--------------------------------------------------------------------------------
+[IMPORTANT] Important Linux concepts
+
+- file system hierarchy
+- permissions and ownership
+- process management
+- networking
+- package managers
+- shell scripting
+
+2. COMMON COMMANDS
+--------------------------------------------------------------------------------
+Common commands
+
+- ls: list files
+- cd: change directory
+- pwd: current directory
+- mkdir: create directory
+- touch: create file
+- rm: remove file
+- cp: copy file
+- mv: move or rename file
+- cat: show file content
+- grep: search text
+- chmod: change permissions
+- chown: change ownership
+- ps: view running processes
+- top: system monitor
+- df -h: disk usage
+- free -h: memory usage
+
+3. FILE PERMISSIONS
+--------------------------------------------------------------------------------
+File permissions
+
+- r: read
+- w: write
+- x: execute
+
+4. EXAMPLE
+--------------------------------------------------------------------------------
+Example
+
+EXAMPLE
+----------------------------------------
+ls -l
+chmod 755 script.sh
+chown ubuntu:ubuntu app.log
+
+5. PROCESS MANAGEMENT
+--------------------------------------------------------------------------------
+Process management
+
+ps aux
+kill 1234
+
+6. SHELL SCRIPT EXAMPLE
+--------------------------------------------------------------------------------
+Shell script example
+
+#!/bin/bash
+ echo "Starting deployment..."
+ mkdir -p /tmp/app
+ ls -l /tmp/app
+
+7. TROUBLESHOOTING AND OPERATIONS
+--------------------------------------------------------------------------------
+Linux is critical for DevOps because servers, containers, build agents, and infrastructure automation all run on Linux.
+
+8. DEEP-DIVE LINUX OPERATIONS
+--------------------------------------------------------------------------------
+Deep-dive Linux operations
+The kernel manages processes, memory, devices, filesystems, and networking.
+User space contains shells, services, libraries, and application processes.
+The root user can bypass many controls and should be used sparingly.
+The filesystem root is written as / and paths are case-sensitive.
+/etc contains host and service configuration.
+/var contains changing data such as logs, caches, and queues.
+/home contains user data and personal configuration.
+/opt commonly contains optional third-party applications.
+/usr contains installed programs, libraries, and shared read-only data.
+/tmp is temporary space and may be cleaned automatically.
+/proc exposes live process and kernel information.
+/sys exposes device and kernel subsystem information.
+/dev contains device nodes managed by the kernel.
+Use absolute paths in automation when the working directory is uncertain.
+Use $HOME instead of hard-coding a user-specific home path.
+Quote paths that contain spaces or shell metacharacters.
+Prefer mkdir -p when a directory may already exist.
+Use install -d to create directories with desired ownership and mode.
+Use find for structured file selection rather than parsing ls output.
+Use stat to inspect precise ownership, permissions, and timestamps.
+Use file to identify file type before processing unknown input.
+Use readlink -f to resolve a canonical path when available.
+Use du -sh to locate directories consuming disk space.
+Use sort and head to rank large files.
+Check inode usage with df -i when disk space appears available.
+Mount points can hide files beneath the mounted directory.
+Use lsblk and findmnt to inspect block devices and mounts.
+Never delete a path until its expansion has been inspected.
+Use rm -- to prevent a filename from being interpreted as an option.
+Prefer trash or backups for interactive deletion of valuable data.
+Permissions have user, group, and other classes.
+The execute bit on a directory permits traversal, not file execution.
+The setgid bit on a directory keeps new files in the directory group.
+The sticky bit on a shared directory limits who may delete entries.
+Use umask to control default permissions for newly created files.
+Avoid chmod 777 because it removes meaningful access boundaries.
+Use groups to grant shared access instead of changing individual ownership.
+Use getfacl and setfacl when standard mode bits are insufficient.
+Use sudo for one command rather than running an entire session as root.
+Review sudoers rules for broad commands and unsafe wildcards.
+Processes have identifiers, parents, users, states, and resource usage.
+Use ps -ef or ps aux for a point-in-time process view.
+Use pgrep and pkill with a precise pattern and user constraint.
+Use systemctl status to inspect a systemd service.
+Use journalctl -u service-name to inspect service logs.
+Use systemctl cat to see a unit and its drop-in configuration.
+Use systemctl daemon-reload after changing a unit file.
+Enable services only when startup after reboot is intended.
+Use systemctl is-enabled and is-active in health checks.
+Send SIGTERM first so applications can shut down cleanly.
+Use SIGKILL only when a process ignores graceful termination.
+Inspect child processes when a supervisor appears healthy but work fails.
+Use nice and renice carefully for CPU scheduling priority.
+Use ionice when disk-intensive jobs compete with latency-sensitive work.
+Check load average against CPU count rather than treating it as a percentage.
+Use uptime for a quick load and uptime summary.
+Use vmstat for CPU, memory, paging, and run-queue signals.
+Use iostat to investigate storage latency and utilization.
+Use pidstat to attribute CPU, memory, or I/O to processes.
+Use ss -tulpn to inspect listening sockets and owning processes.
+Use ip addr to inspect addresses and interfaces.
+Use ip route to inspect route selection.
+Use resolvectl status to inspect DNS configuration on systemd systems.
+Use curl -v to test an HTTP connection and TLS negotiation.
+Use dig for precise DNS record and resolver checks.
+Use traceroute or tracepath to investigate routing paths.
+Use tcpdump only with a narrow interface, host, and port filter.
+Treat packet captures as sensitive because they may contain credentials.
+Firewalls should default to deny and allow only required flows.
+Document the source, destination, port, protocol, and business reason.
+Prefer SSH keys with passphrases over passwords for administration.
+Disable password authentication only after key access is verified.
+Restrict SSH by network policy, identity, and MFA-capable access paths.
+Use fail2ban only as a layer, not as a replacement for strong access control.
+Patch the kernel and user-space packages through a controlled process.
+Record package versions when diagnosing environment differences.
+Use apt update before apt install on Debian-like systems.
+Use dnf or yum according to the distribution lifecycle.
+Use apk in minimal Alpine images and understand its libc differences.
+Do not mix repositories from incompatible distribution releases.
+Use package locks or snapshots when build reproducibility matters.
+Logs should have timestamps, severity, service, and correlation context.
+Use logrotate or journald retention controls to avoid filling disks.
+Never log passwords, tokens, private keys, or unnecessary personal data.
+Use tail -F for a service log that may be rotated.
+Use grep -E for expressions and grep -F for literal strings.
+Use awk for columns and calculations rather than complex cut chains.
+Use sed for controlled stream substitutions and transformations.
+Use xargs -0 with find -print0 for filenames containing spaces.
+Use shellcheck to detect common shell portability and quoting errors.
+Use shfmt to keep shell scripts consistent and reviewable.
+Use cron for simple scheduled work and systemd timers for service-aware jobs.
+Record the environment explicitly because cron has a minimal PATH.
+Use flock to prevent overlapping scheduled jobs.
+Use /etc/environment and service-specific configuration deliberately.
+Do not assume an interactive shell profile runs in CI or systemd.
+Use environment files with restricted permissions for non-secret settings.
+Use a secret manager for credentials rather than plain environment files.
+Back up configuration and test restoring permissions and ownership.
+Use LVM snapshots only with an application-consistent backup plan.
+Verify filesystem and database backups by performing test restores.
+Monitor disk, inode, memory, CPU, process count, and certificate expiry.
+Set alerts on symptoms and capacity forecasts, not every transient spike.
+Define a runbook link for each operational alert.
+Use health checks that test dependencies at an appropriate depth.
+Avoid health checks that perform destructive or expensive actions.
+Use namespaces and cgroups to isolate processes where supported.
+Understand that containers share the host kernel.
+Use capabilities and seccomp to reduce container privileges.
+Keep host kernels and container runtimes patched.
+Use immutable images instead of modifying production hosts manually.
+Capture command output and exit status in automation logs.
+Use set -euo pipefail in Bash scripts after testing its implications.
+Use trap to clean temporary files and report failures.
+Use temporary directories from mktemp with restrictive permissions.
+Validate user input before using it in paths or commands.
+Avoid eval because it turns data into executable shell code.
+Use printf rather than echo for portable formatted output.
+Prefer command substitution with $(...) over legacy backticks.
+Use functions to isolate reusable operations and local variables.
+Return meaningful exit codes from operational scripts.
+Test scripts with a disposable host or container.
+Document supported distributions and required privileges.
+Use a least-privilege service account for application processes.
+Set resource limits so one process cannot exhaust the host.
+Check file descriptor limits with ulimit and service configuration.
+Use lsof to find processes holding deleted files open.
+Use dmesg or journalctl -k for kernel and device errors.
+Investigate OOM killer messages before simply adding memory.
+Use coredump controls and symbol packages for crash analysis.
+Keep time synchronized with a trusted NTP source.
+Time drift can break TLS, logs, tokens, and distributed coordination.
+Use timedatectl to inspect timezone and synchronization state.
+Prefer UTC in logs and convert for human-facing reports.
+Use locale settings deliberately in scripts that parse command output.
+Avoid parsing human-formatted output when a machine-readable flag exists.
+Treat command-line tools as APIs whose exit codes matter.
+Check both stdout and stderr when a command is part of a pipeline.
+Use system resource limits to make failure predictable.
+Review changes to kernel parameters and record their rationale.
+Use sysctl -p only with a validated configuration file.
+Do not expose management ports to the public internet by default.
+Segment administrative access from application traffic.
+Use bastions or identity-aware access where direct SSH is unnecessary.
+Keep an inventory of hosts, operating systems, owners, and patch status.
+Automate baseline configuration with idempotent tools.
+Compare configuration drift against a known-good baseline.
+Test upgrades on a representative staging system first.
+Use rolling maintenance when the service supports redundancy.
+Define rollback steps before applying a kernel or package upgrade.
+Record incident timelines from commands, logs, and monitoring events.
+Remove temporary debug settings after an incident.
+Linux expertise combines command fluency with cautious operational judgment.
+Validate host identity before maintenance.
+Confirm the intended filesystem before deletion.
+Check disk and inode capacity together.
+Check memory pressure before restarting services.
+Capture process state before changing limits.
+Review listening ports after deployments.
+Confirm firewall changes from a second session.
+Use immutable backups for critical configuration.
+Test restore permissions, owners, and modes.
+Record package and kernel versions.
+Use UTC timestamps in incident notes.
+Keep operational scripts under review.
+Document distribution-specific differences.
+Prefer machine-readable command output.
+Verify exit status in every automation step.
+Avoid hidden dependencies on interactive profiles.
+Use least privilege for service accounts.
+Restrict administrative network paths.
+Patch with a tested rollback plan.
+Monitor certificates before they expire.
+Check time synchronization during authentication failures.
+Use correlation identifiers across service logs.
+Protect logs from unauthorized changes.
+Review resource limits after workload growth.

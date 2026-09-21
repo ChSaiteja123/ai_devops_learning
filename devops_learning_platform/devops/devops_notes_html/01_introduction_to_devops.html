@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Introduction to DevOps - DevOps Notes</title><link rel="stylesheet" href="style.css"></head><body>
+<header class="site-header"><div class="page"><a class="back-link" href="index.html">Back to DevOps Notes</a></div></header><main class="page"><article>
+<h1 class="note-title">Introduction to DevOps</h1>
+<p class="note-overview">Formatted learning document with commands, examples, production guidance, and operational callouts.</p>
+<p class="text-line">Introduction to DevOps</p>
+<h3 class="section-heading">PURPOSE / OVERVIEW</h3>
+<p class="text-line">DevOps is a combination of software development and IT operations. It focuses on automation, continuous delivery, monitoring, and collaboration between developers and operations teams.</p>
+<h2 class="section-heading">1. GOALS OF DEVOPS</h2>
+<p class="text-line">Goals of DevOps</p>
+<p class="text-line bullet">- reduce deployment time</p>
+<p class="text-line bullet">- increase software reliability</p>
+<p class="text-line bullet">- improve collaboration between teams</p>
+<p class="text-line bullet">- automate repetitive work</p>
+<p class="text-line bullet">- increase observability and faster recovery</p>
+<h2 class="section-heading">2. DEVOPS LIFECYCLE</h2>
+<p class="text-line">DevOps lifecycle</p>
+<p class="text-line">Plan -&gt; Code -&gt; Build -&gt; Test -&gt; Release -&gt; Deploy -&gt; Operate -&gt; Monitor</p>
+<h2 class="section-heading">3. CORE PRINCIPLES</h2>
+<p class="text-line">Core principles</p>
+<p class="text-line bullet">- automation first</p>
+<p class="text-line bullet">- version control everywhere</p>
+<p class="text-line bullet">- continuous integration and deployment</p>
+<p class="text-line bullet">- infrastructure as code</p>
+<p class="text-line bullet">- monitoring and observability</p>
+<p class="text-line bullet">- security by default</p>
+<h2 class="section-heading">4. EXAMPLE SCENARIO</h2>
+<p class="text-line">Example scenario</p>
+<p class="text-line">A developer pushes code to GitHub. A CI pipeline runs tests, builds the artifact, deploys it to staging, and then promotes it to production using automated deployment steps.</p>
+<h2 class="section-heading">5. SECURITY AND RELIABILITY</h2>
+<p class="text-line">DevOps is not just tools. It is a culture and process that enables faster, safer delivery.</p>
+<h2 class="section-heading">6. COMMON DEVOPS TOOLS</h2>
+<p class="text-line">Common DevOps tools</p>
+<p class="text-line bullet">- Git</p>
+<p class="text-line bullet">- GitHub / GitLab / Bitbucket</p>
+<p class="text-line bullet">- Jenkins / GitHub Actions / GitLab CI</p>
+<p class="text-line bullet">- Docker</p>
+<p class="text-line bullet">- Kubernetes</p>
+<p class="text-line bullet">- Terraform</p>
+<p class="text-line bullet">- Ansible</p>
+<p class="text-line bullet">- Prometheus</p>
+<p class="text-line bullet">- Grafana</p>
+<p class="text-line bullet">- AWS / Azure / GCP</p>
+<h2 class="section-heading">7. EXAMPLE</h2>
+<h3 class="section-heading">Example</h3>
+<div class="code-block">
+</div>
+<p class="text-line"># Example workflow</p>
+<p class="text-line"># developer commits code</p>
+<p class="text-line"># pipeline builds app</p>
+<p class="text-line"># tests run automatically</p>
+<p class="text-line"># artifact is pushed to registry</p>
+<p class="text-line"># deployment triggers to Kubernetes cluster</p>
+<h2 class="section-heading">8. DEEP-DIVE: DEVOPS OPERATING MODEL</h2>
+<p class="text-line">Deep-dive: DevOps operating model</p>
+<h2 class="section-heading">9. KEY TOOLS AND COMPONENTS</h2>
+<p class="text-line">DevOps connects people, process, and technology around a measurable delivery flow.</p>
+<p class="text-line">The goal is a sustainable feedback loop, not simply faster releases.</p>
+<p class="text-line">Product teams own outcomes such as reliability, security, and customer value.</p>
+<p class="text-line">Developers participate in operations through dashboards, on-call, and postmortems.</p>
+<p class="text-line">Operations engineers participate early in design, testing, and capacity planning.</p>
+<div class="callout security"><strong>[SECURITY]</strong> Security engineers embed controls in the delivery workflow.</div>
+<p class="text-line">Platform teams provide paved roads that make the safe path the easy path.</p>
+<h2 class="section-heading">10. VALUE STREAM MAPPING</h2>
+<p class="text-line">Value stream mapping</p>
+<h2 class="section-heading">11. COMMANDS AND CONFIGURATION</h2>
+<h3 class="section-heading">EXAMPLE</h3>
+<div class="code-block">
+Map an idea from request to production and record waiting time at each handoff.
+Separate active work from queue time because queues often dominate lead time.
+Measure deployment frequency, lead time, change failure rate, and recovery time.
+Use a baseline before changing tools or team structure.
+Review metrics by service and team rather than using them as individual quotas.
+Optimize the slowest constraint instead of accelerating an already fast stage.
+Keep work in progress small so feedback arrives while context is fresh.
+Make ownership visible with a service catalog and escalation path.
+</div>
+<h2 class="section-heading">12. TEAM PRACTICES</h2>
+<p class="text-line">Team practices</p>
+<h2 class="section-heading">13. PRODUCTION GUIDANCE</h2>
+<p class="text-line">Create small cross-functional teams around a product or service boundary.</p>
+<p class="text-line">Define a clear service owner, technical owner, and business owner.</p>
+<p class="text-line">Write a lightweight runbook for common failures and operational tasks.</p>
+<p class="text-line">Rotate incident duties so knowledge is distributed across the team.</p>
+<p class="text-line">Use blameless postmortems to improve systems rather than punish people.</p>
+<p class="text-line">Turn every recurring incident into a tracked engineering improvement.</p>
+<p class="text-line">Use documented decision records for important architecture choices.</p>
+<p class="text-line">Prefer asynchronous, searchable communication for routine technical decisions.</p>
+<p class="text-line">Reserve synchronous meetings for decisions, incidents, and complex collaboration.</p>
+<h2 class="section-heading">14. DELIVERY DESIGN</h2>
+<p class="text-line">Delivery design</p>
+<h2 class="section-heading">15. CORE CONCEPTS</h2>
+<h3 class="section-heading">EXAMPLE</h3>
+<div class="code-block">
+Keep application code, tests, and pipeline definitions under version control.
+Build immutable artifacts once and promote the same artifact between environments.
+Give every build a unique commit, version, and provenance identifier.
+Make builds reproducible by pinning tools, plugins, and dependency versions.
+Fail early on formatting, unit tests, policy checks, and dependency vulnerabilities.
+Separate compilation from deployment so a deployment can be retried safely.
+Use feature flags when deployment and feature release need different timing.
+Use canary or blue-green rollout strategies for high-risk changes.
+Automate rollback when health indicators cross a defined threshold.
+Require explicit approval for exceptional production actions.
+</div>
+<h2 class="section-heading">16. INFRASTRUCTURE AND ENVIRONMENTS</h2>
+<p class="text-line">Infrastructure and environments</p>
+<h2 class="section-heading">17. WORKFLOWS AND PRACTICES</h2>
+<p class="text-line">Describe infrastructure as code and review changes like application code.</p>
+<p class="text-line">Keep environment differences in configuration rather than copied scripts.</p>
+<p class="text-line">Use isolated accounts or projects for development, staging, and production.</p>
+<p class="text-line">Treat production access as temporary, auditable, and least privileged.</p>
+<p class="text-line">Store secrets in a managed secret system and inject them at runtime.</p>
+<p class="text-line">Avoid putting credentials in repositories, images, logs, or command history.</p>
+<p class="text-line">Use tags and labels for owner, environment, cost center, and expiration date.</p>
+<p class="text-line">Define backup, restore, and disaster recovery objectives before launch.</p>
+<p class="text-line">Test restores rather than assuming a successful backup is usable.</p>
+<p class="text-line">Document dependencies on DNS, identity, networks, queues, and third parties.</p>
+<h2 class="section-heading">18. SECURITY IN THE LIFECYCLE</h2>
+<div class="callout security"><strong>[SECURITY]</strong> Security in the lifecycle</div>
+<h2 class="section-heading">19. SECURITY AND RELIABILITY</h2>
+<p class="text-line">Threat model important flows before implementation begins.</p>
+<p class="text-line">Scan source, dependencies, images, infrastructure, and runtime configuration.</p>
+<p class="text-line">Treat scanner results as input for risk decisions, not as a substitute for review.</p>
+<p class="text-line">Prioritize exploitable vulnerabilities in internet-facing or privileged paths.</p>
+<p class="text-line">Use signed commits or protected branches for sensitive repositories.</p>
+<p class="text-line">Require peer review and automated checks before merging.</p>
+<p class="text-line">Rotate credentials and revoke unused access promptly.</p>
+<p class="text-line">Log authentication, authorization, deployment, and administrative events.</p>
+<p class="text-line">Protect logs from alteration and restrict access to sensitive fields.</p>
+<p class="text-line">Test dependency update and emergency patch procedures regularly.</p>
+<h2 class="section-heading">20. RELIABILITY AND RESILIENCE</h2>
+<p class="text-line">Reliability and resilience</p>
+<h2 class="section-heading">21. TROUBLESHOOTING AND OPERATIONS</h2>
+<h3 class="section-heading">EXAMPLE</h3>
+<div class="code-block">
+Define a service level indicator for availability, latency, or correctness.
+Define a service level objective that reflects the user experience.
+Use an error budget to balance feature delivery with reliability work.
+Design timeouts, retries, and circuit breakers together.
+Use bounded retries with exponential backoff and jitter.
+Make operations idempotent so retries do not duplicate side effects.
+Remove single points of failure in critical paths.
+Exercise failure scenarios with game days and controlled experiments.
+Measure recovery time from detection through verified restoration.
+Keep a tested, versioned incident communication template.
+</div>
+<h2 class="section-heading">22. OBSERVABILITY AND FEEDBACK</h2>
+<p class="text-line">Observability and feedback</p>
+<h2 class="section-heading">23. KEY TOOLS AND COMPONENTS</h2>
+<p class="text-line">Instrument the user journey rather than collecting data without a question.</p>
+<p class="text-line">Attach correlation identifiers to requests crossing service boundaries.</p>
+<p class="text-line">Use structured logs with timestamps, severity, service, and request context.</p>
+<p class="text-line">Track rate, errors, duration, saturation, and important business outcomes.</p>
+<p class="text-line">Create dashboards for operators and separate summaries for product owners.</p>
+<p class="text-line">Alert on symptoms and user impact instead of every low-level fluctuation.</p>
+<p class="text-line">Include a runbook link and owner in each actionable alert.</p>
+<p class="text-line">Review noisy alerts and delete alerts that do not lead to action.</p>
+<p class="text-line">Use traces to locate latency across asynchronous and synchronous dependencies.</p>
+<p class="text-line">Feed incident findings back into tests, automation, and architecture.</p>
+<h2 class="section-heading">24. COST MANAGEMENT</h2>
+<p class="text-line">Cost management</p>
+<h2 class="section-heading">25. COMMANDS AND CONFIGURATION</h2>
+<h3 class="section-heading">EXAMPLE</h3>
+<div class="code-block">
+Make cost visible by environment, service, team, and workload.
+Choose capacity from measured demand and realistic growth assumptions.
+Use autoscaling with sensible lower and upper bounds.
+Schedule nonproduction resources off when they are not needed.
+Remove unattached disks, old snapshots, unused IP addresses, and stale artifacts.
+Use reserved capacity or savings plans only after usage is understood.
+Compare the cost of reliability improvements with the cost of outages.
+Avoid premature optimization that increases operational complexity.
+</div>
+<h2 class="section-heading">26. PRACTICAL MATURITY PATH</h2>
+<p class="text-line">Practical maturity path</p>
+<h2 class="section-heading">27. PRODUCTION GUIDANCE</h2>
+<p class="text-line">Start with source control, repeatable builds, and automated tests.</p>
+<p class="text-line">Next add artifact management, deployment automation, and environment parity.</p>
+<p class="text-line">Then add service ownership, monitoring, incident response, and security gates.</p>
+<p class="text-line">Finally optimize with progressive delivery, policy as code, and platform self-service.</p>
+<p class="text-line">Maturity is demonstrated by repeatable outcomes, not by a long tool list.</p>
+<p class="text-line">Review the operating model quarterly and remove practices that no longer help.</p>
+<h2 class="section-heading">28. CHANGE MANAGEMENT DETAILS</h2>
+<p class="text-line">Change management details</p>
+<h2 class="section-heading">29. CORE CONCEPTS</h2>
+<p class="text-line">Use small, reversible changes to reduce blast radius.</p>
+<p class="text-line">Record the expected impact before a risky deployment.</p>
+<p class="text-line">Define a change owner and an observer for critical releases.</p>
+<p class="text-line">Check dependencies and maintenance windows before production work.</p>
+<p class="text-line">Announce user-visible changes through the appropriate channel.</p>
+<p class="text-line">Capture deployment markers in monitoring dashboards.</p>
+<p class="text-line">Compare post-release indicators with the pre-release baseline.</p>
+<p class="text-line">Stop a rollout when evidence contradicts the release hypothesis.</p>
+<p class="text-line">Keep rollback instructions next to the deployment procedure.</p>
+<p class="text-line">Verify rollback behavior with a controlled staging exercise.</p>
+<h2 class="section-heading">30. LEARNING CULTURE</h2>
+<p class="text-line">Learning culture</p>
+<h2 class="section-heading">31. WORKFLOWS AND PRACTICES</h2>
+<p class="text-line">Pair engineers on unfamiliar operational tasks.</p>
+<p class="text-line">Run short architecture reviews before large implementation efforts.</p>
+<p class="text-line">Use internal documentation with examples that can be executed and tested.</p>
+<p class="text-line">Label experiments clearly so temporary code is not mistaken for production design.</p>
+<p class="text-line">Budget time for maintenance, upgrades, and removal of obsolete automation.</p>
+<p class="text-line">Reward prevention and learning, not only visible feature output.</p>
+<p class="text-line">Share incident patterns across teams when they reveal systemic risk.</p>
+<p class="text-line">Create a feedback channel for the engineers who use the platform.</p>
+<p class="text-line">Measure developer experience with wait time, friction, and recovery effort.</p>
+<p class="text-line">Treat automation failures as product defects in the delivery system.</p>
+<h2 class="section-heading">32. DECISION CHECKLIST</h2>
+<p class="text-line">Decision checklist</p>
+<h2 class="section-heading">33. SECURITY AND RELIABILITY</h2>
+<p class="text-line">Can the change be tested automatically?</p>
+<p class="text-line">Can the artifact be reproduced from the commit?</p>
+<p class="text-line">Can an operator identify the owner within minutes?</p>
+<p class="text-line">Can the service tolerate dependency failure?</p>
+<p class="text-line">Can the team detect user impact quickly?</p>
+<p class="text-line">Can the team roll back without losing data?</p>
+<p class="text-line">Are secrets and permissions limited to the required scope?</p>
+<p class="text-line">Are logs and metrics useful without exposing private data?</p>
+<p class="text-line">Is the cost model understood for normal and peak demand?</p>
+<p class="text-line">Has the team practiced the most likely recovery path?</p>
+<p class="text-line">Can the service owner explain the key failure modes?</p>
+<p class="text-line">Are deployment permissions separated from read-only observation?</p>
+<p class="text-line">Does every alert have a defined response and escalation target?</p>
+<p class="text-line">Are recovery objectives aligned with the business priority?</p>
+<p class="text-line">Can temporary infrastructure be identified and removed?</p>
+<p class="text-line">Are pipeline logs retained long enough for incident investigation?</p>
+<p class="text-line">Does the team review failed changes without assigning blame?</p>
+<p class="text-line">Is the next improvement captured as an owned, time-bound action?</p>
+<p class="text-line">Does the design minimize hidden manual handoffs?</p>
+<p class="text-line">Can a new engineer follow the runbook without tribal knowledge?</p>
+<p class="text-line">Are production experiments limited, observable, and reversible?</p>
+<p class="text-line">Does the architecture document state its assumptions?</p>
+<p class="text-line">Are capacity limits tested before a traffic surge?</p>
+<p class="text-line">Can the team demonstrate a restore from a recent backup?</p>
+<p class="text-line">Does the release process preserve an audit trail?</p>
+<p class="text-line">Are quality gates appropriate to the risk of the service?</p>
+<p class="text-line">Does the platform offer secure defaults for common workflows?</p>
+<p class="text-line">Are exceptions documented with an expiry date?</p>
+<p class="text-line">Does the team remove obsolete alerts, jobs, and permissions?</p>
+<p class="text-line">Is customer feedback connected to engineering priorities?</p>
+<p class="text-line">Are reliability investments visible in planning?</p>
+<p class="text-line">Can the team explain what success looks like after deployment?</p>
+<p class="text-line">Does the operating model support calm, evidence-based decisions?</p>
+<p class="text-line">Are service dependencies reviewed during design and after incidents?</p>
+<p class="text-line">Does every environment have an explicit purpose and owner?</p>
+<p class="text-line">Can automated checks explain why they rejected a change?</p>
+<p class="text-line">Are manual approvals limited to decisions that need human judgment?</p>
+<p class="text-line">Does the team test both forward deployment and rollback paths?</p>
+<p class="text-line">Are operational metrics connected to customer-facing outcomes?</p>
+<p class="text-line">Can the team safely pause delivery without losing work?</p>
+<p class="text-line">Are platform defaults documented and versioned?</p>
+<p class="text-line">Does continuous improvement have a visible feedback loop?</p>
+</article></main></body></html>

@@ -1,0 +1,32 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Validate workflow') {
+            steps {
+                sh 'python3 -m py_compile workflow.py'
+                sh 'python3 workflow.py incident.json'
+            }
+        }
+
+        stage('Policy evidence') {
+            steps {
+                sh 'python3 -c "import json; report=json.load(open(\"automation-audit.json\")); assert report[\"policy_decision\"][\"requires_human_approval\"] is True; assert report[\"deployment_plan\"][\"executed\"] is False"'
+            }
+        }
+
+        stage('Production approval') {
+            when { expression { false } }
+            steps {
+                input message: 'Approve authorized deployment job?', ok: 'Approve'
+            }
+        }
+    }
+
+    post {
+        always {
+            archiveArtifacts artifacts: 'automation-audit.json', allowEmptyArchive: false
+            cleanWs()
+        }
+    }
+}

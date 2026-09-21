@@ -1,0 +1,83 @@
+# 18_rolling_fleet_update.yaml — Rolling update across a fleet with LB drain/restore
+# Usage: ansible-playbook -i inventory/hosts.ini 03_advanced/18_rolling_fleet_update.yaml
+# --extra-vars "app_version=v2.5 rollback=false"
+---
+- name: Rolling fleet update with LB drain and health checks
+  hosts: webservers
+  become: true
+  serial: "25%"       # update 25% of hosts at a time
+  max_fail_percentage: 10   # abort if >10% of hosts fail
+
+  vars:
+    app_name: webapp
+    app_version: "{{ app_version | default('latest') }}"
+    app_dir: /opt/webapp
+    lb_api_url: "http://loadbalancer.internal/api"
+    health_url: "http://localhost:8000/health"
+    health_retries: 10
+    health_delay: 5
+
+  pre_tasks:
+    - name: Assert app_version is defined and not empty
+      ansible.builtin.assert:
+        that:
+          - app_version is defined
+          - app_version != ""
+        fail_msg: "app_version must be specified via --extra-vars"
+
+    - name: Drain host from load balancer
+      ansible.builtin.uri:
+        url: "{{ lb_api_url }}/drain/{{ inventory_hostname }}"
+        method: POST
+        status_code: 200
+      delegate_to: localhost
+      ignore_errors: true     # don't stop if LB API unavailable
+
+    - name: Wait for in-flight requests to drain (30s)
+      ansible.builtin.wait_for:
+        timeout: 30
+
+  tasks:
+    - name: Stop current application
+      ansible.builtin.service:
+        name: "{{ app_name }}"
+        state: stopped
+
+    - name: Deploy new version
+      ansible.builtin.unarchive:
+        src: "releases/{{ app_name }}-{{ app_version }}.tar.gz"
+        dest: "{{ app_dir }}"
+        extra_opts: ["--strip-components=1"]
+
+    - name: Symlink current release
+      ansible.builtin.file:
+        src: "{{ app_dir }}/releases/{{ app_version }}"
+        dest: "{{ app_dir }}/current"
+        state: link
+
+    - name: Start application
+      ansible.builtin.service:
+        name: "{{ app_name }}"
+        state: started
+
+    - name: Wait for application to be healthy
+      ansible.builtin.uri:
+        url: "{{ health_url }}"
+        status_code: 200
+      retries: "{{ health_retries }}"
+      delay: "{{ health_delay }}"
+      register: health_check
+      until: health_check.status == 200
+
+  post_tasks:
+    - name: Return host to load balancer
+      ansible.builtin.uri:
+        url: "{{ lb_api_url }}/enable/{{ inventory_hostname }}"
+        method: POST
+        status_code: 200
+      delegate_to: localhost
+      when: health_check.status == 200
+
+    - name: Record successful deployment
+      ansible.builtin.debug:
+        msg: "{{ inventory_hostname }} — {{ app_name }} {{ app_version }} deployed successfully"

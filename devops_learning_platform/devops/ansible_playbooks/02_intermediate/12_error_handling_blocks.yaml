@@ -1,0 +1,62 @@
+# 12_error_handling_blocks.yaml — Error handling with blocks, rescue, always
+# Usage: ansible-playbook -i inventory/hosts.ini 02_intermediate/12_error_handling_blocks.yaml
+---
+- name: Error handling with blocks
+  hosts: webservers
+  become: true
+
+  tasks:
+    - name: Deploy application with error handling
+      block:
+        # All tasks in block run normally
+        - name: Stop app service
+          ansible.builtin.service:
+            name: webapp
+            state: stopped
+
+        - name: Deploy new version
+          ansible.builtin.copy:
+            src: dist/webapp-v2.tar.gz
+            dest: /tmp/webapp.tar.gz
+
+        - name: Extract application
+          ansible.builtin.unarchive:
+            src: /tmp/webapp.tar.gz
+            dest: /opt/webapp
+            remote_src: true
+
+        - name: Start app service
+          ansible.builtin.service:
+            name: webapp
+            state: started
+
+        - name: Health check
+          ansible.builtin.uri:
+            url: http://localhost:8000/health
+            status_code: 200
+
+      rescue:
+        # These tasks run ONLY if the block failed
+        - name: Log the failure
+          ansible.builtin.debug:
+            msg: "Deployment FAILED on {{ inventory_hostname }}: {{ ansible_failed_result.msg }}"
+
+        - name: Roll back to previous version
+          ansible.builtin.command:
+            cmd: /opt/webapp/scripts/rollback.sh
+
+        - name: Restart service with old version
+          ansible.builtin.service:
+            name: webapp
+            state: restarted
+
+      always:
+        # These tasks run regardless of success or failure
+        - name: Clean up temp files
+          ansible.builtin.file:
+            path: /tmp/webapp.tar.gz
+            state: absent
+
+        - name: Record deployment result
+          ansible.builtin.debug:
+            msg: "Deployment completed at {{ ansible_date_time.iso8601 }}"

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Architecture Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: radial-gradient(circle at top, #0f172a 0%, #020817 60%);
+            color: #e2e8f0;
+        }
+        nav { background: rgba(15, 23, 42, 0.9); padding: 16px 24px; border-bottom: 1px solid rgba(148, 163, 184, 0.2); }
+        nav a { color: #cbd5e1; text-decoration: none; margin-right: 16px; }
+        main {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 18px 60px;
+            display: grid;
+            grid-template-columns: 1fr 1.1fr;
+            gap: 24px;
+        }
+        .box {
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 0 30px 60px rgba(2, 8, 23, 0.45);
+        }
+        textarea {
+            width: 100%;
+            min-height: 140px;
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            background: rgba(2, 8, 23, 0.7);
+            color: white;
+            border-radius: 14px;
+            padding: 14px;
+            resize: vertical;
+        }
+        button {
+            background: linear-gradient(135deg, #34d399, #22d3ee);
+            color: #02130f;
+            font-weight: 800;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 18px;
+            cursor: pointer;
+        }
+        .preview {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 420px;
+        }
+        .preview img {
+            width: 100%;
+            border-radius: 24px;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            box-shadow: 0 24px 50px rgba(2, 8, 23, 0.45);
+        }
+        .reference {
+            grid-column: 1 / -1;
+            display: grid;
+            gap: 18px;
+        }
+        .reference-header { display: flex; justify-content: space-between; gap: 16px; align-items: center; flex-wrap: wrap; }
+        .reference-header h2 { margin: 0; }
+        .status { color: #86efac; min-height: 20px; }
+        .reference-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+        .reference-card { background: rgba(17, 24, 39, 0.82); border: 1px solid rgba(148, 163, 184, 0.2); border-radius: 14px; padding: 16px; }
+        .reference-card h3 { margin-top: 0; color: #67e8f9; }
+        .reference-card ul { padding-left: 20px; line-height: 1.6; color: #cbd5e1; }
+        .flow { color: #fde68a; line-height: 1.6; }
+        .muted { color: #94a3b8; line-height: 1.6; }
+        @media (max-width: 800px) { .reference-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/dashboard/">Dashboard</a>
+        <a href="/courses/">Courses</a>
+        <a href="/library/devops_notes_html/index.html">Notes</a>
+        <a href="/library/devops_projects_html/index.html">Projects</a>
+        <a href="/architecture/">Architecture</a>
+    </nav>
+    <main>
+        <div class="box">
+            <h1>🏗️ Architecture Generator</h1>
+            <p>Describe the system you want to design.</p>
+            <textarea id="architecture-prompt">Design a production-grade AWS DevOps platform with EKS, private networking, CI/CD, GitOps, RAG, AIOps, observability, security, high availability, and disaster recovery.</textarea>
+            <p><button id="generate-button" type="button">Generate architecture</button></p>
+            <p id="generation-status" class="status" role="status"></p>
+            <div style="margin-top:20px; display:grid; gap:10px;">
+                <div class="box" style="padding:16px; background:rgba(17,24,39,0.75);">
+                    <strong>Cloud provider:</strong> AWS
+                </div>
+                <div class="box" style="padding:16px; background:rgba(17,24,39,0.75);">
+                    <strong>Pattern:</strong> High availability + private networking + CDN
+                </div>
+            </div>
+        </div>
+        <div class="box preview">
+            <img src="/static/images/architecture-preview.svg" alt="Architecture preview" />
+        </div>
+        <section class="box reference" aria-live="polite">
+            <div class="reference-header">
+                <h2>Enterprise architecture concepts</h2>
+                <span class="muted">Generate to load the complete reference design</span>
+            </div>
+            <div id="architecture-reference" class="reference-grid">
+                <div class="reference-card"><h3>Ready to generate</h3><p class="muted">The result will include AWS layers, Kubernetes, CI/CD, AI/RAG, AIOps, observability, security, HA, DR, failures, cost, and decisions.</p></div>
+            </div>
+        </section>
+    </main>
+    <script>
+        const promptInput = document.getElementById('architecture-prompt');
+        const generateButton = document.getElementById('generate-button');
+        const status = document.getElementById('generation-status');
+        const reference = document.getElementById('architecture-reference');
+
+        function escapeHtml(value) {
+            return String(value).replace(/[&<>'"]/g, character => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#039;', '"': '&quot;'}[character]));
+        }
+
+        function list(items) {
+            return `<ul>${items.map(item => `<li>${escapeHtml(typeof item === 'string' ? item : item.name || item.title || item.failure || JSON.stringify(item))}</li>`).join('')}</ul>`;
+        }
+
+        function card(title, body) {
+            return `<article class="reference-card"><h3>${escapeHtml(title)}</h3>${body}</article>`;
+        }
+
+        function renderReference(data) {
+            const zones = data.zones.map(zone => `<li><strong>${escapeHtml(zone.name)}:</strong> ${escapeHtml(zone.components.join(', '))}</li>`).join('');
+            const diagrams = data.diagrams.map(diagram => `<li><strong>${escapeHtml(diagram.title)}:</strong> ${escapeHtml(diagram.flow || diagram.layers?.join(' / ') || diagram.components?.join(', ') || '')}</li>`).join('');
+            const flows = Object.entries(data.traffic_flows).map(([name, flow]) => `<li><strong>${escapeHtml(name)}:</strong> ${escapeHtml(flow)}</li>`).join('');
+            const failures = data.failure_scenarios.map(item => `<li><strong>${escapeHtml(item.failure)}:</strong> ${escapeHtml(item.detection)} -> ${escapeHtml(item.recovery)}</li>`).join('');
+            const decisions = data.architecture_decisions.map(item => `<li><strong>${escapeHtml(item.decision)}:</strong> ${escapeHtml(item.reason)} Trade-off: ${escapeHtml(item.trade_off)}</li>`).join('');
+            reference.innerHTML = [
+                card('Business objective', `<p class="muted">${escapeHtml(data.business_objective)}</p>`),
+                card('Reliability targets', `<p class="muted">Availability: ${escapeHtml(data.reliability_targets.availability)}<br>RPO: ${escapeHtml(data.reliability_targets.rpo)}<br>RTO: ${escapeHtml(data.reliability_targets.rto)}</p>`),
+                card('Architecture zones', `<ul>${zones}</ul>`),
+                card('Required diagrams', `<ul>${diagrams}</ul>`),
+                card('Traffic flows', `<ul>${flows}</ul>`),
+                card('Failure detection and recovery', `<ul>${failures}</ul>`),
+                card('Security controls', list(data.security_controls)),
+                card('Cost optimization', list(data.cost_controls)),
+                card('Architecture decisions', `<ul>${decisions}</ul>`),
+                card('Implementation roadmap', list(data.implementation_roadmap)),
+            ].join('');
+        }
+
+        async function generateArchitecture() {
+            generateButton.disabled = true;
+            status.textContent = 'Generating enterprise reference...';
+            try {
+                const response = await fetch('/api/v1/architecture/demo-generate/', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({prompt: promptInput.value, cloud_provider: 'aws'}),
+                });
+                if (!response.ok) throw new Error(`Request failed (${response.status})`);
+                const result = await response.json();
+                renderReference(result.architecture_reference);
+                status.textContent = 'Architecture concepts loaded.';
+            } catch (error) {
+                status.textContent = error.message;
+            } finally {
+                generateButton.disabled = false;
+            }
+        }
+
+        generateButton.addEventListener('click', generateArchitecture);
+        generateArchitecture();
+    </script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Validate automation') {
+            steps {
+                sh 'python3 -m py_compile automation.py'
+                sh 'python3 automation.py alerts.json'
+            }
+        }
+
+        stage('Security review') {
+            steps {
+                sh 'echo "Review generated actions before enabling integrations"'
+            }
+        }
+    }
+
+    post {
+        always {
+            archiveArtifacts artifacts: 'incident-report.json', allowEmptyArchive: false
+            cleanWs()
+        }
+    }
+}

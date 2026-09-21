@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ lesson.title }} | DevOps Lab</title>
+    <style>
+        :root { --ink: #e5e7eb; --muted: #94a3b8; --bg: #07111f; --panel: #0f1d2e; --line: #26384d; --cyan: #67e8f9; --green: #86efac; --yellow: #fde68a; }
+        * { box-sizing: border-box; } body { margin: 0; background: radial-gradient(circle at top left, #12324a, var(--bg) 48%); color: var(--ink); font-family: Georgia, 'Times New Roman', serif; }
+        a { color: inherit; text-decoration: none; } nav { border-bottom: 1px solid var(--line); padding: 18px max(22px, calc((100% - 1180px) / 2)); font: 15px 'Segoe UI', sans-serif; } nav a { color: var(--muted); margin-right: 18px; }
+        main { max-width: 1180px; margin: 0 auto; padding: 42px 22px 80px; } .crumb { color: var(--cyan); font: 700 13px 'Segoe UI', sans-serif; } h1 { font-size: clamp(2rem, 5vw, 4.2rem); line-height: 1.05; margin: 18px 0 10px; } .sub { color: var(--muted); font: 15px 'Segoe UI', sans-serif; }
+        .layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 28px; margin-top: 38px; align-items: start; } .panel { background: rgba(15,29,46,.92); border: 1px solid var(--line); border-radius: 16px; padding: 26px; }
+        .content { font-size: 1.1rem; line-height: 1.82; color: #dbeafe; white-space: pre-line; } .content p { margin: 0 0 1.4em; } h2 { color: var(--cyan); margin-top: 0; } h3 { color: var(--green); margin-top: 30px; }
+        .objective { border-left: 3px solid var(--green); padding-left: 18px; color: #d1fae5; line-height: 1.7; } .command { margin: 14px 0; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; } .command code { display: block; padding: 14px; background: #020817; color: var(--yellow); font: 14px Consolas, monospace; overflow-x: auto; } .command p { margin: 0; padding: 10px 14px; color: var(--muted); font: 13px 'Segoe UI', sans-serif; }
+        .toc a { display: block; padding: 10px 0; border-bottom: 1px solid var(--line); color: #cbd5e1; font: 14px 'Segoe UI', sans-serif; } .toc a.current { color: var(--green); font-weight: 700; } .pager { display: flex; justify-content: space-between; gap: 12px; margin-top: 24px; } .pager a { border: 1px solid var(--line); border-radius: 10px; padding: 12px 15px; color: var(--cyan); font: 700 14px 'Segoe UI', sans-serif; }
+        @media (max-width: 800px) { .layout { grid-template-columns: 1fr; } .toc { order: -1; } }
+    </style>
+</head>
+<body>
+    <nav><a href="/">Home</a><a href="/courses/">Courses</a><a href="/library/devops_notes_html/index.html">Notes</a><a href="/library/devops_projects_html/index.html">Projects</a><a href="{% url 'web-course-detail' course.slug %}">{{ course.title }}</a><a href="/ai-chat/">AI Coach</a></nav>
+    <main>
+        <div class="crumb">{{ course.title }} / Lesson {{ lesson_number }} of {{ lessons|length }}</div>
+        <h1>{{ lesson.title }}</h1>
+        <div class="sub">{{ lesson.get_content_type_display }} · {{ lesson.duration_minutes }} minutes · production and interview practice</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:24px;">
+            <a href="{% url 'web-lesson-section' course.slug lesson.order 'concept' %}" style="border:1px solid #26384d;border-radius:9px;padding:10px 13px;color:#67e8f9;font:700 13px 'Segoe UI',sans-serif;">Open five-page deep dive →</a>
+        </div>
+        <div class="layout">
+            <article class="panel">
+                <div class="content">{{ lesson.content|linebreaks }}</div>
+                <h2>Learning objectives</h2>
+                <ul class="objective">{% for objective in lesson.objectives %}<li>{{ objective }}</li>{% endfor %}</ul>
+                {% if lesson.commands %}
+                    <h2>Hands-on command lab</h2>
+                    {% for command in lesson.commands %}
+                        <div class="command"><code>{{ command.command }}</code><p><strong>Why:</strong> {{ command.explanation }}<br><strong>Expected:</strong> {{ command.expected_output }}</p></div>
+                    {% endfor %}
+                {% endif %}
+                <h2>Production playbook</h2>
+                <ol class="objective">{% for item in extension.production_playbook %}<li>{{ item }}</li>{% endfor %}</ol>
+                <h2>Worked scenario</h2>
+                <p class="scenario">{{ extension.scenario }}</p>
+                <h2>Common failure modes</h2>
+                <ul class="objective">{% for item in extension.mistakes %}<li>{{ item }}</li>{% endfor %}</ul>
+                <h2>Interview prompts</h2>
+                <ul class="interview">{% for item in extension.interview %}<li>{{ item }}</li>{% endfor %}</ul>
+                <h2>Job-ready checkpoint</h2>
+                <p class="sub">{{ extension.deliverable }}</p>
+                <div class="pager">
+                    {% if previous_lesson %}<a href="{% url 'web-lesson-detail' course.slug previous_lesson.order %}">← Previous</a>{% else %}<span></span>{% endif %}
+                    {% if next_lesson %}<a href="{% url 'web-lesson-detail' course.slug next_lesson.order %}">Next →</a>{% endif %}
+                </div>
+            </article>
+            <aside class="panel toc"><h2>Course map</h2>{% for item in lessons %}<a class="{% if item.id == lesson.id %}current{% endif %}" href="{% url 'web-lesson-detail' course.slug item.order %}">{{ forloop.counter|stringformat:'02d' }} · {{ item.title }}</a>{% endfor %}</aside>
+        </div>
+    </main>
+</body>
+</html>

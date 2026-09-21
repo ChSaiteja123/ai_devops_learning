@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Observability Automation</title><link rel="stylesheet" href="style.css"></head>
+<body>
+<header class="site-header"><div class="page"><a class="back-link" href="index.html">Back to project guides</a><h1>16. Observability Automation</h1><p>Validate, group, deduplicate, route, and audit Prometheus and Alertmanager events.</p></div></header>
+<main class="page"><article>
+<h2 class="section-heading">Automation flow</h2>
+<div class="code-block">Prometheus rule -> Alertmanager -> webhook -> validate -> deduplicate -> group by severity
+-> choose receiver -> generate notification plan -> audit and notify</div>
+<h2 class="section-heading">Local run</h2>
+<div class="code-block">python alert_router.py sample-alerts.json</div>
+<p class="text-line">The sample contains a duplicate fingerprint. The router keeps one unique alert, records the duplicate count, and creates separate critical and warning routes without sending real notifications.</p>
+<div class="callout important"><strong>[IMPORTANT]</strong> Grouping and deduplication prevent alert storms, but every group still needs an owner, runbook, escalation path, and response deadline.</div>
+<div class="callout security"><strong>[SECURITY]</strong> Authenticate webhook requests, redact sensitive labels, and never execute remediation directly from an alert payload.</div>
+<h2 class="section-heading">Prometheus and Alertmanager</h2>
+<div class="code-block">Prometheus evaluates alerts.
+Alertmanager groups related alerts and selects a receiver.
+The router validates the payload and writes an auditable plan.
+A separate authorized workflow decides whether any action is allowed.</div>
+<h2 class="section-heading">Jenkins validation</h2>
+<div class="code-block">python3 -m py_compile alert_router.py
+python3 alert_router.py sample-alerts.json
+assert duplicate_count == 1
+assert unique_alert_count == 2</div>
+<h2 class="section-heading">Project files</h2>
+<p><a class="back-link" href="../devops_projects/16_observability_automation/README.md">Open project README</a></p>
+<p><a class="back-link" href="../devops_projects/16_observability_automation/alert_router.py">Open alert router</a></p>
+<p><a class="back-link" href="17_monitoring_observability.html">Read monitoring and observability project context</a></p>
+</article></main>
+</body></html>

@@ -1,0 +1,246 @@
+AWS VPC and Networking
+========================
+
+PURPOSE / OVERVIEW
+--------------------------------------------------------------------------------
+A VPC (Virtual Private Cloud) is an isolated network in AWS where you launch your AWS resources.
+
+1. CORE NETWORKING COMPONENTS
+--------------------------------------------------------------------------------
+Core networking components
+
+- VPC
+- subnets
+- route tables
+- internet gateway
+- NAT gateway
+- NACLs
+- security groups
+- bastion host
+
+2. PUBLIC SUBNET
+--------------------------------------------------------------------------------
+Public subnet
+
+- resources with direct internet access
+- usually host load balancers or NAT gateways
+
+3. PRIVATE SUBNET
+--------------------------------------------------------------------------------
+Private subnet
+
+- resources without direct internet access
+- usually application servers and databases
+
+4. EXAMPLE ARCHITECTURE
+--------------------------------------------------------------------------------
+Example architecture
+
+- ALB in public subnet
+- app servers in private subnet
+- database in private subnet
+- NAT in public subnet for outbound traffic
+
+5. USE CASES
+--------------------------------------------------------------------------------
+Use cases
+
+- segmentation by environment
+- secure access patterns
+- controlled communication between workloads
+
+6. PRODUCTION GUIDANCE
+--------------------------------------------------------------------------------
+Networking design is a core skill for cloud and DevOps engineers because security and reliability depend on proper network planning.
+
+7. VPC AND NETWORKING DEEP DIVE
+--------------------------------------------------------------------------------
+VPC and networking deep dive
+A VPC defines a regional private address space.
+Choose nonoverlapping CIDR ranges before connecting networks.
+Subnets are availability-zone-specific network segments.
+Public subnets have a route to an internet gateway.
+Private subnets use NAT or private endpoints for outbound access.
+Route tables determine next hops for destinations.
+[SECURITY] Security groups are stateful instance and interface firewalls.
+Network ACLs are stateless subnet boundary rules.
+Allow return traffic explicitly in network ACLs.
+Use narrow security group sources and documented ports.
+Avoid public IPs for internal services.
+Use VPC endpoints for supported AWS services.
+Endpoint policies should restrict accessible actions and resources.
+Use NAT gateways for controlled outbound access.
+Budget for NAT hourly and data processing charges.
+Use multiple NAT gateways when zone resilience justifies cost.
+Do not route one zone through another unnecessarily.
+Use flow logs to investigate accepted and rejected traffic.
+Protect flow logs and control retention costs.
+Use DNS hostnames and resolution intentionally.
+Use Route 53 private hosted zones for internal names.
+Use transit gateways for structured multi-VPC connectivity.
+Use peering for simpler direct VPC relationships.
+Check transitive routing limitations before choosing peering.
+Use VPN or Direct Connect for on-premises connectivity.
+Design redundant tunnels and failover monitoring.
+Use network firewall controls for centralized inspection when needed.
+Separate management, application, and data paths.
+Keep databases in isolated private subnets.
+Use load balancers in appropriate public or private subnets.
+Allow application security groups to reach database groups.
+Avoid permitting database access from an entire VPC unnecessarily.
+Use ephemeral ports correctly in stateless ACL rules.
+Check route tables before changing security groups.
+Check DNS before assuming a network block.
+Use Reachability Analyzer for supported path analysis.
+Capture packet evidence carefully because payloads may be sensitive.
+Use TLS between services even inside private networks.
+Use certificates with automated renewal.
+Apply egress restrictions for sensitive workloads.
+Control metadata service access and require tokens.
+Use network segmentation for environment boundaries.
+Do not assume subnets provide application-level isolation alone.
+Use identity and service authorization in addition to network controls.
+Plan IPv4 exhaustion before launch.
+Use IPv6 only with complete firewall and application support.
+Document every CIDR, route, endpoint, and dependency.
+Tag network resources with owner and lifecycle.
+Centralize network changes through reviewed infrastructure code.
+Use policy checks to reject public routes and broad ports.
+Separate network administration from application deployment roles.
+Audit route, security group, ACL, and endpoint changes.
+Test failover for NAT, VPN, DNS, and load balancers.
+Use multiple availability zones for critical network components.
+Monitor packet drops, NAT ports, connection counts, and latency.
+Set alarms for tunnel state and route changes.
+Use synthetic checks from relevant subnets.
+Keep subnet free space for scaling and interfaces.
+Avoid overlapping CIDRs that block future peering.
+Use address management tools for larger environments.
+Control cross-AZ and cross-region data transfer cost.
+Place high-volume communicating services deliberately.
+Use caching to reduce repeated network and database traffic.
+Define an incident runbook for unreachable service flows.
+Networking is a dependency graph that needs both security and observability.
+
+8. VPC DESIGN AND NETWORK TROUBLESHOOTING
+--------------------------------------------------------------------------------
+VPC design and network troubleshooting
+Choose nonoverlapping CIDR ranges that leave room for additional accounts and regions.
+Record subnet purpose, availability zone, route table, NAT path, and free address capacity.
+Use public subnets only for components that deliberately accept or initiate internet traffic.
+Keep applications, databases, management interfaces, and inspection paths in separate segments.
+Use private endpoints for AWS services when they reduce public exposure or NAT cost.
+Design NAT placement for both zone resilience and data-processing cost.
+Use transit gateways, peering, VPN, or Direct Connect according to routing and ownership needs.
+Check transitive routing limitations before connecting multiple VPCs through peering.
+Use security group references for service-to-service access and narrow CIDR rules for exceptions.
+Remember that NACLs are stateless and require both request and ephemeral return ports.
+Use default-deny network policies where the platform supports them, then add documented flows.
+Enable VPC flow logs for critical interfaces or subnets with controlled retention and access.
+Use DNS hostnames, resolvers, and private hosted zones consistently across environments.
+Protect the metadata service and require IMDSv2 for instance-based workloads.
+Use TLS between services even when packets remain inside private address space.
+Centralize certificate issuance and renewal with monitoring for expiry.
+When a connection fails, check DNS, route tables, security groups, NACLs, endpoints, and service health in that order.
+Use Reachability Analyzer for supported paths before changing several controls at once.
+Use a narrow packet capture filter and protect captures because payloads may be sensitive.
+Check source and destination security group references in the same VPC context.
+Verify load balancer target health and return routes for asymmetric failures.
+Test failover for NAT, VPN tunnels, DNS records, and inspection appliances.
+Reserve subnet space for autoscaling, interfaces, endpoints, and blue-green deployments.
+Monitor NAT ports, rejected flows, packet drops, tunnel state, route changes, and latency.
+Budget for cross-AZ, cross-region, NAT processing, firewall, and Direct Connect charges.
+Keep network changes in reviewed Terraform or CloudFormation with policy checks for public exposure.
+Separate network administration from application deployment permission.
+Document a rollback for route, ACL, security group, endpoint, and DNS changes.
+Network resilience depends on address planning, route clarity, controlled access, and tested failover.
+
+9. VPC ADDRESS AND SUBNET PLANNING
+--------------------------------------------------------------------------------
+VPC address and subnet planning
+Reserve CIDR space for future availability zones, interface endpoints, and blue-green capacity.
+Use a central address management process for accounts, regions, VPCs, and on-premises networks.
+Reject overlapping ranges before creating peering, transit gateway, VPN, or Direct Connect links.
+Use separate subnet tiers for ingress, application, data, management, and inspection functions.
+Record usable IP capacity because AWS reserves addresses inside every subnet.
+Monitor free addresses before autoscaling or deploying many interface endpoints.
+Use route tables associated to subnets deliberately and avoid relying on implicit defaults.
+Keep public routes limited to components that need inbound or outbound internet connectivity.
+Use private service endpoints to reduce exposure and sometimes lower NAT processing cost.
+Choose one NAT gateway per zone when resilience and traffic volume justify the additional cost.
+Route private traffic locally where possible instead of crossing zones unnecessarily.
+
+10. NETWORK SECURITY CONTROLS
+--------------------------------------------------------------------------------
+Network security controls
+Treat security groups as workload-level allow lists and keep source references narrow.
+Use NACLs only with a documented request and ephemeral return-port model.
+Use network firewalls or inspection appliances for centralized controls that require them.
+Restrict egress for workloads that handle sensitive data or execute untrusted content.
+Require TLS and validate certificates for traffic inside private networks.
+Use private hosted zones and resolver rules for internal service names.
+Protect the instance metadata service and avoid exposing management interfaces publicly.
+Separate network administration from application deployment and data access roles.
+Log and review changes to routes, gateways, endpoints, security groups, NACLs, and DNS.
+Use policy as code to reject public database routes, unrestricted management ports, and missing flow logs.
+Document exceptions with owner, reason, compensating control, and expiration date.
+
+11. CONNECTIVITY TROUBLESHOOTING
+--------------------------------------------------------------------------------
+Connectivity troubleshooting
+Confirm the destination name resolves to the expected address from the source subnet.
+Check the source route table, destination route table, and any transit or peering path.
+Check security group ingress and egress on both endpoints and all load balancer interfaces.
+Check NACL ingress and egress including ephemeral ports and return traffic.
+Check endpoint policy, private DNS, proxy settings, and service-level authorization.
+Use VPC flow logs to determine whether traffic was accepted, rejected, or absent.
+Use Reachability Analyzer before changing multiple controls during an incident.
+Use a narrow tcpdump filter only when metadata is insufficient and protect the capture.
+Check load balancer target health, listener ports, and backend response routes.
+Check NAT connection and port exhaustion when private workloads lose external access.
+Check VPN tunnel state, BGP routes, and on-premises firewall rules for hybrid failures.
+Record source, destination, protocol, port, timestamp, route, and observed error in the incident.
+
+12. NETWORK RELIABILITY AND COST
+--------------------------------------------------------------------------------
+Network reliability and cost
+Test loss of a NAT gateway, VPN tunnel, availability zone, DNS path, and inspection appliance.
+Use redundant tunnels and failover monitoring for important hybrid connections.
+Monitor packet drops, rejected flows, NAT ports, connection counts, route changes, and latency.
+Estimate NAT processing, firewall hours, cross-zone traffic, inter-region transfer, and endpoint cost.
+Place high-volume communicating services deliberately to reduce unnecessary transfer.
+Keep network changes small, reviewed, observable, and reversible.
+Network operations are safest when topology, policy, evidence, and cost ownership are documented together.
+Network change and recovery checklist
+Review CIDR, route, subnet, endpoint, and security group changes with an independent operator.
+Apply network changes in a dependency-aware order so temporary loss is understood.
+Create a rollback route or policy before removing the current working path.
+Test management access from a second session before closing the first maintenance connection.
+Use change markers in flow logs and monitoring to correlate network changes with failures.
+Keep a known-good resolver, bastion, or Session Manager path for emergency diagnosis.
+Document the expected source and destination addresses for every critical application flow.
+Use explicit health checks for NAT gateways, VPN tunnels, transit attachments, and inspection devices.
+Monitor route propagation and BGP convergence during hybrid connectivity changes.
+Check MTU, fragmentation, proxy behavior, and idle timeouts for long-lived connections.
+Tune load balancer and NAT idle timeouts to match application protocol behavior.
+Use connection draining before changing routes that affect stateful clients.
+Review endpoint policies when an AWS API call works publicly but fails privately.
+Check DNS search domains and split-horizon behavior from the actual workload subnet.
+Avoid relying on security group changes to solve authorization or application identity failures.
+Use service-level authentication in addition to network reachability.
+Keep packet captures short, filtered, encrypted, and deleted according to policy.
+Record rejected flow samples without retaining unnecessary payload or customer information.
+Test subnet exhaustion before a large autoscaling or interface endpoint rollout.
+Use address utilization forecasts for regions and accounts with rapid growth.
+Review NAT and cross-zone charges after traffic topology changes.
+Prefer local endpoints and regional placement for high-volume service traffic.
+Use centralized inspection only when its capacity and failure behavior are understood.
+Test inspection bypass and recovery before making it a single required path.
+Document the blast radius of a route table, transit gateway, or DNS change.
+Keep a dependency map for application, data, identity, monitoring, and provider endpoints.
+Use policy tests in CI to reject broad ingress, public data tiers, and missing logging.
+Run a quarterly review of public addresses, unused gateways, stale peers, and abandoned endpoints.
+Remove temporary diagnostic rules after the incident and verify the intended baseline.
+Network recovery is complete only when routing, authorization, and user-facing health all pass.
+Record route propagation time and observed client recovery during failover exercises.
+Review network diagrams after every account, region, or connectivity boundary change.

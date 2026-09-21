@@ -1,0 +1,21 @@
+{% extends "admin/index.html" %}
+
+{% block content %}
+<div id="content-main">
+    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin: 0 0 22px;">
+        {% for app in app_list %}
+            <div style="background: rgba(17,24,39,0.9); border: 1px solid rgba(148,163,184,0.2); border-radius: 14px; padding: 18px; min-height: 120px;">
+                <h2 style="margin: 0 0 12px; color: #e2e8f0;">{{ app.name }}</h2>
+                {% for model in app.models %}
+                    <div style="margin: 6px 0;">
+                        <a href="{{ model.admin_url }}" style="color: #93c5fd; text-decoration: none;">{{ model.name }}</a>
+                    </div>
+                {% endfor %}
+            </div>
+        {% empty %}
+            <p>No apps available.</p>
+        {% endfor %}
+    </div>
+</div>
+{{ block.super }}
+{% endblock %}

@@ -1,0 +1,331 @@
+Introduction to DevOps
+========================
+
+PURPOSE / OVERVIEW
+--------------------------------------------------------------------------------
+DevOps is a combination of software development and IT operations. It focuses on automation, continuous delivery, monitoring, and collaboration between developers and operations teams.
+
+1. GOALS OF DEVOPS
+--------------------------------------------------------------------------------
+Goals of DevOps
+
+- reduce deployment time
+- increase software reliability
+- improve collaboration between teams
+- automate repetitive work
+- increase observability and faster recovery
+
+2. DEVOPS LIFECYCLE
+--------------------------------------------------------------------------------
+DevOps lifecycle
+
+Plan -> Code -> Build -> Test -> Release -> Deploy -> Operate -> Monitor
+
+3. CORE PRINCIPLES
+--------------------------------------------------------------------------------
+Core principles
+
+- automation first
+- version control everywhere
+- continuous integration and deployment
+- infrastructure as code
+- monitoring and observability
+- security by default
+
+4. EXAMPLE SCENARIO
+--------------------------------------------------------------------------------
+Example scenario
+
+A developer pushes code to GitHub. A CI pipeline runs tests, builds the artifact, deploys it to staging, and then promotes it to production using automated deployment steps.
+
+5. SECURITY AND RELIABILITY
+--------------------------------------------------------------------------------
+DevOps is not just tools. It is a culture and process that enables faster, safer delivery.
+
+6. COMMON DEVOPS TOOLS
+--------------------------------------------------------------------------------
+Common DevOps tools
+
+- Git
+- GitHub / GitLab / Bitbucket
+- Jenkins / GitHub Actions / GitLab CI
+- Docker
+- Kubernetes
+- Terraform
+- Ansible
+- Prometheus
+- Grafana
+- AWS / Azure / GCP
+
+7. EXAMPLE
+--------------------------------------------------------------------------------
+Example
+
+# Example workflow
+# developer commits code
+# pipeline builds app
+# tests run automatically
+# artifact is pushed to registry
+# deployment triggers to Kubernetes cluster
+
+8. DEEP-DIVE: DEVOPS OPERATING MODEL
+--------------------------------------------------------------------------------
+Deep-dive: DevOps operating model
+
+
+9. KEY TOOLS AND COMPONENTS
+--------------------------------------------------------------------------------
+DevOps connects people, process, and technology around a measurable delivery flow.
+The goal is a sustainable feedback loop, not simply faster releases.
+Product teams own outcomes such as reliability, security, and customer value.
+Developers participate in operations through dashboards, on-call, and postmortems.
+Operations engineers participate early in design, testing, and capacity planning.
+[SECURITY] Security engineers embed controls in the delivery workflow.
+Platform teams provide paved roads that make the safe path the easy path.
+
+10. VALUE STREAM MAPPING
+--------------------------------------------------------------------------------
+Value stream mapping
+
+
+11. COMMANDS AND CONFIGURATION
+--------------------------------------------------------------------------------
+EXAMPLE
+----------------------------------------
+Map an idea from request to production and record waiting time at each handoff.
+Separate active work from queue time because queues often dominate lead time.
+Measure deployment frequency, lead time, change failure rate, and recovery time.
+Use a baseline before changing tools or team structure.
+Review metrics by service and team rather than using them as individual quotas.
+Optimize the slowest constraint instead of accelerating an already fast stage.
+Keep work in progress small so feedback arrives while context is fresh.
+Make ownership visible with a service catalog and escalation path.
+
+12. TEAM PRACTICES
+--------------------------------------------------------------------------------
+Team practices
+
+
+13. PRODUCTION GUIDANCE
+--------------------------------------------------------------------------------
+Create small cross-functional teams around a product or service boundary.
+Define a clear service owner, technical owner, and business owner.
+Write a lightweight runbook for common failures and operational tasks.
+Rotate incident duties so knowledge is distributed across the team.
+Use blameless postmortems to improve systems rather than punish people.
+Turn every recurring incident into a tracked engineering improvement.
+Use documented decision records for important architecture choices.
+Prefer asynchronous, searchable communication for routine technical decisions.
+Reserve synchronous meetings for decisions, incidents, and complex collaboration.
+
+14. DELIVERY DESIGN
+--------------------------------------------------------------------------------
+Delivery design
+
+
+15. CORE CONCEPTS
+--------------------------------------------------------------------------------
+EXAMPLE
+----------------------------------------
+Keep application code, tests, and pipeline definitions under version control.
+Build immutable artifacts once and promote the same artifact between environments.
+Give every build a unique commit, version, and provenance identifier.
+Make builds reproducible by pinning tools, plugins, and dependency versions.
+Fail early on formatting, unit tests, policy checks, and dependency vulnerabilities.
+Separate compilation from deployment so a deployment can be retried safely.
+Use feature flags when deployment and feature release need different timing.
+Use canary or blue-green rollout strategies for high-risk changes.
+Automate rollback when health indicators cross a defined threshold.
+Require explicit approval for exceptional production actions.
+
+16. INFRASTRUCTURE AND ENVIRONMENTS
+--------------------------------------------------------------------------------
+Infrastructure and environments
+
+
+17. WORKFLOWS AND PRACTICES
+--------------------------------------------------------------------------------
+Describe infrastructure as code and review changes like application code.
+Keep environment differences in configuration rather than copied scripts.
+Use isolated accounts or projects for development, staging, and production.
+Treat production access as temporary, auditable, and least privileged.
+Store secrets in a managed secret system and inject them at runtime.
+Avoid putting credentials in repositories, images, logs, or command history.
+Use tags and labels for owner, environment, cost center, and expiration date.
+Define backup, restore, and disaster recovery objectives before launch.
+Test restores rather than assuming a successful backup is usable.
+Document dependencies on DNS, identity, networks, queues, and third parties.
+
+18. SECURITY IN THE LIFECYCLE
+--------------------------------------------------------------------------------
+[SECURITY] Security in the lifecycle
+
+
+19. SECURITY AND RELIABILITY
+--------------------------------------------------------------------------------
+Threat model important flows before implementation begins.
+Scan source, dependencies, images, infrastructure, and runtime configuration.
+Treat scanner results as input for risk decisions, not as a substitute for review.
+Prioritize exploitable vulnerabilities in internet-facing or privileged paths.
+Use signed commits or protected branches for sensitive repositories.
+Require peer review and automated checks before merging.
+Rotate credentials and revoke unused access promptly.
+Log authentication, authorization, deployment, and administrative events.
+Protect logs from alteration and restrict access to sensitive fields.
+Test dependency update and emergency patch procedures regularly.
+
+20. RELIABILITY AND RESILIENCE
+--------------------------------------------------------------------------------
+Reliability and resilience
+
+
+21. TROUBLESHOOTING AND OPERATIONS
+--------------------------------------------------------------------------------
+EXAMPLE
+----------------------------------------
+Define a service level indicator for availability, latency, or correctness.
+Define a service level objective that reflects the user experience.
+Use an error budget to balance feature delivery with reliability work.
+Design timeouts, retries, and circuit breakers together.
+Use bounded retries with exponential backoff and jitter.
+Make operations idempotent so retries do not duplicate side effects.
+Remove single points of failure in critical paths.
+Exercise failure scenarios with game days and controlled experiments.
+Measure recovery time from detection through verified restoration.
+Keep a tested, versioned incident communication template.
+
+22. OBSERVABILITY AND FEEDBACK
+--------------------------------------------------------------------------------
+Observability and feedback
+
+
+23. KEY TOOLS AND COMPONENTS
+--------------------------------------------------------------------------------
+Instrument the user journey rather than collecting data without a question.
+Attach correlation identifiers to requests crossing service boundaries.
+Use structured logs with timestamps, severity, service, and request context.
+Track rate, errors, duration, saturation, and important business outcomes.
+Create dashboards for operators and separate summaries for product owners.
+Alert on symptoms and user impact instead of every low-level fluctuation.
+Include a runbook link and owner in each actionable alert.
+Review noisy alerts and delete alerts that do not lead to action.
+Use traces to locate latency across asynchronous and synchronous dependencies.
+Feed incident findings back into tests, automation, and architecture.
+
+24. COST MANAGEMENT
+--------------------------------------------------------------------------------
+Cost management
+
+
+25. COMMANDS AND CONFIGURATION
+--------------------------------------------------------------------------------
+EXAMPLE
+----------------------------------------
+Make cost visible by environment, service, team, and workload.
+Choose capacity from measured demand and realistic growth assumptions.
+Use autoscaling with sensible lower and upper bounds.
+Schedule nonproduction resources off when they are not needed.
+Remove unattached disks, old snapshots, unused IP addresses, and stale artifacts.
+Use reserved capacity or savings plans only after usage is understood.
+Compare the cost of reliability improvements with the cost of outages.
+Avoid premature optimization that increases operational complexity.
+
+26. PRACTICAL MATURITY PATH
+--------------------------------------------------------------------------------
+Practical maturity path
+
+
+27. PRODUCTION GUIDANCE
+--------------------------------------------------------------------------------
+Start with source control, repeatable builds, and automated tests.
+Next add artifact management, deployment automation, and environment parity.
+Then add service ownership, monitoring, incident response, and security gates.
+Finally optimize with progressive delivery, policy as code, and platform self-service.
+Maturity is demonstrated by repeatable outcomes, not by a long tool list.
+Review the operating model quarterly and remove practices that no longer help.
+
+28. CHANGE MANAGEMENT DETAILS
+--------------------------------------------------------------------------------
+Change management details
+
+
+29. CORE CONCEPTS
+--------------------------------------------------------------------------------
+Use small, reversible changes to reduce blast radius.
+Record the expected impact before a risky deployment.
+Define a change owner and an observer for critical releases.
+Check dependencies and maintenance windows before production work.
+Announce user-visible changes through the appropriate channel.
+Capture deployment markers in monitoring dashboards.
+Compare post-release indicators with the pre-release baseline.
+Stop a rollout when evidence contradicts the release hypothesis.
+Keep rollback instructions next to the deployment procedure.
+Verify rollback behavior with a controlled staging exercise.
+
+30. LEARNING CULTURE
+--------------------------------------------------------------------------------
+Learning culture
+
+
+31. WORKFLOWS AND PRACTICES
+--------------------------------------------------------------------------------
+Pair engineers on unfamiliar operational tasks.
+Run short architecture reviews before large implementation efforts.
+Use internal documentation with examples that can be executed and tested.
+Label experiments clearly so temporary code is not mistaken for production design.
+Budget time for maintenance, upgrades, and removal of obsolete automation.
+Reward prevention and learning, not only visible feature output.
+Share incident patterns across teams when they reveal systemic risk.
+Create a feedback channel for the engineers who use the platform.
+Measure developer experience with wait time, friction, and recovery effort.
+Treat automation failures as product defects in the delivery system.
+
+32. DECISION CHECKLIST
+--------------------------------------------------------------------------------
+Decision checklist
+
+
+33. SECURITY AND RELIABILITY
+--------------------------------------------------------------------------------
+Can the change be tested automatically?
+Can the artifact be reproduced from the commit?
+Can an operator identify the owner within minutes?
+Can the service tolerate dependency failure?
+Can the team detect user impact quickly?
+Can the team roll back without losing data?
+Are secrets and permissions limited to the required scope?
+Are logs and metrics useful without exposing private data?
+Is the cost model understood for normal and peak demand?
+Has the team practiced the most likely recovery path?
+Can the service owner explain the key failure modes?
+Are deployment permissions separated from read-only observation?
+Does every alert have a defined response and escalation target?
+Are recovery objectives aligned with the business priority?
+Can temporary infrastructure be identified and removed?
+Are pipeline logs retained long enough for incident investigation?
+Does the team review failed changes without assigning blame?
+Is the next improvement captured as an owned, time-bound action?
+Does the design minimize hidden manual handoffs?
+Can a new engineer follow the runbook without tribal knowledge?
+Are production experiments limited, observable, and reversible?
+Does the architecture document state its assumptions?
+Are capacity limits tested before a traffic surge?
+Can the team demonstrate a restore from a recent backup?
+Does the release process preserve an audit trail?
+Are quality gates appropriate to the risk of the service?
+Does the platform offer secure defaults for common workflows?
+Are exceptions documented with an expiry date?
+Does the team remove obsolete alerts, jobs, and permissions?
+Is customer feedback connected to engineering priorities?
+Are reliability investments visible in planning?
+Can the team explain what success looks like after deployment?
+Does the operating model support calm, evidence-based decisions?
+Are service dependencies reviewed during design and after incidents?
+Does every environment have an explicit purpose and owner?
+Can automated checks explain why they rejected a change?
+Are manual approvals limited to decisions that need human judgment?
+Does the team test both forward deployment and rollback paths?
+Are operational metrics connected to customer-facing outcomes?
+Can the team safely pause delivery without losing work?
+Are platform defaults documented and versioned?
+Does continuous improvement have a visible feedback loop?

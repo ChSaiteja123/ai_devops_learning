@@ -1,0 +1,25 @@
+# 02_pod_basic.yaml — Simplest possible Pod definition
+# Usage: kubectl apply -f 02_pod_basic.yaml -n dev
+# Note: In production use Deployments, not bare Pods
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-pod
+  namespace: dev
+  labels:
+    app: nginx
+    tier: frontend
+spec:
+  containers:
+    - name: nginx
+      image: nginx:1.25-alpine        # pin to a specific version, never 'latest'
+      ports:
+        - containerPort: 80
+      resources:
+        requests:
+          cpu: "100m"
+          memory: "64Mi"
+        limits:
+          cpu: "200m"
+          memory: "128Mi"

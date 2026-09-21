@@ -1,0 +1,58 @@
+# 13_deployment_rolling_update.yaml — Deployment with rolling update strategy
+# Usage: kubectl apply -f 13_deployment_rolling_update.yaml -n dev
+# Rollback: kubectl rollout undo deployment/webapp -n dev
+# History: kubectl rollout history deployment/webapp -n dev
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp
+  namespace: dev
+  annotations:
+    kubernetes.io/change-cause: "Release v2.1 — added payment feature"
+spec:
+  replicas: 4
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1       # at most 1 pod down during update
+      maxSurge: 1             # at most 1 extra pod during update
+  selector:
+    matchLabels:
+      app: webapp
+  template:
+    metadata:
+      labels:
+        app: webapp
+        version: "v2.1"
+    spec:
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: webapp
+          image: myapp:v2.1
+          ports:
+            - containerPort: 8000
+          lifecycle:
+            preStop:
+              exec:
+                command: ["/bin/sh", "-c", "sleep 5"]   # allow LB to drain
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 30
+            periodSeconds: 15
+          resources:
+            requests:
+              cpu: "200m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"

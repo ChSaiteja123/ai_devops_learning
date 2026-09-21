@@ -1,0 +1,66 @@
+# 23_pod_security_context.yaml — Hardened pod with security context
+# Usage: kubectl apply -f 23_pod_security_context.yaml -n dev
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: secure-app
+  namespace: dev
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: secure-app
+  template:
+    metadata:
+      labels:
+        app: secure-app
+    spec:
+      # Pod-level security context
+      securityContext:
+        runAsNonRoot: true          # container must not run as root
+        runAsUser: 1000             # specific non-root UID
+        runAsGroup: 3000
+        fsGroup: 2000               # file ownership for mounted volumes
+        seccompProfile:
+          type: RuntimeDefault      # default syscall filter
+
+      serviceAccountName: webapp-sa
+      automountServiceAccountToken: false
+
+      containers:
+        - name: app
+          image: myapp:v1.2
+          ports:
+            - containerPort: 8000
+
+          # Container-level security context
+          securityContext:
+            allowPrivilegeEscalation: false   # cannot gain more privilege
+            readOnlyRootFilesystem: true       # immutable filesystem
+            capabilities:
+              drop:
+                - ALL                          # drop everything
+              add:
+                - NET_BIND_SERVICE             # only if binding port < 1024
+
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
+
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp           # writable temp dir since root fs is read-only
+            - name: cache
+              mountPath: /app/cache
+
+      volumes:
+        - name: tmp
+          emptyDir: {}
+        - name: cache
+          emptyDir:
+            medium: Memory   # fast in-memory temp storage

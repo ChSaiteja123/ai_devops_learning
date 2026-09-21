@@ -1,0 +1,48 @@
+{
+  "receiver": "platform-team",
+  "status": "firing",
+  "alerts": [
+    {
+      "status": "firing",
+      "labels": {
+        "alertname": "CheckoutHighErrorRate",
+        "service": "checkout-api",
+        "severity": "critical",
+        "environment": "production"
+      },
+      "annotations": {
+        "summary": "Checkout API error rate is elevated",
+        "runbook_url": "https://runbooks.example.com/checkout-errors"
+      },
+      "fingerprint": "checkout-critical-001"
+    },
+    {
+      "status": "firing",
+      "labels": {
+        "alertname": "WorkerQueueAge",
+        "service": "worker",
+        "severity": "warning",
+        "environment": "production"
+      },
+      "annotations": {
+        "summary": "Worker queue age is elevated",
+        "runbook_url": "https://runbooks.example.com/worker-queue"
+      },
+      "fingerprint": "worker-warning-001"
+    },
+    {
+      "status": "firing",
+      "labels": {
+        "alertname": "CheckoutHighErrorRate",
+        "service": "checkout-api",
+        "severity": "critical",
+        "environment": "production"
+      },
+      "annotations": {
+        "summary": "Duplicate delivery of checkout alert",
+        "runbook_url": "https://runbooks.example.com/checkout-errors"
+      },
+      "fingerprint": "checkout-critical-001"
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "generated_at": "2026-09-18T10:46:31.803889+00:00",
+  "source_status": "firing",
+  "unique_alert_count": 2,
+  "duplicate_count": 1,
+  "groups": [
+    {
+      "environment": "production",
+      "severity": "critical",
+      "receiver": "on-call-pager",
+      "alert_count": 1,
+      "alertnames": [
+        "CheckoutHighErrorRate"
+      ],
+      "services": [
+        "checkout-api"
+      ],
+      "runbooks": [
+        "https://runbooks.example.com/checkout-errors"
+      ],
+      "automated_notification_sent": false
+    },
+    {
+      "environment": "production",
+      "severity": "warning",
+      "receiver": "platform-ticketing",
+      "alert_count": 1,
+      "alertnames": [
+        "WorkerQueueAge"
+      ],
+      "services": [
+        "worker"
+      ],
+      "runbooks": [
+        "https://runbooks.example.com/worker-queue"
+      ],
+      "automated_notification_sent": false
+    }
+  ]
+}

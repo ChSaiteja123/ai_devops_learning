@@ -1,0 +1,14 @@
+[
+  {
+    "id": "delivery-001",
+    "title": "Safe deployment",
+    "tenant": "public",
+    "content": "Build once, promote an immutable artifact, run health checks, and keep a tested rollback path."
+  },
+  {
+    "id": "security-001",
+    "title": "Secret handling",
+    "tenant": "public",
+    "content": "Store credentials in a secret manager and never commit API keys to source control."
+  }
+]

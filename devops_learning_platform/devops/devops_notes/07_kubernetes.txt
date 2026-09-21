@@ -1,0 +1,241 @@
+Kubernetes (K8s)
+========================
+
+PURPOSE / OVERVIEW
+--------------------------------------------------------------------------------
+Kubernetes is an open-source container orchestration platform used to automate deployment, scaling, and management of containerized applications.
+
+1. BASIC KUBERNETES CONCEPTS
+--------------------------------------------------------------------------------
+Basic Kubernetes concepts
+
+- Pod: smallest deployable unit
+- Deployment: manages pods and upgrades
+- Service: exposes pods internally or externally
+- ReplicaSet: ensures desired number of pod replicas
+- Namespace: logical cluster partition
+- ConfigMap: non-secret configuration
+- Secret: sensitive configuration
+- Ingress: HTTP routing to services
+
+2. EXAMPLE DEPLOYMENT YAML
+--------------------------------------------------------------------------------
+Example deployment YAML
+
+EXAMPLE
+----------------------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      containers:
+      - name: myapp
+        image: myapp:latest
+        ports:
+        - containerPort: 8000
+
+3. COMMON COMMANDS
+--------------------------------------------------------------------------------
+Common commands
+
+COMMANDS
+----------------------------------------
+kubectl get pods
+kubectl apply -f deployment.yaml
+kubectl get svc
+kubectl logs <pod-name>
+kubectl describe pod <pod-name>
+
+4. WHY KUBERNETES MATTERS
+--------------------------------------------------------------------------------
+Why Kubernetes matters
+
+- automated scaling
+- self-healing
+- rolling updates and rollbacks
+- service discovery and load balancing
+
+5. SECURITY AND RELIABILITY
+--------------------------------------------------------------------------------
+Kubernetes is the standard orchestration layer for containerized workloads in modern cloud-native environments.
+[SECURITY] Treat manifests as production security policy: protect secrets, enforce least privilege, and reject privileged workloads.
+
+6. KUBERNETES DEEP DIVE
+--------------------------------------------------------------------------------
+Kubernetes deep dive
+The control plane reconciles declared state with observed cluster state.
+The API server is the authenticated front door for cluster operations.
+etcd stores cluster state and requires backup and access protection.
+The scheduler selects nodes using resources, constraints, and affinity.
+Controllers continuously create or remove objects to match desired state.
+Kubelet runs pods and reports node and container status.
+Container runtime executes images through the CRI interface.
+Pods share a network namespace and are scheduled as one unit.
+Use one main workload concern per pod where practical.
+Deployments manage stateless replicas and rolling updates.
+StatefulSets provide stable identity and ordered storage behavior.
+DaemonSets place one pod on selected nodes.
+Jobs run finite work and CronJobs schedule recurring work.
+Services provide stable discovery for changing pod addresses.
+ClusterIP is internal service access.
+NodePort exposes a port on every eligible node.
+LoadBalancer requests an external provider load balancer.
+Ingress routes HTTP traffic through an ingress controller.
+Use Gateway APIs when the platform standard supports them.
+ConfigMaps hold non-secret configuration.
+Secrets need encryption at rest and strict access controls.
+Never place passwords in ConfigMaps or public manifests.
+Use namespaces for ownership, quotas, and policy boundaries.
+Labels support selection, ownership, and operational queries.
+Annotations hold non-selector metadata for controllers and tools.
+Set resource requests so scheduling reflects real needs.
+Set memory limits to contain runaway processes.
+Avoid CPU limits that create latency without understanding workload behavior.
+Use LimitRanges and ResourceQuotas for namespace governance.
+Use PodDisruptionBudgets during voluntary maintenance.
+Use topology spread to avoid correlated replica loss.
+Use node affinity only when the placement reason is durable.
+Taints and tolerations should express explicit workload boundaries.
+Use readiness probes to remove unhealthy pods from traffic.
+Use liveness probes only when restart is an appropriate recovery.
+Use startup probes for slow initialization.
+Set probe timeouts and failure thresholds from measurements.
+Use graceful termination and a suitable termination grace period.
+Handle preStop behavior without delaying shutdown indefinitely.
+Use rolling strategy limits to control unavailable capacity.
+Set maxSurge and maxUnavailable for the service risk profile.
+Use revision history to support controlled rollback.
+Pin images by digest for production deployments.
+Never rely on latest for a controlled release.
+Use image pull credentials with least privilege.
+Use admission policy to reject risky images and settings.
+Run containers as non-root whenever possible.
+Drop Linux capabilities and use seccomp profiles.
+Set read-only root filesystems where compatible.
+Prevent privileged pods and host namespace sharing.
+Restrict hostPath because it breaks isolation boundaries.
+Use NetworkPolicies to define allowed ingress and egress.
+Default-deny policies require explicit application flows.
+Test policies from each namespace and service account.
+Use service accounts per workload instead of the default account.
+Apply RBAC with the smallest resource and verb scope.
+Audit cluster role bindings and wildcard permissions.
+Protect the API server with identity, TLS, and authorization.
+Encrypt sensitive objects in etcd.
+Back up etcd or managed control-plane state according to platform rules.
+Test restore procedures in an isolated cluster.
+Separate cluster administration from application deployment roles.
+Use GitOps or reviewed manifests for desired state.
+Validate YAML schemas before applying changes.
+Use kustomize or Helm with controlled values and review.
+Avoid templates that hide security-critical behavior.
+Keep environment overlays small and auditable.
+Use progressive delivery for high-risk workloads.
+Observe rollout status rather than trusting apply success.
+Use kubectl rollout status and rollout undo deliberately.
+Check events when pods remain Pending or fail admission.
+Use describe for scheduling, probe, mount, and image errors.
+Use logs --previous after a container restart.
+Use ephemeral debug containers with controlled permissions.
+Inspect endpoints and EndpointSlices when traffic is missing.
+Check DNS from inside the relevant namespace.
+Check NetworkPolicy before changing application code.
+Check requests and node pressure when scheduling fails.
+Investigate OOMKilled using limits, usage, and application behavior.
+Investigate CrashLoopBackOff using logs, events, and startup dependencies.
+Keep persistent volumes separate from disposable pod lifecycle.
+Use StorageClasses with explicit performance and retention behavior.
+Test volume snapshots and restores for critical data.
+Do not assume deleting a PVC deletes or preserves data.
+Use backup operators or provider services with tested restore paths.
+Keep cluster and node versions in a supported lifecycle.
+Upgrade control plane and workloads with compatibility checks.
+Use surge capacity for node maintenance when possible.
+Drain nodes while respecting disruption budgets.
+Monitor API latency, scheduler health, node pressure, and pod restarts.
+Monitor workload saturation and user-facing service indicators.
+Avoid alerts on every pod replacement without impact context.
+Control metrics, logs, and trace cardinality and retention.
+Use autoscaling from reliable metrics and realistic stabilization windows.
+Horizontal Pod Autoscaler changes replica count.
+Vertical recommendations must be reviewed before applying changes.
+Cluster autoscaling needs quota, capacity, and cost guardrails.
+Use priority classes carefully so critical workloads preempt safely.
+Reserve system capacity on shared nodes.
+Use separate node pools for incompatible trust or performance needs.
+Use spot capacity only for interruptible workloads with recovery design.
+Tag cloud resources for owner, environment, and cost center.
+Clean abandoned namespaces, images, volumes, and load balancers.
+Use policy exceptions with owner and expiry date.
+Document every exposed service and its authentication model.
+Kubernetes reliability comes from explicit desired state and feedback.
+Review manifests before applying.
+Pin production image digests.
+Set requests from measurements.
+Set limits from failure analysis.
+Use readiness before traffic.
+Use liveness only for recovery.
+Use startup probes for slow apps.
+Set disruption budgets.
+Spread replicas across zones.
+Use pod security controls.
+Use least-privilege service accounts.
+Restrict API permissions.
+Use default-deny network policies.
+Encrypt sensitive cluster data.
+Back up control-plane state.
+Test volume restoration.
+Monitor pending pods.
+Monitor restart loops.
+Monitor node pressure.
+Monitor API errors.
+Monitor rollout progress.
+Use staged delivery.
+Define rollback thresholds.
+Document ownership and escalation.
+Kubernetes operations require feedback and discipline.
+
+7. CLUSTER RELEASE VERIFICATION
+--------------------------------------------------------------------------------
+Cluster release verification
+Check the rendered manifest rather than reviewing only the Helm or Kustomize input.
+Confirm the namespace, service account, image digest, requests, limits, probes, and policies.
+Verify that rollout progress, endpoint readiness, and user-facing smoke tests all succeed.
+Keep the previous ReplicaSet and image digest available until the observation window ends.
+Record cluster version, deployment revision, operator, approval, and rollback decision.
+
+8. KUBERNETES DEPLOYMENT AND INCIDENT WORKFLOW
+--------------------------------------------------------------------------------
+Kubernetes deployment and incident workflow
+Run kubectl diff before applying a reviewed manifest to a shared cluster.
+Use a dedicated namespace and service account for each application boundary.
+Verify image digests, resource requests, probes, and security context before rollout.
+Check kubectl rollout status and deployment conditions after every change.
+Use kubectl rollout history and rollout undo for controlled application rollback.
+Inspect events sorted by time when a pod is Pending, evicted, or rejected.
+Compare requested resources with node allocatable capacity during scheduling failures.
+Check image pull secrets, registry reachability, and architecture compatibility for pull errors.
+Check previous container logs, exit codes, and probe failures for restart loops.
+Confirm Service selectors match pod labels when endpoints are empty.
+Inspect EndpointSlices and DNS resolution before changing ingress rules.
+Test NetworkPolicies from the source namespace and service account that makes the call.
+Use port-forward only for temporary diagnosis and record its operator and duration.
+Keep debug containers restricted and remove them after the investigation.
+Use PodDisruptionBudgets with enough capacity for upgrades, not as a substitute for replicas.
+Drain nodes gradually and observe application saturation during maintenance.
+Back up cluster state and persistent data independently of the Kubernetes API.
+Test restores in an isolated cluster with matching storage and identity assumptions.
+Record cluster version, add-ons, admission policies, and node image versions.
+Budget for control-plane, load balancer, storage, logging, and egress charges.
+Remove abandoned namespaces and load balancers only after checking ownership and data.
+Treat a successful kubectl apply as accepted configuration, not proof of user availability.

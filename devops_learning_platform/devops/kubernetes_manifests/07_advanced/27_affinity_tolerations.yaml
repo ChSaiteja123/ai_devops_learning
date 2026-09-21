@@ -1,0 +1,76 @@
+# 27_affinity_tolerations.yaml — Node Affinity, Pod Anti-Affinity, Tolerations
+# Usage: kubectl apply -f 27_affinity_tolerations.yaml -n dev
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp-scheduled
+  namespace: dev
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: webapp
+  template:
+    metadata:
+      labels:
+        app: webapp
+    spec:
+      # Tolerate tainted nodes (e.g., GPU or spot nodes)
+      tolerations:
+        - key: "spot"
+          operator: "Equal"
+          value: "true"
+          effect: "NoSchedule"
+
+      affinity:
+        # Node affinity: prefer nodes in us-east-1a or us-east-1b
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: topology.kubernetes.io/zone
+                    operator: In
+                    values:
+                      - us-east-1a
+                      - us-east-1b
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 80
+              preference:
+                matchExpressions:
+                  - key: node.kubernetes.io/instance-type
+                    operator: In
+                    values:
+                      - m5.xlarge
+                      - m5.2xlarge
+
+        # Pod anti-affinity: spread replicas across nodes (avoid correlated failure)
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - webapp
+              topologyKey: kubernetes.io/hostname
+
+      # Topology spread (newer, preferred over anti-affinity for zone spread)
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: topology.kubernetes.io/zone
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app: webapp
+
+      containers:
+        - name: webapp
+          image: myapp:v1.2
+          resources:
+            requests:
+              cpu: "200m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"

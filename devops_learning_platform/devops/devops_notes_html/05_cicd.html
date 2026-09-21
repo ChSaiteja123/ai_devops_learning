@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CI/CD - DevOps Notes</title><link rel="stylesheet" href="style.css"></head><body>
+<header class="site-header"><div class="page"><a class="back-link" href="index.html">Back to DevOps Notes</a></div></header><main class="page"><article>
+<h1 class="note-title">CI/CD</h1>
+<p class="note-overview">Formatted learning document with commands, examples, production guidance, and operational callouts.</p>
+<p class="text-line">CI/CD</p>
+<h3 class="section-heading">PURPOSE / OVERVIEW</h3>
+<p class="text-line">CI/CD stands for Continuous Integration and Continuous Delivery/Deployment.</p>
+<h2 class="section-heading">1. CONTINUOUS INTEGRATION (CI)</h2>
+<p class="text-line">Continuous Integration (CI)</p>
+<p class="text-line bullet">- developers merge code frequently</p>
+<p class="text-line bullet">- automated test suite runs on every commit</p>
+<p class="text-line bullet">- build artifacts are created automatically</p>
+<h2 class="section-heading">2. CONTINUOUS DELIVERY (CD)</h2>
+<p class="text-line">Continuous Delivery (CD)</p>
+<p class="text-line bullet">- code is prepared for release automatically</p>
+<p class="text-line bullet">- deployment to environments is controlled and repeatable</p>
+<h2 class="section-heading">3. CONTINUOUS DEPLOYMENT</h2>
+<p class="text-line">Continuous Deployment</p>
+<p class="text-line bullet">- code is deployed automatically to production after passing validation</p>
+<h2 class="section-heading">4. TYPICAL CI/CD PIPELINE</h2>
+<p class="text-line">Typical CI/CD pipeline</p>
+<p class="text-line">Source Code -&gt; Build -&gt; Unit Tests -&gt; Static Analysis -&gt; Package -&gt; Deploy -&gt; Validate</p>
+<h2 class="section-heading">5. EXAMPLE GITHUB ACTIONS WORKFLOW</h2>
+<p class="text-line">Example GitHub Actions workflow</p>
+<p class="text-line">name: CI</p>
+<h2 class="section-heading">6. ON</h2>
+<p class="text-line">on</p>
+<h3 class="section-heading">EXAMPLE</h3>
+<div class="code-block">
+push:
+branches: [ main ]
+</div>
+<h2 class="section-heading">7. JOBS</h2>
+<p class="text-line">jobs</p>
+<h3 class="section-heading">EXAMPLE</h3>
+<div class="code-block">
+build:
+runs-on: ubuntu-latest
+steps:
+- uses: actions/checkout@v4
+- name: Set up Python
+uses: actions/setup-python@v5
+with:
+python-version: &#39;3.11&#39;
+- run: python -m pip install -r requirements.txt
+- run: pytest
+</div>
+<h2 class="section-heading">8. BENEFITS OF CI/CD</h2>
+<p class="text-line">Benefits of CI/CD</p>
+<p class="text-line bullet">- faster delivery</p>
+<p class="text-line bullet">- fewer manual errors</p>
+<p class="text-line bullet">- better deployment consistency</p>
+<p class="text-line bullet">- quicker feedback loop</p>
+<h2 class="section-heading">9. COMMON CI/CD TOOLS</h2>
+<p class="text-line">Common CI/CD tools</p>
+<p class="text-line bullet">- GitHub Actions</p>
+<p class="text-line bullet">- GitLab CI</p>
+<p class="text-line bullet">- Jenkins</p>
+<p class="text-line bullet">- Azure DevOps</p>
+<p class="text-line bullet">- CircleCI</p>
+<p class="text-line bullet">- ArgoCD</p>
+<h2 class="section-heading">10. QUALITY AND SECURITY STAGES SHOULD BE PART OF THE PIPELINE</h2>
+<div class="callout security"><strong>[SECURITY]</strong> Quality and security stages should be part of the pipeline</div>
+<p class="text-line bullet">- Gradle: compile, test, and package Java applications</p>
+<p class="text-line bullet">- SonarQube: analyze code quality and enforce quality gates</p>
+<p class="text-line bullet">- Trivy: scan source files, dependencies, infrastructure, and container images</p>
+<h2 class="section-heading">11. EXAMPLE JENKINS SEQUENCE</h2>
+<p class="text-line">Example Jenkins sequence</p>
+<p class="text-line">Checkout -&gt; Gradle Test -&gt; SonarQube -&gt; Trivy Filesystem Scan -&gt; Docker Build -&gt; Trivy Image Scan -&gt; Deploy</p>
+<h2 class="section-heading">12. BEST PRACTICES</h2>
+<h3 class="section-heading">Best practices</h3>
+<p class="text-line bullet">- run fast, reliable tests</p>
+<p class="text-line bullet">- separate staging and production pipelines</p>
+<p class="text-line bullet">- store environment variables securely</p>
+<p class="text-line bullet">- review deployment approvals</p>
+<p class="text-line bullet">- maintain rollback plans</p>
+<h2 class="section-heading">13. PRODUCTION GUIDANCE</h2>
+<p class="text-line">In modern DevOps, CI/CD is essential for safe and fast delivery.</p>
+<p class="text-line">See `18_jenkins_gradle_sonarqube_trivy_alertmanager.txt` for a complete example.</p>
+<h2 class="section-heading">14. CI/CD DEEP DIVE</h2>
+<h3 class="section-heading">EXAMPLE</h3>
+<div class="code-block">
+CI/CD deep dive
+Keep pipeline code in version control beside the application.
+Use a pinned runner image and print tool versions at the start.
+Build from an immutable commit rather than a moving branch.
+Validate syntax and formatting before expensive jobs.
+Run unit tests on every change and publish their reports.
+Run integration tests against disposable dependencies.
+Run contract tests when services release independently.
+Parallelize independent checks to shorten feedback time.
+Keep the critical path visible as a dependency graph.
+Cache dependencies only with complete and deterministic cache keys.
+Treat caches as accelerators, never as trusted artifacts.
+Build once and promote the same artifact to every environment.
+Use a commit digest and version tag for artifact identity.
+Publish checksums, provenance, and an SBOM with releases.
+Store artifacts in a controlled repository with retention policies.
+Never rebuild a production artifact during deployment.
+Use separate credentials for build, test, staging, and production.
+Grant each job only the permissions it needs.
+Use OIDC federation instead of long-lived cloud keys.
+Keep tokens in the CI secret store and mask sensitive output.
+Do not pass production secrets to untrusted pull request code.
+Protect the production environment with branch rules and approvals.
+Use concurrency controls so releases cannot overlap accidentally.
+Cancel obsolete validation runs when newer commits arrive.
+Require code review and mandatory status checks before merging.
+Track flaky tests with an owner and removal deadline.
+Never make unreliable tests silently nonblocking forever.
+Use deterministic test data and isolated test environments.
+Test database migrations both forward and backward.
+Use feature flags to separate deployment from feature activation.
+Give every feature flag an owner and expiry date.
+Use canary or blue-green rollout for high-risk services.
+Define rollback criteria before starting a release.
+Make rollback safe by keeping schemas backward compatible.
+Use health checks that measure user-facing readiness.
+Run smoke tests through the real deployed route.
+Record deployment markers in dashboards and incident timelines.
+Make deployment steps idempotent and retryable.
+Set timeouts on every external operation.
+Use bounded retries with exponential backoff and jitter.
+Do not retry bad credentials or invalid configuration.
+Archive logs, tests, scans, and approvals as build evidence.
+Keep artifacts long enough to investigate a production incident.
+Delete abandoned caches and artifacts to control cost.
+Use path filters only after verifying required checks remain required.
+Keep release jobs separate from pull request jobs.
+Pin third-party actions and review their permissions.
+Limit workflow token permissions at job scope.
+Run dependency and security scans on a schedule as well as on changes.
+Scan source, dependencies, images, manifests, and infrastructure.
+Define severity thresholds and time-limited exceptions.
+Block exploitable critical findings in release workflows.
+Verify downloaded tools and dependencies by checksum or signature.
+Use private registries for sensitive packages and images.
+Audit package publishing and registry overwrite permissions.
+Use ephemeral runners for untrusted workloads.
+Clean runner workspaces after every job.
+Restrict runner network egress when possible.
+Do not interpolate untrusted values into shell commands.
+Quote pipeline variables and validate deployment targets.
+Use explicit working directories and environment inputs.
+Keep logs free of tokens, headers, and private data.
+Send actionable notifications with stage, commit, owner, and log link.
+Avoid paging for routine developer test failures.
+Escalate repeated runner or registry failures to the platform owner.
+Write runbooks for credential, runner, registry, and deployment errors.
+Test recovery of pipeline configuration and artifact metadata.
+Keep a time-limited, audited break-glass release process.
+Document how automatic delivery is paused during an incident.
+Use redundant runners for critical delivery paths.
+Plan for CI unavailability without unsafe manual releases.
+Measure queue time separately from execution time.
+Track lead time, deployment frequency, change failure rate, and recovery time.
+Use delivery metrics to improve the system, not rank individuals.
+Set performance targets for the feedback loop.
+Right-size runners and schedule nonurgent analysis.
+Avoid duplicate builds from overlapping triggers.
+Publish release notes from reviewed change metadata.
+Record the exact artifact digest after deployment.
+Observe a defined period before declaring rollout complete.
+Link incidents to the change that introduced them.
+Use post-incident learning to improve tests and automation.
+CI/CD is a production system and deserves reliability engineering.
+Use explicit job dependencies.
+Keep triggers intentional.
+Test pull request workflows.
+Test release workflows.
+Test cancellation behavior.
+Test retry behavior.
+Test secret masking.
+Test artifact promotion.
+Test rollback paths.
+Keep jobs idempotent.
+Keep artifacts immutable.
+Record exact commit identifiers.
+Record tool versions.
+Record approvals.
+Record scan results.
+Record quality results.
+Record deployment results.
+Use bounded runner queues.
+Monitor queue age.
+Monitor job duration.
+Monitor failure rate.
+Monitor flaky tests.
+Review pipeline cost.
+Expire unused artifacts.
+Expire unused caches.
+Use secure defaults.
+Document emergency release steps.
+CI/CD needs the same ownership as application code.
+</div>
+<h2 class="section-heading">15. PIPELINE EVIDENCE AND RECOVERY</h2>
+<p class="text-line">Pipeline evidence and recovery</p>
+<p class="text-line">Store the final artifact digest beside the deployment result and approval record.</p>
+<p class="text-line">Verify that a rollback job can retrieve the previous artifact without rebuilding it.</p>
+<p class="text-line">Test a disabled dependency, expired credential, full runner disk, and unavailable registry.</p>
+<p class="text-line">Keep emergency release instructions separate from normal automation and audit every use.</p>
+<h2 class="section-heading">16. PIPELINE DESIGN AND TROUBLESHOOTING</h2>
+<p class="text-line">Pipeline design and troubleshooting</p>
+<p class="text-line">Give each stage one responsibility and make dependencies explicit.</p>
+<p class="text-line">Use a fast validation stage before provisioning databases or external services.</p>
+<p class="text-line">Publish test reports even when a later stage fails.</p>
+<p class="text-line">Use a unique build identifier in artifact names, logs, and deployment markers.</p>
+<p class="text-line">Keep test fixtures isolated so parallel jobs cannot overwrite each other.</p>
+<p class="text-line">Use service containers or disposable environments for integration tests.</p>
+<p class="text-line">Verify that migrations are compatible with both the old and new application version.</p>
+<p class="text-line">Test rollback using the exact artifact that was previously deployed.</p>
+<p class="text-line">Use smoke tests that exercise authentication, routing, storage, and a critical user path.</p>
+<p class="text-line">Check runner disk, memory, queue age, and network reachability when jobs slow down.</p>
+<p class="text-line">Compare a failed job with the last successful run before changing pipeline code.</p>
+<p class="text-line">Retry only transient registry, network, or provider failures.</p>
+<p class="text-line">Fail immediately on syntax, permission, credential, and policy errors.</p>
+<p class="text-line">Capture the resolved commit, dependency lockfile, runner image, and tool versions.</p>
+<p class="text-line">Keep deployment credentials unavailable to ordinary pull request jobs.</p>
+<p class="text-line">Use protected environments for approval, secrets, and production concurrency.</p>
+<p class="text-line">Separate build artifacts from logs so retention policies can differ.</p>
+<p class="text-line">Use artifact retention long enough to support the defined rollback window.</p>
+<p class="text-line">Delete caches by key after changing compilers, lockfiles, or runner images.</p>
+<p class="text-line">Measure pipeline queue time separately from execution time.</p>
+<p class="text-line">Track flaky tests as reliability defects with an owner and deadline.</p>
+<p class="text-line">Use canary traffic and automated rollback for changes with uncertain impact.</p>
+<p class="text-line">Pause automatic deployment when an incident or provider outage is active.</p>
+<p class="text-line">Keep an audited manual recovery path for a broken pipeline control plane.</p>
+<p class="text-line">Test notification delivery, secret masking, cancellation, and approval expiry.</p>
+<p class="text-line">Review pipeline permissions whenever a new action, plugin, or deployment target is added.</p>
+<p class="text-line">Treat pipeline configuration as production software with code review and backups.</p>
+</article></main></body></html>

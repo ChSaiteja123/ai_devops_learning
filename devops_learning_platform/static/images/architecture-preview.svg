@@ -1,0 +1,23 @@
+<svg width="960" height="560" viewBox="0 0 960 560" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="960" height="560" rx="30" fill="#081520"/>
+  <rect x="58" y="52" width="844" height="456" rx="24" fill="#0F172A" stroke="#233A57"/>
+  <rect x="102" y="102" width="180" height="72" rx="16" fill="#112640" stroke="#60A5FA"/>
+  <rect x="388" y="102" width="170" height="72" rx="16" fill="#112640" stroke="#22D3EE"/>
+  <rect x="616" y="102" width="200" height="72" rx="16" fill="#112640" stroke="#34D399"/>
+  <rect x="152" y="246" width="180" height="120" rx="18" fill="#0C1D2E" stroke="#60A5FA"/>
+  <rect x="390" y="246" width="180" height="120" rx="18" fill="#0C1D2E" stroke="#22D3EE"/>
+  <rect x="628" y="246" width="180" height="120" rx="18" fill="#0C1D2E" stroke="#34D399"/>
+  <path d="M282 164H388" stroke="#60A5FA" stroke-width="8" stroke-linecap="round"/>
+  <path d="M558 164H616" stroke="#22D3EE" stroke-width="8" stroke-linecap="round"/>
+  <path d="M242 246V214H242" stroke="#60A5FA" stroke-width="8" stroke-linecap="round"/>
+  <path d="M478 246V214H478" stroke="#22D3EE" stroke-width="8" stroke-linecap="round"/>
+  <path d="M718 246V214H718" stroke="#34D399" stroke-width="8" stroke-linecap="round"/>
+  <path d="M206 366V420H758V366" stroke="#334155" stroke-width="6" stroke-linecap="round" stroke-dasharray="10 10"/>
+  <rect x="130" y="430" width="660" height="38" rx="18" fill="#0B1426"/>
+  <circle cx="168" cy="164" r="12" fill="#60A5FA"/>
+  <circle cx="448" cy="164" r="12" fill="#22D3EE"/>
+  <circle cx="698" cy="164" r="12" fill="#34D399"/>
+  <text x="98" y="132" fill="#E2E8F0" font-family="Arial, sans-serif" font-size="20" font-weight="700">Client</text>
+  <text x="398" y="132" fill="#E2E8F0" font-family="Arial, sans-serif" font-size="20" font-weight="700">API</text>
+  <text x="632" y="132" fill="#E2E8F0" font-family="Arial, sans-serif" font-size="20" font-weight="700">Database</text>
+</svg>

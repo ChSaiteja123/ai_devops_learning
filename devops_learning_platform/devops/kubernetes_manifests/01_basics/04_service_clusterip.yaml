@@ -1,0 +1,20 @@
+# 04_service_clusterip.yaml — ClusterIP Service (internal only)
+# Usage: kubectl apply -f 04_service_clusterip.yaml -n dev
+# Test: kubectl run test --rm -it --image=busybox -- wget -qO- http://nginx-service
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+  namespace: dev
+  labels:
+    app: nginx
+spec:
+  type: ClusterIP           # internal only — default type
+  selector:
+    app: nginx              # must match pod labels
+  ports:
+    - name: http
+      port: 80              # service port
+      targetPort: 80        # container port
+      protocol: TCP

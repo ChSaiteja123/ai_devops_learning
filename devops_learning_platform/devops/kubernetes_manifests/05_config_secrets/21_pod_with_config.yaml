@@ -1,0 +1,51 @@
+# 21_pod_with_config.yaml — Pod consuming ConfigMap and Secret
+# Usage: kubectl apply -f 21_pod_with_config.yaml -n dev
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app-with-config
+  namespace: dev
+spec:
+  containers:
+    - name: app
+      image: myapp:v1.2
+      ports:
+        - containerPort: 8000
+      env:
+        # Single value from ConfigMap
+        - name: APP_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: APP_ENV
+        # Single value from Secret
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: app-secret
+              key: db-password
+      # Inject all ConfigMap keys as env vars
+      envFrom:
+        - configMapRef:
+            name: app-config
+      volumeMounts:
+        # Mount config file from ConfigMap
+        - name: config-volume
+          mountPath: /etc/app
+          readOnly: true
+        # Mount secret as files
+        - name: secret-volume
+          mountPath: /run/secrets
+          readOnly: true
+  volumes:
+    - name: config-volume
+      configMap:
+        name: app-config
+        items:
+          - key: app.properties
+            path: app.properties
+    - name: secret-volume
+      secret:
+        secretName: app-secret
+        defaultMode: 0400     # read-only for owner only

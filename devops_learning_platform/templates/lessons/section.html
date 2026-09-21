@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ section_label }}: {{ lesson.title }} | DevOps Lab</title>
+    <style>
+        :root { --bg:#07111f; --panel:#0f1d2e; --line:#26384d; --text:#e5e7eb; --muted:#94a3b8; --cyan:#67e8f9; --green:#86efac; --yellow:#fde68a; }
+        * { box-sizing:border-box; } body { margin:0; background:radial-gradient(circle at top right,#12324a,var(--bg) 48%); color:var(--text); font-family:Georgia,'Times New Roman',serif; }
+        a { color:inherit; text-decoration:none; } nav { border-bottom:1px solid var(--line); padding:18px max(22px,calc((100% - 1180px)/2)); font:15px 'Segoe UI',sans-serif; } nav a { color:var(--muted); margin-right:18px; }
+        main { max-width:1180px; margin:0 auto; padding:44px 22px 80px; } .crumb { color:var(--cyan); font:700 13px 'Segoe UI',sans-serif; } h1 { font-size:clamp(2rem,5vw,4.2rem); line-height:1.05; margin:16px 0 10px; } .sub { color:var(--muted); font:15px 'Segoe UI',sans-serif; }
+        .tabs { display:flex; gap:8px; flex-wrap:wrap; margin:30px 0; } .tabs a { border:1px solid var(--line); padding:10px 13px; border-radius:9px; color:var(--muted); font:700 13px 'Segoe UI',sans-serif; } .tabs a.current { background:var(--green); color:#06130d; border-color:var(--green); }
+        .layout { display:grid; grid-template-columns:minmax(0,1fr) 280px; gap:26px; align-items:start; } .panel { background:rgba(15,29,46,.93); border:1px solid var(--line); border-radius:16px; padding:28px; } h2 { color:var(--cyan); margin-top:0; } h3 { color:var(--green); margin-top:28px; }
+        .body { font-size:1.12rem; line-height:1.8; color:#dbeafe; white-space:pre-line; } .body p { margin:0 0 1.35em; } ul,ol { color:#cbd5e1; line-height:1.8; padding-left:24px; } .callout { border-left:3px solid var(--green); padding:15px 18px; background:rgba(134,239,172,.06); color:#d1fae5; line-height:1.7; }
+        .command { margin:15px 0; border:1px solid var(--line); border-radius:10px; overflow:hidden; } code { display:block; padding:15px; background:#020817; color:var(--yellow); font:14px Consolas,monospace; overflow-x:auto; } .command p { margin:0; padding:11px 15px; color:var(--muted); font:13px 'Segoe UI',sans-serif; }
+        .toc a { display:block; border-bottom:1px solid var(--line); padding:10px 0; color:#cbd5e1; font:14px 'Segoe UI',sans-serif; } .toc a.current { color:var(--green); font-weight:700; } .pager { display:flex; justify-content:space-between; margin-top:30px; } .pager a { color:var(--cyan); font:700 14px 'Segoe UI',sans-serif; }
+        @media(max-width:800px) { .layout { grid-template-columns:1fr; } .toc { order:-1; } }
+    </style>
+</head>
+<body>
+    <nav><a href="/">Home</a><a href="/courses/">Courses</a><a href="/library/devops_notes_html/index.html">Notes</a><a href="/library/devops_projects_html/index.html">Projects</a><a href="{% url 'web-course-detail' course.slug %}">{{ course.title }}</a><a href="/ai-chat/">AI Coach</a></nav>
+    <main>
+        <div class="crumb">{{ course.title }} / Lesson {{ lesson_number }} of {{ lessons|length }}</div>
+        <h1>{{ lesson.title }}</h1><div class="sub">{{ section_label }} · production-focused learning</div>
+        <div class="tabs">{% for item in section_navigation %}<a class="{% if item.slug == section %}current{% endif %}" href="{% url 'web-lesson-section' course.slug lesson.order item.slug %}">{{ item.label }}</a>{% endfor %}</div>
+        <div class="layout">
+            <article class="panel">
+                {% if section == 'concept' %}
+                    <h2>Deep concept</h2><div class="body">{{ lesson.content|linebreaks }}</div>
+                    <h2>Learning objectives</h2><ul>{% for item in lesson.objectives %}<li>{{ item }}</li>{% endfor %}</ul>
+                    <h3>Why this matters at work</h3><p class="callout">Translate the concept into an operational decision: what can fail, how you will detect it, how you will secure it, and how you will recover it.</p>
+                {% elif section == 'commands' %}
+                    <h2>Command lab</h2><p class="sub">Run these in a disposable environment. Read the explanation before executing a command against shared infrastructure.</p>
+                    {% for command in lesson.commands %}<div class="command"><code>{{ command.command }}</code><p><strong>Why:</strong> {{ command.explanation }}<br><strong>Expected:</strong> {{ command.expected_output }}</p></div>{% endfor %}
+                    {% for command, explanation, expected in expanded_commands %}<div class="command"><code>{{ command }}</code><p><strong>Why:</strong> {{ explanation }}<br><strong>Expected:</strong> {{ expected }}</p></div>{% endfor %}
+                {% elif section == 'scenario' %}
+                    <h2>Production scenario</h2><p class="callout">{{ extension.scenario }}</p><h3>Production playbook</h3><ol>{% for item in extension.production_playbook %}<li>{{ item }}</li>{% endfor %}</ol><h3>Failure modes to rehearse</h3><ul>{% for item in extension.mistakes %}<li>{{ item }}</li>{% endfor %}</ul>
+                {% elif section == 'interview' %}
+                    <h2>Interview preparation</h2><p class="sub">Answer with context, trade-offs, evidence, and a recovery plan. Avoid listing tools without explaining the decision behind them.</p><h3>Prompts</h3><ul>{% for item in extension.interview %}<li>{{ item }}</li>{% endfor %}</ul><h3>Answer structure</h3><ol><li>State the design or diagnosis.</li><li>Explain the trade-off and security impact.</li><li>Describe observability and failure handling.</li><li>Give one command, metric, or artifact that proves it.</li></ol>
+                {% else %}
+                    <h2>Portfolio project</h2><p class="callout">{{ extension.deliverable }}</p><h3>Acceptance criteria</h3><ul><li>Code and infrastructure are versioned and reproducible.</li><li>Automated tests and security checks run in CI.</li><li>Metrics, logs, health checks, and rollback steps are documented.</li><li>A README explains architecture, threat model, cost, and failure recovery.</li></ul><h3>What to show an employer</h3><p class="sub">Include a short architecture diagram, a clean commit history, terminal evidence, a recorded failure test, and a postmortem or design decision record.</p>
+                {% endif %}
+                <div class="pager"><a href="{% url 'web-lesson-detail' course.slug lesson.order %}">← Lesson overview</a><a href="{% url 'web-lesson-section' course.slug lesson.order 'concept' %}">Restart concept →</a></div>
+            </article>
+            <aside class="panel toc"><h2>Five-page module</h2>{% for item in section_navigation %}<a class="{% if item.slug == section %}current{% endif %}" href="{% url 'web-lesson-section' course.slug lesson.order item.slug %}">{{ forloop.counter }}. {{ item.label }}</a>{% endfor %}<h3>Course map</h3>{% for item in lessons %}<a href="{% url 'web-lesson-detail' course.slug item.order %}">{{ forloop.counter|stringformat:'02d' }} · {{ item.title }}</a>{% endfor %}</aside>
+        </div>
+    </main>
+</body>
+</html>

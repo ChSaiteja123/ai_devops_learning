@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Automated Deployment Pipeline</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header"><div class="page"><a class="back-link" href="index.html">Back to project guides</a><h1>12. Automated Deployment Pipeline</h1><p>Promote immutable images, verify rollouts, smoke-test services, and protect production with approval.</p></div></header>
+  <main class="page"><article>
+    <h2 class="section-heading">Deployment flow</h2>
+    <div class="code-block">Validate -> build -> push immutable image -> deploy staging -> rollout status -> smoke test
+-> approval -> deploy production -> monitor -> rollback if required</div>
+    <h2 class="section-heading">Safe local dry run</h2>
+    <div class="code-block">python deploy.py --environment staging --image registry.example.com/app:1.0.0</div>
+    <p class="text-line">The default mode prints the planned <strong>kubectl</strong> commands. Add <strong>--execute</strong> only from a trusted deployment agent with the correct cluster credentials.</p>
+    <div class="callout security"><strong>[SECURITY]</strong> Use separate staging and production service accounts, least-privilege RBAC, immutable image digests, and an approval gate for production.</div>
+    <div class="callout production"><strong>[PRODUCTION]</strong> Verify readiness, run a real smoke test, record the deployment evidence, and keep the previous revision available for rollback.</div>
+    <h2 class="section-heading">Jenkins stages</h2>
+    <div class="code-block">Validate -> Deploy staging -> Approve production -> Deploy production
+
+kubectl rollout status deployment/app --timeout=120s
+kubectl rollout undo deployment/app</div>
+    <h2 class="section-heading">Project files</h2>
+    <p class="text-line"><a class="back-link" href="../devops_projects/12_auto_deployment_pipeline/README.md">Open project README</a></p>
+    <p class="text-line"><a class="back-link" href="../devops_projects/12_auto_deployment_pipeline/deploy.py">Open deployment script</a></p>
+    <p class="text-line"><a class="back-link" href="11_ai_devops_automation.html">Related AI DevOps automation</a></p>
+  </article></main>
+</body>
+</html>

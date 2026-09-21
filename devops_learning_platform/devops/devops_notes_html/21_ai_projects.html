@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI and MLOps Projects - DevOps Notes</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="page">
+      <a class="back-link" href="index.html">Back to DevOps Notes</a>
+      <h1>AI and MLOps project lab</h1>
+      <p>Progressive projects for building, securing, deploying, and operating AI systems.</p>
+    </div>
+  </header>
+  <main class="page"><article>
+    <h2 class="section-heading">Project 1: AI quality gate</h2>
+    <p class="text-line">Build a CI job that validates prompt templates, checks structured-output schemas, runs a fixed evaluation set, and fails when quality or safety scores fall below thresholds.</p>
+    <div class="code-block">Checkout -> install dependencies -> lint -> unit tests -> evaluation set
+-> security checks -> publish report -> approval</div>
+    <p class="text-line"><strong>Skills:</strong> Jenkins, Python, JSON Schema, pytest, report publishing, thresholds, and artifact retention.</p>
+
+    <h2 class="section-heading">Project 2: Secure RAG assistant</h2>
+    <p class="text-line">Build a document question-answering service with ingestion, chunking, embeddings, vector retrieval, tenant filters, citations, refusal behavior, and an evaluation dataset.</p>
+    <p class="text-line"><strong>Required controls:</strong> document access rules, prompt-injection tests, PII redaction, source citations, output validation, request limits, and audit events.</p>
+
+    <div class="callout security"><strong>[SECURITY]</strong> Never allow the model to bypass application authorization. A retrieved document must be filtered for the requesting user's access before it enters the prompt.</div>
+
+    <h2 class="section-heading">Project 3: AI service on Kubernetes</h2>
+    <p class="text-line">Containerize an inference API, deploy it with Kubernetes, expose health endpoints, configure resource requests and limits, and monitor latency, errors, queue depth, and token usage.</p>
+    <p class="text-line"><strong>Operations:</strong> readiness and liveness probes, horizontal scaling, secret references, rolling deployment, canary release, logs, traces, and rollback.</p>
+
+    <h2 class="section-heading">Project 4: Model promotion pipeline</h2>
+    <p class="text-line">Train or package a model, store its metadata in a registry, compare it with the current production version, require approval, deploy a canary, and promote only when service and quality signals remain healthy.</p>
+    <p class="text-line"><strong>Evidence:</strong> commit ID, data version, model digest, evaluation report, approval identity, deployment ID, and rollback artifact.</p>
+
+    <h2 class="section-heading">Project 5: AI observability dashboard</h2>
+    <p class="text-line">Create dashboards and alerts for request rate, time to first token, total latency, errors, provider quota, input/output tokens, retrieval hit rate, groundedness, refusal rate, and tool failures.</p>
+    <p class="text-line"><strong>Alert examples:</strong> provider outage, rising latency, retrieval failure, unexpected cost increase, sensitive-output detection, and expired model credentials.</p>
+
+    <h2 class="section-heading">Project completion checklist</h2>
+    <p class="text-line">Each project should include a README, architecture diagram, local run instructions, tests, security assumptions, cost notes, dashboards, failure scenarios, and a rollback or shutdown procedure.</p>
+    <p class="text-line">Start locally with mock model responses and small datasets. Add a real provider only after validation, secret handling, cost limits, and data-retention decisions are documented.</p>
+
+    <h2 class="section-heading">Reference links</h2>
+    <p class="text-line"><a class="back-link" href="19_ai_mlops_deepdive.html">AI and MLOps deep dive</a></p>
+    <p class="text-line"><a class="back-link" href="20_generative_ai_deepdive.html">Generative AI engineering deep dive</a></p>
+    <p class="text-line"><a class="back-link" href="18_jenkins_gradle_sonarqube_trivy_alertmanager.html">Jenkins quality and security pipeline</a></p>
+  </article></main>
+</body>
+</html>

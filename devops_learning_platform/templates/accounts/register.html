@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f8fafc; margin: 0; }
+        .container { max-width: 520px; margin: 80px auto; background: white; padding: 32px; border-radius: 12px; border: 1px solid #e2e8f0; }
+        form { display: flex; flex-direction: column; gap: 12px; }
+        input { padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; }
+        button { background: #16a34a; color: white; border: none; border-radius: 8px; padding: 12px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Create account</h1>
+        <form>
+            <input type="text" placeholder="Username" />
+            <input type="email" placeholder="Email" />
+            <input type="password" placeholder="Password" />
+            <button type="submit">Register</button>
+        </form>
+        <p><a href="/accounts/login/">Already have an account?</a></p>
+    </div>
+</body>
+</html>

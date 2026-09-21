@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="760" viewBox="0 0 1500 760">
+  <title>Jenkins Quality and Security Pipeline</title>
+  <desc>Pipeline from Git commit through Jenkins, Gradle, SonarQube, Trivy, Docker, deployment, and monitoring.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#081a2b"/>
+      <stop offset="1" stop-color="#123b50"/>
+    </linearGradient>
+    <filter id="shadow"><feDropShadow dx="0" dy="8" stdDeviation="8" flood-opacity="0.25"/></filter>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 Z" fill="#7dd3fc"/></marker>
+  </defs>
+  <rect width="1500" height="760" fill="url(#bg)"/>
+  <text x="80" y="82" fill="#f8fafc" font-family="sans-serif" font-size="38" font-weight="700">Jenkins quality and security pipeline</text>
+  <text x="80" y="122" fill="#a5f3fc" font-family="sans-serif" font-size="20">Every promotion passes through tests, quality gates, and vulnerability scans.</text>
+  <g filter="url(#shadow)" font-family="sans-serif" text-anchor="middle">
+    <g transform="translate(80 230)"><rect width="180" height="130" rx="14" fill="#0f766e"/><text x="90" y="53" fill="white" font-size="24" font-weight="700">Git</text><text x="90" y="86" fill="#ccfbf1" font-size="17">commit</text></g>
+    <g transform="translate(330 230)"><rect width="180" height="130" rx="14" fill="#d97706"/><text x="90" y="53" fill="white" font-size="24" font-weight="700">Jenkins</text><text x="90" y="86" fill="#fef3c7" font-size="17">orchestrates</text></g>
+    <g transform="translate(580 230)"><rect width="180" height="130" rx="14" fill="#2563eb"/><text x="90" y="53" fill="white" font-size="24" font-weight="700">Gradle</text><text x="90" y="86" fill="#dbeafe" font-size="17">build + test</text></g>
+    <g transform="translate(830 230)"><rect width="180" height="130" rx="14" fill="#7c3aed"/><text x="90" y="53" fill="white" font-size="24" font-weight="700">SonarQube</text><text x="90" y="86" fill="#ede9fe" font-size="17">quality gate</text></g>
+    <g transform="translate(1080 230)"><rect width="180" height="130" rx="14" fill="#dc2626"/><text x="90" y="53" fill="white" font-size="24" font-weight="700">Trivy</text><text x="90" y="86" fill="#fee2e2" font-size="17">scan</text></g>
+  </g>
+  <g stroke="#7dd3fc" stroke-width="4" fill="none" marker-end="url(#arrow)"><path d="M260 295 H325"/><path d="M510 295 H575"/><path d="M760 295 H825"/><path d="M1010 295 H1075"/><path d="M1170 360 V500 H920"/></g>
+  <g filter="url(#shadow)" font-family="sans-serif" text-anchor="middle">
+    <g transform="translate(770 500)"><rect width="300" height="130" rx="14" fill="#475569"/><text x="150" y="53" fill="white" font-size="24" font-weight="700">Docker image</text><text x="150" y="86" fill="#e2e8f0" font-size="17">build + image scan</text></g>
+    <g transform="translate(1120 500)"><rect width="260" height="130" rx="14" fill="#0f766e"/><text x="130" y="53" fill="white" font-size="24" font-weight="700">Deploy</text><text x="130" y="86" fill="#ccfbf1" font-size="17">Kubernetes / AWS</text></g>
+  </g>
+  <path d="M1070 565 H1115" stroke="#7dd3fc" stroke-width="4" fill="none" marker-end="url(#arrow)"/>
+  <text x="80" y="700" fill="#cbd5e1" font-family="sans-serif" font-size="18">Fail fast: test failures, quality-gate failures, and HIGH/CRITICAL vulnerabilities stop promotion.</text>
+</svg>

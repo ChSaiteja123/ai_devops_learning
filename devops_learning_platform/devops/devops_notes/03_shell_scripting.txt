@@ -1,0 +1,289 @@
+Shell Scripting
+========================
+
+PURPOSE / OVERVIEW
+--------------------------------------------------------------------------------
+Shell scripting allows you to automate system tasks and operations using bash or sh scripts. It is a standard skill for DevOps engineers.
+
+1. WHY SHELL SCRIPTING MATTERS
+--------------------------------------------------------------------------------
+Why shell scripting matters
+
+- automate deployments
+- create backup scripts
+- manage logs and files
+- perform system checks
+- drive infrastructure tasks
+
+2. BASIC SCRIPT EXAMPLE
+--------------------------------------------------------------------------------
+Basic script example
+
+#!/bin/bash
+
+3. ECHO "STARTING SCRIPT..."
+--------------------------------------------------------------------------------
+echo "Starting script..."
+
+EXAMPLE
+----------------------------------------
+DATE=$(date)
+echo "Current date: $DATE"
+
+4. BASH VARIABLES
+--------------------------------------------------------------------------------
+Bash variables
+
+EXAMPLE
+----------------------------------------
+name="DevOps"
+echo $name
+
+5. CONDITIONAL EXAMPLE
+--------------------------------------------------------------------------------
+Conditional example
+
+#!/bin/bash
+
+6. IF [ -F /ETC/PASSWD ]; THEN
+--------------------------------------------------------------------------------
+EXAMPLE
+----------------------------------------
+if [ -f /etc/passwd ]; then
+  echo "File exists"
+else
+  echo "File missing"
+fi
+
+7. LOOP EXAMPLE
+--------------------------------------------------------------------------------
+Loop example
+
+#!/bin/bash
+
+8. FOR I IN 1 2 3 4 5
+--------------------------------------------------------------------------------
+EXAMPLE
+----------------------------------------
+for i in 1 2 3 4 5
+ do
+  echo "Iteration: $i"
+ done
+
+9. USE CASES
+--------------------------------------------------------------------------------
+Use cases
+
+- start app services
+- rotate logs
+- create directories
+- run build commands
+- update environment variables
+
+10. EXAMPLE DEPLOYMENT SCRIPT
+--------------------------------------------------------------------------------
+Example deployment script
+
+#!/bin/bash
+
+11. SET -E
+--------------------------------------------------------------------------------
+set -e
+[WARNING] Use set -euo pipefail deliberately and test failure paths because shell error handling has important edge cases.
+
+
+12. ECHO "DEPLOYING APPLICATION..."
+--------------------------------------------------------------------------------
+echo "Deploying application..."
+
+cd /opt/myapp
+./run.sh
+
+13. PRODUCTION GUIDANCE
+--------------------------------------------------------------------------------
+Shell scripting is often the easiest way to automate infrastructure and application tasks on Linux systems.
+
+14. DEEP-DIVE SHELL ENGINEERING
+--------------------------------------------------------------------------------
+EXAMPLE
+----------------------------------------
+Deep-dive shell engineering
+Choose Bash when Bash features are required and POSIX sh when portability matters.
+Declare the interpreter with a shebang that matches the deployment environment.
+Use set -euo pipefail for strict Bash scripts after understanding its edge cases.
+Use shellcheck in CI to detect quoting, expansion, and portability errors.
+Use shfmt to produce predictable formatting for review.
+Quote every variable unless intentional word splitting is required.
+Use arrays for lists so filenames with spaces remain intact.
+Use read -r so backslashes in input are not consumed unexpectedly.
+Use printf for portable and predictable output.
+Use command -v to verify required commands before doing work.
+Fail with a useful message when a dependency is missing.
+Return zero only when the intended operation succeeded.
+Use distinct nonzero exit codes for validation and runtime failures.
+Use functions to make scripts testable and readable.
+Keep functions focused on one side effect or decision.
+Use local variables inside functions to prevent accidental global changes.
+Pass values as arguments rather than relying on hidden global state.
+Use readonly for constants that must not be reassigned.
+Validate required environment variables before using them.
+Never print secrets while debugging environment variables.
+Use a secret manager for credentials and tokens.
+Use mktemp to create secure temporary files and directories.
+Clean temporary resources with trap on EXIT.
+Avoid trap handlers that hide the command that actually failed.
+Use a lock with flock when concurrent execution would corrupt state.
+Make deployment steps idempotent so retries converge on the desired state.
+Check current state before changing files, services, or users.
+Write configuration to a temporary file and move it atomically.
+Validate generated configuration before replacing the active file.
+Use rsync with --dry-run before a destructive synchronization.
+Avoid rm -rf when the target path can be empty or unset.
+Use parameter expansion checks to reject empty paths.
+Use find with -print0 and xargs -0 for arbitrary filenames.
+Prefer find -exec when it avoids an unnecessary shell pipeline.
+Avoid parsing ls because its display format is for humans.
+Use stat for machine-readable metadata when available.
+Use grep -F for literal searches and grep -E for regular expressions.
+Remember that grep returns one when no match exists.
+Use awk for structured columns and numeric summaries.
+Use sed for simple transformations with an explicit delimiter.
+Use jq to process JSON instead of extracting fields with grep.
+Check that command output is complete before feeding it to another command.
+Use curl --fail-with-body for HTTP checks that need status and body.
+Set curl timeouts so network failures cannot block a pipeline forever.
+Use retry loops with bounded attempts, backoff, and jitter.
+Do not retry authentication failures or invalid input.
+Use timeout for external commands that may hang.
+Check HTTP response codes and validate response content.
+Use sha256sum to verify downloaded artifacts when a trusted checksum exists.
+Never execute downloaded scripts without inspection and trust verification.
+Set PATH and locale intentionally in noninteractive environments.
+Remember that cron does not load an interactive shell profile.
+Use environment files for configuration, not executable shell fragments.
+Keep configuration separate from code and validate its schema.
+Use case statements for finite modes such as start, stop, and status.
+Reject unknown options instead of silently ignoring them.
+Use getopts for short command-line options.
+Document long options and positional arguments in usage output.
+Use -- to separate options from user-supplied paths.
+Do not pass untrusted input through eval or bash -c.
+Treat filenames and environment values as untrusted input.
+Use allowlists for environment names and deployment targets.
+Require an explicit production confirmation flag for destructive commands.
+Log the selected target without logging confidential configuration.
+Include command start, end, and status in operational logs.
+Use timestamps in UTC for automation logs.
+Rotate local logs and cap output from noisy commands.
+Use dry-run modes for scripts that modify infrastructure.
+Make dry-run output describe each proposed change.
+Write tests for parsing, validation, and failure paths.
+Use bats or a similar framework for Bash behavior tests.
+Run scripts in a minimal container to expose hidden dependencies.
+Test on every supported shell and distribution when portability is required.
+Review suppressed ShellCheck warnings and document exceptions.
+Remember that pipelines can mask failures without pipefail.
+Use PIPESTATUS when individual pipeline statuses matter.
+Avoid subshells when a variable must persist in the parent shell.
+Use process substitution when it preserves required state.
+Use null-delimited data for filenames.
+Capture exit codes from background processes with wait.
+Track process IDs and clean children on exit.
+Prevent orphaned child processes during cancellation.
+Use kill -TERM before kill -KILL in cleanup logic.
+Check that a PID still belongs to the expected command before killing it.
+Use resource limits to prevent runaway scripts from exhausting hosts.
+Check free space before generating large files.
+Stream large inputs instead of loading them into shell variables.
+Verify backups by listing and restoring selected files.
+Use checksums to detect changed backup content.
+Do not delete the only known-good backup during rotation.
+Make network calls observable with target and duration fields.
+Use TLS validation rather than disabling certificate checks.
+Never use curl -k in production automation without a documented exception.
+Use SSH host key verification and managed known_hosts files.
+Use restricted deployment accounts and separate credentials per environment.
+Make scripts safe to rerun after a partial failure.
+Store state explicitly when a multi-step operation must resume.
+Mark completed steps only after their verification succeeds.
+Provide rollback or cleanup for every created resource.
+Use a unique transaction identifier across related commands.
+Keep output concise during success and detailed during failure.
+Avoid printing a secret through set -x tracing.
+Disable tracing around sensitive commands and restore the prior setting.
+Document required Bash version and external commands.
+Version scripts alongside the systems they manage.
+Review operational scripts like application code.
+Shell scripts are powerful because they compose tools, so boundaries need discipline.
+Validate every required command before changing state.
+Keep destructive operations behind explicit confirmation.
+Use a dry run for unfamiliar targets.
+Record target, actor, and request identifier.
+Make retries bounded and observable.
+Clean temporary files on success and failure.
+Preserve the original failure status.
+Keep error messages actionable.
+Separate validation from mutation.
+Use allowlists for environments and regions.
+Avoid implicit working directories.
+Quote paths and variable expansions.
+Use arrays for argument lists.
+Use null delimiters for filenames.
+Do not parse human-oriented output.
+Check command output before consuming it.
+Use timeouts around network calls.
+Verify certificates and host keys.
+Never echo credential values.
+Disable tracing around secrets.
+Test empty input and malformed input.
+Test repeated execution.
+Test interruption during each phase.
+Test partial network failure.
+Test missing dependencies.
+Test permission errors.
+Test disk-full behavior.
+Test rollback behavior.
+Document supported shells.
+Document required external tools.
+Keep runtime paths explicit.
+Pin downloaded tool versions.
+Verify checksums and signatures.
+Use a temporary workspace per run.
+Prevent concurrent execution when state is shared.
+Lock before reading and writing shared state.
+Release locks through cleanup traps.
+Use structured diagnostic output.
+Keep normal output concise.
+Retain failure logs for investigation.
+Make success and failure codes consistent.
+Review scripts like production application code.
+Automate shell linting in CI.
+Keep lint suppressions narrow.
+Remove obsolete scripts and cron jobs.
+Give each script an owner.
+Give each script a recovery procedure.
+Shell automation should be boring to operate.
+
+15. PRODUCTION SCRIPT CHECKLIST
+--------------------------------------------------------------------------------
+Production script checklist
+Use a usage function that documents required arguments and exit codes.
+Resolve the script directory before loading files relative to the script.
+Use an explicit umask when creating files that may contain operational data.
+Check that a target host and environment are in an approved allowlist.
+Acquire a lock before reading or writing shared deployment state.
+Write a transaction log with start time, actor, target, and result.
+Validate inputs before making any external calls or filesystem changes.
+Use temporary files in the same filesystem before an atomic rename.
+Validate service configuration before restarting a service.
+Wait for readiness after a restart instead of assuming success from systemctl.
+Treat a timeout as a failure and include the last diagnostic output.
+Preserve the first failure while allowing cleanup to complete.
+Use a rollback command that is tested against the same release format.
+Run the script under the same account, PATH, and locale used in automation.
+Test interrupted execution with SIGTERM and verify that locks are released.
+Test reruns after every externally visible step has completed.
+Record dependency versions when output formats affect parsing.
+Review shell scripts for injection risk before accepting new parameters.
+Keep destructive operations behind a separate command or explicit flag.
+Give production scripts an owner, runbook, and retirement date.

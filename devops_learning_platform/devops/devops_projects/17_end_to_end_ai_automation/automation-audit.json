@@ -1,0 +1,37 @@
+{
+  "generated_at": "2026-09-18T10:51:23.361607+00:00",
+  "incident_id": "INC-2026-001",
+  "service": "checkout-api",
+  "environment": "production",
+  "model_mode": "deterministic_local_analysis",
+  "analysis": {
+    "hypothesis": "recent deployment may be related",
+    "confidence": "medium",
+    "evidence": [
+      "service=checkout-api",
+      "severity=critical",
+      "deployment_minutes_ago=8"
+    ],
+    "recommended_actions": [
+      "inspect_dashboard",
+      "create_incident",
+      "prepare_rollback"
+    ],
+    "automated_action": false
+  },
+  "policy_decision": {
+    "approved_actions": [
+      "inspect_dashboard",
+      "create_incident",
+      "prepare_rollback"
+    ],
+    "requires_human_approval": true,
+    "decision": "awaiting_approval"
+  },
+  "deployment_plan": {
+    "target": "checkout:2026.09.18-42",
+    "rollback_target": "checkout:2026.09.17-41",
+    "executed": false
+  },
+  "audit_status": "complete"
+}

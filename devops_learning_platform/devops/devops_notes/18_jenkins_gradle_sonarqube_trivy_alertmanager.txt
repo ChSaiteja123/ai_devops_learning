@@ -1,0 +1,444 @@
+Jenkins, Gradle, SonarQube, Trivy, and Alertmanager
+===================================================
+
+PURPOSE / OVERVIEW
+--------------------------------------------------------------------------------
+This toolchain combines build automation, code quality, vulnerability scanning, and operational alerting in a CI/CD workflow.
+
+1. PIPELINE FLOW
+--------------------------------------------------------------------------------
+Pipeline flow
+
+EXAMPLE
+----------------------------------------
+Git commit -> Jenkins -> Gradle build/test -> SonarQube analysis -> Trivy scan -> container build -> Trivy image scan -> deployment -> Prometheus metrics -> Alertmanager notifications
+
+2. JENKINS
+--------------------------------------------------------------------------------
+Jenkins
+
+Jenkins is an automation server that executes repeatable pipelines.
+
+3. IMPORTANT CONCEPTS
+--------------------------------------------------------------------------------
+[IMPORTANT] Important concepts
+
+- Jenkins controller: coordinates jobs and pipeline execution
+- agent: machine that runs pipeline steps
+- Jenkinsfile: pipeline definition stored with application code
+- credentials: protected secrets managed by Jenkins
+- stages: named sections such as test, scan, build, and deploy
+- artifacts: files retained after a build
+
+4. EXAMPLE DECLARATIVE JENKINS STAGE
+--------------------------------------------------------------------------------
+Example declarative Jenkins stage
+
+EXAMPLE
+----------------------------------------
+pipeline {
+  agent any
+  stages {
+    stage('Test') {
+      steps {
+        sh 'gradle test'
+      }
+    }
+  }
+}
+
+5. JENKINS BEST PRACTICES
+--------------------------------------------------------------------------------
+Jenkins best practices
+
+- store the Jenkinsfile in source control
+- use ephemeral or disposable agents where practical
+- keep secrets in Jenkins Credentials, never in Git
+- require approval before production deployment
+- archive test reports and security results
+- use a shared library for repeated enterprise pipeline logic
+
+6. GRADLE
+--------------------------------------------------------------------------------
+Gradle
+
+EXAMPLE
+----------------------------------------
+Gradle is a build automation tool commonly used for Java, Kotlin, and Android projects.
+
+7. COMMON GRADLE TASKS
+--------------------------------------------------------------------------------
+Common Gradle tasks
+
+- gradle clean: remove previous build output
+- gradle test: compile and execute tests
+- gradle build: create a complete build artifact
+- gradle dependencies: inspect dependency graph
+- gradle sonar: send analysis to SonarQube
+
+8. EXAMPLE BUILD.GRADLE CONFIGURATION
+--------------------------------------------------------------------------------
+Example build.gradle configuration
+
+EXAMPLE
+----------------------------------------
+plugins {
+  id 'java'
+  id 'org.sonarqube' version '5.1.0.4882'
+}
+
+9. KEY TOOLS AND COMPONENTS
+--------------------------------------------------------------------------------
+EXAMPLE
+----------------------------------------
+repositories {
+  mavenCentral()
+}
+
+10. WORKFLOWS AND PRACTICES
+--------------------------------------------------------------------------------
+EXAMPLE
+----------------------------------------
+dependencies {
+  testImplementation 'org.junit.jupiter:junit-jupiter:5.10.3'
+}
+
+11. COMMANDS AND CONFIGURATION
+--------------------------------------------------------------------------------
+EXAMPLE
+----------------------------------------
+test {
+  useJUnitPlatform()
+}
+
+12. GRADLE SECURITY PRACTICES
+--------------------------------------------------------------------------------
+[SECURITY] Gradle security practices
+
+- pin plugin and dependency versions
+- use dependency locking for repeatable builds
+- use a private artifact repository when required
+- avoid downloading dependencies from untrusted repositories
+
+13. SONARQUBE
+--------------------------------------------------------------------------------
+SonarQube
+
+SonarQube performs static analysis of source code and reports bugs, vulnerabilities, code smells, and duplication.
+
+14. KEY CONCEPTS
+--------------------------------------------------------------------------------
+Key concepts
+
+- project key: unique SonarQube project identifier
+- quality profile: rules used during analysis
+- quality gate: pass/fail conditions for code quality
+- coverage: percentage of code exercised by tests
+- technical debt: estimated effort to improve maintainability
+
+15. TYPICAL JENKINS INTEGRATION
+--------------------------------------------------------------------------------
+Typical Jenkins integration
+
+EXAMPLE
+----------------------------------------
+withSonarQubeEnv('sonarqube') {
+  sh 'gradle sonar'
+}
+
+16. PRODUCTION PRACTICE
+--------------------------------------------------------------------------------
+[PRODUCTION] Production practice
+
+Run SonarQube after tests and fail the pipeline when the quality gate does not meet the team standard. Store the SonarQube token as a Jenkins credential.
+
+17. TRIVY
+--------------------------------------------------------------------------------
+Trivy
+
+EXAMPLE
+----------------------------------------
+Trivy is a vulnerability scanner for container images, filesystems, Git repositories, and infrastructure configuration.
+
+18. FILESYSTEM SCAN
+--------------------------------------------------------------------------------
+Filesystem scan
+
+COMMANDS
+----------------------------------------
+trivy fs --severity HIGH,CRITICAL --exit-code 1 --ignore-unfixed .
+
+19. CONTAINER IMAGE SCAN
+--------------------------------------------------------------------------------
+Container image scan
+
+COMMANDS
+----------------------------------------
+trivy image --severity HIGH,CRITICAL --exit-code 1 --ignore-unfixed myapp:1.0.0
+
+20. INFRASTRUCTURE SCAN
+--------------------------------------------------------------------------------
+Infrastructure scan
+
+COMMANDS
+----------------------------------------
+trivy config --severity HIGH,CRITICAL .
+
+21. IMPORTANT OPTIONS
+--------------------------------------------------------------------------------
+[IMPORTANT] Important options
+
+- --severity: select vulnerability levels
+- --exit-code 1: fail CI when findings exist
+- --ignore-unfixed: reduce noise from vulnerabilities without fixes
+- --format sarif: produce a report for security platforms
+
+22. TRIVY BEST PRACTICES
+--------------------------------------------------------------------------------
+Trivy best practices
+
+- scan dependencies before building images
+- scan the final image after building it
+- use small trusted base images
+- update base images regularly
+- define an approved exception process for false positives
+
+23. ALERTMANAGER
+--------------------------------------------------------------------------------
+Alertmanager
+
+Alertmanager receives alerts from Prometheus, groups related alerts, suppresses duplicates, and routes notifications.
+
+24. WORKFLOWS AND PRACTICES
+--------------------------------------------------------------------------------
+Prometheus sends an alert when an expression remains true for a configured duration. Alertmanager then routes it to email, Slack, PagerDuty, or a webhook.
+
+25. EXAMPLE PROMETHEUS ALERT
+--------------------------------------------------------------------------------
+Example Prometheus alert
+
+EXAMPLE
+----------------------------------------
+groups:
+  - name: application
+    rules:
+      - alert: ApplicationDown
+        expr: up == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: Application target is down
+
+26. EXAMPLE ALERTMANAGER ROUTE
+--------------------------------------------------------------------------------
+Example Alertmanager route
+
+EXAMPLE
+----------------------------------------
+route:
+  receiver: platform-team
+  group_by: [alertname, job]
+
+27. RECEIVERS
+--------------------------------------------------------------------------------
+receivers
+
+EXAMPLE
+----------------------------------------
+  - name: platform-team
+    webhook_configs:
+      - url: http://notification-service:8080/alerts
+
+28. ALERTMANAGER BEST PRACTICES
+--------------------------------------------------------------------------------
+Alertmanager best practices
+
+- route critical alerts to an on-call channel
+- group related alerts to avoid notification storms
+- define inhibition rules for dependent failures
+- configure repeat intervals thoughtfully
+- test notification receivers regularly
+- avoid putting passwords or tokens directly in YAML
+
+29. END-TO-END ENTERPRISE EXAMPLE
+--------------------------------------------------------------------------------
+End-to-end enterprise example
+
+1. A developer pushes Java code to Git.
+2. Jenkins checks out the code.
+3. Gradle compiles the project and runs JUnit tests.
+4. SonarQube evaluates maintainability, bugs, and coverage.
+5. Trivy scans source dependencies and infrastructure files.
+6. Jenkins builds a Docker image.
+7. Trivy scans the final image for HIGH and CRITICAL vulnerabilities.
+8. Jenkins publishes the image only when quality and security gates pass.
+9. Prometheus monitors the deployed service.
+10. Alertmanager routes availability alerts to the operations team.
+
+30. KEY TOOLS AND COMPONENTS
+--------------------------------------------------------------------------------
+This design connects delivery speed with quality, security, and operational feedback.
+
+31. TOOLCHAIN DEEP DIVE
+--------------------------------------------------------------------------------
+EXAMPLE
+----------------------------------------
+Toolchain deep dive
+Jenkins controllers coordinate jobs but should not perform heavy builds.
+Use agents with labels for workload requirements.
+Prefer ephemeral agents for clean and isolated workspaces.
+Store Jenkinsfiles with application code.
+Use declarative pipelines for visible stage structure.
+Keep credentials in Jenkins Credentials, never in Git.
+Scope credentials to the smallest folder or job.
+Restrict script approval and plugin administration.
+Pin plugin versions and patch Jenkins regularly.
+Archive test, coverage, scan, and deployment reports.
+Use shared libraries for repeated enterprise pipeline logic.
+Protect production stages with environment approvals.
+Use timeouts and retry only transient operations.
+Clean workspaces after builds.
+Gradle Wrapper pins the Gradle runtime for repeatability.
+Use dependency locking for stable resolution.
+Use a private repository mirror when supply chain control matters.
+Keep plugin and dependency versions reviewed.
+Run clean, compile, test, and package tasks in CI.
+Use build scans only under approved data policies.
+Cache Gradle dependencies with safe keys.
+Do not trust caches from untrusted branches.
+Publish immutable JARs with commit metadata.
+Run JUnit tests and publish failures clearly.
+Set coverage thresholds appropriate to critical code.
+SonarQube quality gates should match release risk.
+Store Sonar tokens as Jenkins credentials.
+Analyze after compilation and tests.
+Review new issues separately from legacy debt.
+Use quality profiles with documented exceptions.
+Track technical debt with owners and deadlines.
+Trivy can scan filesystems, repositories, images, and IaC.
+Scan the exact image digest intended for deployment.
+Fail on policy-defined HIGH and CRITICAL findings.
+Review exploitability and reachability before exceptions.
+Keep the vulnerability database current.
+Generate and archive an SBOM.
+Scan base images as well as application layers.
+Do not publish an image before security gates pass.
+Use image signing and admission verification where supported.
+Alertmanager receives Prometheus alerts and routes notifications.
+Group related alerts to prevent notification storms.
+Use inhibition for dependent failures.
+Set repeat intervals according to incident urgency.
+Test email, chat, paging, and webhook receivers.
+Use secrets for receiver credentials.
+Avoid putting tokens directly in YAML.
+Include service, environment, severity, and runbook labels.
+Use silence expiry so temporary suppression ends.
+Protect Alertmanager configuration with review and access controls.
+Connect release markers to Prometheus dashboards.
+Alert on user impact after deployment.
+Use canaries and rollback thresholds for production.
+
+31. OBSERVABILITY AUTOMATION IN CI/CD
+--------------------------------------------------------------------------------
+CI/CD can validate alert automation before it is connected to real receivers.
+Compile the event router and run deterministic sample payloads.
+Assert that required alert fields are enforced.
+Assert that duplicate fingerprints are counted and suppressed.
+Assert that critical events route to on-call and warnings route to ticketing.
+Archive the generated notification plan as a build artifact.
+Keep the test payload and expected result in source control.
+Run the checks on pull requests and before receiver configuration changes.
+
+Example Jenkins validation:
+EXAMPLE
+----------------------------------------
+stage('Validate alert automation') {
+  steps {
+    sh 'python3 -m py_compile alert_router.py'
+    sh 'python3 alert_router.py sample-alerts.json'
+  }
+}
+
+32. NOTIFICATION PLAN DESIGN
+--------------------------------------------------------------------------------
+An alert event should become a plan before it becomes an external notification.
+The plan records source status, unique alerts, duplicate events, groups, severity,
+receiver, services, alert names, runbooks, and delivery state.
+This intermediate representation makes behavior testable and auditable.
+It also prevents a parser from directly executing infrastructure commands.
+
+[SECURITY] Never treat an alert label, annotation, or runbook URL as permission
+to execute a shell command, rollback, scale, or change traffic.
+
+33. WEBHOOK OPERATIONS
+--------------------------------------------------------------------------------
+Authenticate Alertmanager webhook requests.
+Use network policy or firewall rules to restrict the receiver.
+Validate JSON size, content type, and required fields.
+Reject unknown severity values and malformed fingerprints.
+Apply timeouts to outbound notification calls.
+Retry only transient delivery failures.
+Use a dead-letter queue for events that cannot be delivered.
+Measure delivery latency, retry count, queue age, and permanent failure count.
+Redact tokens, passwords, customer data, and internal secrets.
+Keep notification templates versioned and reviewed.
+Test receiver credentials and failure behavior in a disposable environment.
+
+34. SAFE INCIDENT AUTOMATION
+--------------------------------------------------------------------------------
+Automation may classify and recommend without being allowed to change production.
+Keep execution credentials outside the alert-processing component.
+Use an explicit allowlist for any future remediation action.
+Validate environment, namespace, service, and target version before execution.
+Require human approval for destructive or high-impact operations.
+Use dry-run as the default mode.
+Record operator, approval, command, result, and rollback information.
+Ensure repeated delivery of the same alert is idempotent.
+Pause automatic remediation during an incident when the evidence is uncertain.
+
+35. INCIDENT AUTOMATION TEST MATRIX
+--------------------------------------------------------------------------------
+Test a valid critical alert.
+Test a valid warning alert.
+Test an informational alert.
+Test a resolved alert.
+Test a payload with no alerts.
+Test missing service labels.
+Test missing severity labels.
+Test unsupported severity values.
+Test missing fingerprints.
+Test duplicate fingerprints.
+Test two services with the same alert name.
+Test two environments with the same service.
+Test malformed JSON.
+Test receiver timeout and retry behavior.
+Test redaction of sensitive annotations.
+Test audit artifact generation after a failed delivery.
+
+36. PROJECT INTEGRATION
+--------------------------------------------------------------------------------
+The observability automation project is located at:
+`devops_projects/16_observability_automation`
+
+It contains Prometheus rules, Alertmanager routes, a sample Alertmanager
+payload, a deterministic Python router, a Jenkinsfile, and an audit report.
+Use it as a reference implementation for connecting monitoring to CI/CD without
+turning alerts into uncontrolled production commands.
+Keep database migrations backward compatible.
+Record artifact digest, scan result, quality gate, and approver.
+Use least-privilege cloud credentials from Jenkins.
+Prefer short-lived OIDC credentials for deployment.
+Do not expose secrets to untrusted pull request jobs.
+Pin actions and Jenkins plugins where applicable.
+Restrict outbound access from build agents.
+Review dependency licenses and provenance.
+Use separate staging and production credentials.
+Keep emergency deployment paths audited and time-limited.
+Test restoration of Jenkins configuration and job metadata.
+Back up SonarQube and alert configuration according to recovery needs.
+Monitor controller disk, queue, executor, and JVM health.
+Monitor Gradle duration, cache hit rate, and flaky tests.
+Monitor scan duration and database freshness.
+Control artifact, workspace, and log retention costs.
+This toolchain works when every gate produces actionable evidence.

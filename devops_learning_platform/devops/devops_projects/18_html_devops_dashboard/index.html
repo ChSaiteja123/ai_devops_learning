@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Hands-on HTML DevOps operations dashboard">
+  <title>PulseOps Dashboard</title>
+  <link rel="stylesheet" href="app.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="shell topbar-inner">
+      <a class="brand" href="#main-content" aria-label="PulseOps home">Pulse<span>Ops</span></a>
+      <nav aria-label="Primary navigation">
+        <a href="#overview">Overview</a>
+        <a href="#services">Services</a>
+        <a href="#incidents">Incidents</a>
+      </nav>
+      <button class="icon-button" type="button" data-action="theme" aria-pressed="false">High contrast</button>
+    </div>
+  </header>
+
+  <main class="shell" id="main-content">
+    <section class="hero" id="overview" aria-labelledby="dashboard-title">
+      <div>
+        <p class="eyebrow">Operations control room</p>
+        <h1 id="dashboard-title">System pulse</h1>
+        <p class="hero-copy">A practical dashboard for scanning reliability, delivery, and incident signals.</p>
+      </div>
+      <div class="hero-actions">
+        <span class="live-dot" aria-hidden="true"></span>
+        <span id="updated-at" role="status">Updated just now</span>
+        <button class="primary-button" type="button" data-action="refresh">Refresh data</button>
+      </div>
+    </section>
+
+    <section class="kpi-grid" aria-label="Key performance indicators">
+      <article class="kpi-card"><p>Availability</p><strong>99.96%</strong><span class="positive">+0.08% this week</span></article>
+      <article class="kpi-card"><p>p95 latency</p><strong>184 ms</strong><span class="positive">-12 ms from yesterday</span></article>
+      <article class="kpi-card"><p>Deployments</p><strong>24</strong><span class="neutral">7 successful today</span></article>
+      <article class="kpi-card"><p>Open incidents</p><strong id="incident-count">3</strong><span class="warning-text">1 critical</span></article>
+    </section>
+
+    <section class="dashboard-grid" id="services" aria-labelledby="services-title">
+      <article class="panel wide-panel">
+        <div class="panel-heading"><div><p class="eyebrow">Runtime health</p><h2 id="services-title">Services</h2></div><div class="filter-group" role="group" aria-label="Filter services"><button class="filter active" type="button" data-service-filter="all">All</button><button class="filter" type="button" data-service-filter="healthy">Healthy</button><button class="filter" type="button" data-service-filter="degraded">Degraded</button></div></div>
+        <div class="table-wrap"><table><caption class="sr-only">Current service health</caption><thead><tr><th scope="col">Service</th><th scope="col">Status</th><th scope="col">Region</th><th scope="col">Latency</th><th scope="col">Error rate</th></tr></thead><tbody id="service-rows"></tbody></table></div>
+      </article>
+
+      <article class="panel deployment-panel">
+        <div class="panel-heading"><div><p class="eyebrow">Delivery flow</p><h2>Deployments</h2></div><span class="badge success">Healthy</span></div>
+        <ol class="timeline" id="deployment-list"></ol>
+      </article>
+
+      <article class="panel incidents-panel" id="incidents">
+        <div class="panel-heading"><div><p class="eyebrow">Response queue</p><h2>Incidents</h2></div><button class="text-button" type="button" data-action="clear-filters">Clear filters</button></div>
+        <div class="incident-list" id="incident-list"></div>
+      </article>
+    </section>
+  </main>
+  <footer class="shell footer"><span>PulseOps local learning project</span><span>Mock data only</span></footer>
+</body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "incident_id": "INC-2026-001",
+  "alert": {
+    "fingerprint": "checkout-critical-001",
+    "service": "checkout-api",
+    "environment": "production",
+    "severity": "critical",
+    "summary": "HTTP 500 rate is above 10 percent",
+    "runbook": "https://runbooks.example.com/checkout-errors"
+  },
+  "recent_deployment": {
+    "version": "checkout:2026.09.18-42",
+    "previous_version": "checkout:2026.09.17-41",
+    "minutes_ago": 8
+  }
+}

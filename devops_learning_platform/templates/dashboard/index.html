@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevOps Learning Platform</title>
+    <style>
+        :root {
+            --bg: #020817;
+            --bg-soft: #0f172a;
+            --panel: rgba(15, 23, 42, 0.82);
+            --panel-strong: #111827;
+            --line: rgba(148, 163, 184, 0.25);
+            --text: #e2e8f0;
+            --muted: #94a3b8;
+            --blue: #60a5fa;
+            --cyan: #22d3ee;
+            --green: #34d399;
+            --purple: #a78bfa;
+            --shadow: 0 20px 45px rgba(15, 23, 42, 0.35);
+        }
+
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: radial-gradient(circle at top, #111827 0%, var(--bg) 38%, #020817 100%);
+            color: var(--text);
+        }
+
+        a { color: inherit; text-decoration: none; }
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            backdrop-filter: blur(12px);
+            background: rgba(2, 8, 23, 0.72);
+            border-bottom: 1px solid var(--line);
+        }
+
+        .nav {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 18px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .brand {
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 18px;
+            flex-wrap: wrap;
+            color: var(--muted);
+        }
+
+        .nav-links a:hover { color: var(--text); }
+
+        .cta {
+            background: linear-gradient(135deg, var(--blue), var(--cyan));
+            color: #03111f;
+            font-weight: 700;
+            padding: 10px 18px;
+            border-radius: 999px;
+            box-shadow: var(--shadow);
+        }
+
+        .container {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 40px 24px 80px;
+        }
+
+        .hero {
+            display: grid;
+            grid-template-columns: 1.4fr 0.9fr;
+            gap: 28px;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .hero-card, .panel, .mini-card {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 22px;
+            box-shadow: var(--shadow);
+        }
+
+        .hero-card {
+            padding: 42px;
+        }
+
+        .eyebrow {
+            display: inline-block;
+            background: rgba(96, 165, 250, 0.12);
+            color: var(--blue);
+            border: 1px solid rgba(96, 165, 250, 0.35);
+            padding: 8px 12px;
+            border-radius: 999px;
+            font-size: 12px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 22px;
+        }
+
+        h1 {
+            font-size: clamp(2.4rem, 4vw, 4.2rem);
+            line-height: 1.05;
+            margin: 0 0 16px;
+            letter-spacing: -0.06em;
+        }
+
+        .subtitle {
+            color: var(--muted);
+            font-size: 1.05rem;
+            line-height: 1.7;
+            max-width: 620px;
+            margin-bottom: 28px;
+        }
+
+        .button-row {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            margin-bottom: 28px;
+        }
+
+        .primary-btn, .secondary-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-weight: 700;
+        }
+
+        .primary-btn {
+            background: linear-gradient(135deg, var(--green), var(--cyan));
+            color: #02130f;
+        }
+
+        .secondary-btn {
+            background: rgba(148, 163, 184, 0.08);
+            border: 1px solid var(--line);
+            color: var(--text);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(120px, 1fr));
+            gap: 16px;
+        }
+
+        .stat {
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            padding: 18px 16px;
+        }
+
+        .stat strong {
+            display: block;
+            font-size: 1.7rem;
+            margin-bottom: 4px;
+        }
+
+        .stat span { color: var(--muted); font-size: 0.88rem; }
+
+        .metrics-panel {
+            padding: 24px;
+        }
+
+        .mini-card {
+            padding: 20px;
+            background: rgba(17, 24, 39, 0.88);
+            margin-bottom: 16px;
+        }
+
+        .mini-card h3 {
+            margin: 0 0 10px;
+            font-size: 0.95rem;
+            color: var(--muted);
+            font-weight: 600;
+        }
+
+        .big-number {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin: 0 0 8px;
+        }
+
+        .trend {
+            color: var(--green);
+            font-size: 0.86rem;
+            font-weight: 600;
+        }
+
+        .section {
+            margin-top: 52px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+            gap: 16px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+        }
+
+        h2 {
+            margin: 0;
+            font-size: clamp(1.6rem, 2vw, 2.35rem);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(200px, 1fr));
+            gap: 18px;
+        }
+
+        .panel {
+            padding: 22px 20px;
+        }
+
+        .icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 18px;
+            font-size: 1.3rem;
+            background: linear-gradient(135deg, rgba(96, 165, 250, 0.18), rgba(34, 211, 238, 0.15));
+        }
+
+        .panel h3 {
+            margin: 0 0 10px;
+            font-size: 1.15rem;
+        }
+
+        .panel p {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        @media (max-width: 900px) {
+            .hero { grid-template-columns: 1fr; }
+            .grid { grid-template-columns: repeat(2, minmax(200px, 1fr)); }
+        }
+
+        @media (max-width: 560px) {
+            .grid { grid-template-columns: 1fr; }
+            .stats { grid-template-columns: 1fr; }
+            .hero-card { padding: 28px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <header class="topbar">
+        <nav class="nav">
+            <a href="/" class="brand">DEVOPS LAB</a>
+            <div class="nav-links">
+                <a href="/dashboard/">Dashboard</a>
+                <a href="/courses/">Courses</a>
+                <a href="/library/devops_notes_html/index.html">Notes</a>
+                <a href="/library/devops_projects_html/index.html">Projects</a>
+                <a href="/ai-chat/">AI Chat</a>
+                <a href="/architecture/">Architecture</a>
+            </div>
+            <a class="cta" href="/accounts/login/">Login</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="hero">
+            <div class="hero-card">
+                <div class="eyebrow">AI-powered learning</div>
+                <h1>Master DevOps with guided, real-world practice.</h1>
+                <p class="subtitle">
+                    Learn cloud architecture, automation, observability, and deployment workflows through interactive courses, labs, and AI coaching.
+                </p>
+                <div class="button-row">
+                    <a class="primary-btn" href="/courses/">Explore courses</a>
+                    <a class="secondary-btn" href="/ai-chat/">Ask the AI coach</a>
+                </div>
+                <div class="stats">
+                    <div class="stat">
+                        <strong>120+</strong>
+                        <span>lessons</span>
+                    </div>
+                    <div class="stat">
+                        <strong>18</strong>
+                        <span>hands-on labs</span>
+                    </div>
+                    <div class="stat">
+                        <strong>96%</strong>
+                        <span>skill completion</span>
+                    </div>
+                </div>
+            </div>
+
+            <aside class="metrics-panel panel">
+                <img src="/static/images/devops-hero.svg" alt="DevOps dashboard illustration" style="width:100%; border-radius:18px; display:block; margin-bottom:16px; border:1px solid var(--line);">
+                <div class="mini-card">
+                    <h3>Learning streak</h3>
+                    <p class="big-number">21 days</p>
+                    <div class="trend">↑ 12% this week</div>
+                </div>
+                <div class="mini-card">
+                    <h3>Active labs</h3>
+                    <p class="big-number">7</p>
+                    <div class="trend">3 waiting for review</div>
+                </div>
+                <div class="mini-card">
+                    <h3>AI tasks completed</h3>
+                    <p class="big-number">49</p>
+                    <div class="trend">boosted by architecture assistant</div>
+                </div>
+            </aside>
+        </section>
+
+        <section class="section">
+            <div class="section-header">
+                <h2>Platform modules</h2>
+            </div>
+            <div class="grid">
+                <div class="panel">
+                    <div class="icon">📚</div>
+                    <h3>Courses</h3>
+                    <p>Structured lessons from beginner to production-grade DevOps topics.</p>
+                </div>
+                <div class="panel">
+                    <div class="icon">🧪</div>
+                    <h3>Labs</h3>
+                    <p>Hands-on exercises with command prompts, expected output, and review.</p>
+                </div>
+                <div class="panel">
+                    <div class="icon">🤖</div>
+                    <h3>AI Assistant</h3>
+                    <p>Get help with troubleshooting, design reviews, and guided explanations.</p>
+                </div>
+                <div class="panel">
+                    <div class="icon">🛰️</div>
+                    <h3>Deployments</h3>
+                    <p>Track releases, rollbacks, incidents, and operational health in one view.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
