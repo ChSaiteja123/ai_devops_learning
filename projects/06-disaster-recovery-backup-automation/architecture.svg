@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="430" viewBox="0 0 1000 430" role="img" aria-labelledby="title desc">
+  <title id="title">Disaster recovery backup and restore workflow</title>
+  <desc id="desc">A scheduled backup captures application data and configuration, copies backups to a recovery region, and a controlled drill restores into an isolated environment for validation and RPO/RTO measurement.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#526579"/></marker>
+    <style>text{font-family:Segoe UI,Arial,sans-serif;fill:#183247}.title{font-size:25px;font-weight:700}.label{font-size:16px;font-weight:600}.small{font-size:13px;fill:#40566a}.box{rx:12;stroke-width:2}.arrow{stroke:#526579;stroke-width:2.5;fill:none;marker-end:url(#arrow)}</style>
+  </defs>
+  <rect width="1000" height="430" rx="18" fill="#f5f8fc"/>
+  <text x="40" y="48" class="title">Backup, restore, and recovery verification</text>
+  <text x="40" y="76" class="small">Backup success is not restore success: validate data and measure actual RPO/RTO.</text>
+  <rect class="box" x="40" y="145" width="170" height="90" fill="#e7f1ff" stroke="#4382c3"/><text x="125" y="182" text-anchor="middle" class="label">Workload</text><text x="125" y="207" text-anchor="middle" class="small">RDS • EKS data • config</text>
+  <rect class="box" x="280" y="145" width="170" height="90" fill="#e5f7ef" stroke="#3b9b70"/><text x="365" y="182" text-anchor="middle" class="label">Backup policy</text><text x="365" y="207" text-anchor="middle" class="small">schedule • retention</text>
+  <rect class="box" x="520" y="145" width="180" height="90" fill="#fff2d9" stroke="#d39528"/><text x="610" y="182" text-anchor="middle" class="label">Recovery region</text><text x="610" y="207" text-anchor="middle" class="small">copy • keys • inventory</text>
+  <rect class="box" x="770" y="105" width="190" height="78" fill="#f0eaff" stroke="#8060bd"/><text x="865" y="137" text-anchor="middle" class="label">Isolated restore</text><text x="865" y="160" text-anchor="middle" class="small">controlled drill</text>
+  <rect class="box" x="770" y="220" width="190" height="78" fill="#e7f1ff" stroke="#4382c3"/><text x="865" y="252" text-anchor="middle" class="label">Validation</text><text x="865" y="275" text-anchor="middle" class="small">data checks + smoke tests</text>
+  <path class="arrow" d="M210 190 H275"/><path class="arrow" d="M450 190 H515"/><path class="arrow" d="M700 175 H750 V145 H765"/><path class="arrow" d="M865 183 V215"/>
+  <rect class="box" x="310" y="325" width="250" height="70" fill="#ffe8e5" stroke="#d16b5d"/><text x="435" y="354" text-anchor="middle" class="label">Measured recovery</text><text x="435" y="377" text-anchor="middle" class="small">actual RPO / actual RTO</text>
+  <rect class="box" x="650" y="325" width="250" height="70" fill="#e5f7ef" stroke="#3b9b70"/><text x="775" y="354" text-anchor="middle" class="label">Report + improvements</text><text x="775" y="377" text-anchor="middle" class="small">evidence • actions • cleanup</text>
+  <path class="arrow" d="M865 298 V315 H560 V350"/><path class="arrow" d="M560 360 H645"/>
+</svg>

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="430" viewBox="0 0 1000 430" role="img" aria-labelledby="title desc">
+  <title id="title">Centralized observability architecture</title>
+  <desc id="desc">Applications and cluster components send metrics to Prometheus and logs to Loki. Grafana queries both data sources. Prometheus alerts route through Alertmanager to the on-call channel.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#526579"/></marker>
+    <style>text{font-family:Segoe UI,Arial,sans-serif;fill:#183247}.title{font-size:25px;font-weight:700}.label{font-size:16px;font-weight:600}.small{font-size:13px;fill:#40566a}.box{rx:12;stroke-width:2}.arrow{stroke:#526579;stroke-width:2.5;fill:none;marker-end:url(#arrow)}</style>
+  </defs>
+  <rect width="1000" height="430" rx="18" fill="#f5f8fc"/>
+  <text x="40" y="48" class="title">Centralized observability</text>
+  <text x="40" y="76" class="small">Collect signals, query them together, and route actionable alerts.</text>
+  <rect class="box" x="45" y="150" width="185" height="92" fill="#e7f1ff" stroke="#4382c3"/><text x="137" y="186" text-anchor="middle" class="label">Apps + cluster</text><text x="137" y="212" text-anchor="middle" class="small">metrics and logs</text>
+  <rect class="box" x="325" y="105" width="190" height="82" fill="#e5f7ef" stroke="#3b9b70"/><text x="420" y="140" text-anchor="middle" class="label">Prometheus</text><text x="420" y="165" text-anchor="middle" class="small">metrics and rules</text>
+  <rect class="box" x="325" y="225" width="190" height="82" fill="#fff2d9" stroke="#d39528"/><text x="420" y="260" text-anchor="middle" class="label">Log collector → Loki</text><text x="420" y="285" text-anchor="middle" class="small">logs and retention</text>
+  <rect class="box" x="625" y="165" width="180" height="90" fill="#f0eaff" stroke="#8060bd"/><text x="715" y="202" text-anchor="middle" class="label">Grafana</text><text x="715" y="228" text-anchor="middle" class="small">dashboards / queries</text>
+  <rect class="box" x="845" y="105" width="130" height="82" fill="#ffe8e5" stroke="#d16b5d"/><text x="910" y="140" text-anchor="middle" class="label">Alertmanager</text><text x="910" y="165" text-anchor="middle" class="small">route / silence</text>
+  <rect class="box" x="845" y="225" width="130" height="82" fill="#e7f1ff" stroke="#4382c3"/><text x="910" y="260" text-anchor="middle" class="label">On-call</text><text x="910" y="285" text-anchor="middle" class="small">Slack / email</text>
+  <path class="arrow" d="M230 180 H320"/><path class="arrow" d="M230 215 H280 V266 H320"/><path class="arrow" d="M515 145 H620"/><path class="arrow" d="M515 265 H580 V230 H620"/><path class="arrow" d="M515 125 H820 V145 H840"/><path class="arrow" d="M910 187 V220"/>
+</svg>

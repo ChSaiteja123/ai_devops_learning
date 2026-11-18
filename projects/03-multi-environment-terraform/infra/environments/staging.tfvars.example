@@ -1,0 +1,10 @@
+environment = "staging"
+aws_region  = "ap-south-1"
+vpc_cidr    = "10.41.0.0/16"
+az_count    = 2
+
+tags = {
+  Project     = "devops-platform"
+  Environment = "staging"
+  ManagedBy   = "terraform"
+}

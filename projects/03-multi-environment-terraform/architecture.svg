@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="430" viewBox="0 0 1000 430" role="img" aria-labelledby="title desc">
+  <title id="title">Multi-environment Terraform architecture</title>
+  <desc id="desc">A pull request runs Terraform formatting and validation, reviewers approve a plan, reusable modules provision separate dev, staging and production resources, while each environment uses a distinct versioned S3 state key and lock.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#526579"/></marker>
+    <style>text{font-family:Segoe UI,Arial,sans-serif;fill:#183247}.title{font-size:25px;font-weight:700}.label{font-size:16px;font-weight:600}.small{font-size:13px;fill:#40566a}.box{rx:12;stroke-width:2}.arrow{stroke:#526579;stroke-width:2.5;fill:none;marker-end:url(#arrow)}</style>
+  </defs>
+  <rect width="1000" height="430" rx="18" fill="#f5f8fc"/>
+  <text x="40" y="48" class="title">Multi-environment Terraform</text>
+  <text x="40" y="76" class="small">One reusable module set, separate environment inputs and state keys.</text>
+  <rect class="box" x="45" y="145" width="165" height="85" fill="#e7f1ff" stroke="#4382c3"/><text x="127" y="180" text-anchor="middle" class="label">Pull request</text><text x="127" y="204" text-anchor="middle" class="small">change proposal</text>
+  <rect class="box" x="280" y="145" width="190" height="85" fill="#fff2d9" stroke="#d39528"/><text x="375" y="180" text-anchor="middle" class="label">CI checks</text><text x="375" y="204" text-anchor="middle" class="small">fmt • validate • scan</text>
+  <rect class="box" x="545" y="145" width="180" height="85" fill="#f0eaff" stroke="#8060bd"/><text x="635" y="180" text-anchor="middle" class="label">Reviewed plan</text><text x="635" y="204" text-anchor="middle" class="small">approval before apply</text>
+  <rect class="box" x="790" y="115" width="165" height="70" fill="#e5f7ef" stroke="#3b9b70"/><text x="872" y="145" text-anchor="middle" class="label">Dev</text><text x="872" y="166" text-anchor="middle" class="small">isolated resources</text>
+  <rect class="box" x="790" y="205" width="165" height="70" fill="#e5f7ef" stroke="#3b9b70"/><text x="872" y="235" text-anchor="middle" class="label">Staging</text><text x="872" y="256" text-anchor="middle" class="small">isolated resources</text>
+  <rect class="box" x="790" y="295" width="165" height="70" fill="#e5f7ef" stroke="#3b9b70"/><text x="872" y="325" text-anchor="middle" class="label">Production</text><text x="872" y="346" text-anchor="middle" class="small">approval required</text>
+  <path class="arrow" d="M210 187 H275"/><path class="arrow" d="M470 187 H540"/><path class="arrow" d="M725 165 H785"/><path class="arrow" d="M725 185 H765 V240 H785"/><path class="arrow" d="M725 205 H755 V330 H785"/>
+  <rect class="box" x="280" y="305" width="330" height="72" fill="#e7f1ff" stroke="#4382c3"/><text x="445" y="335" text-anchor="middle" class="label">Reusable Terraform modules</text><text x="445" y="359" text-anchor="middle" class="small">network • typed inputs • outputs</text>
+  <rect class="box" x="45" y="305" width="185" height="72" fill="#fff2d9" stroke="#d39528"/><text x="137" y="335" text-anchor="middle" class="label">S3 state</text><text x="137" y="359" text-anchor="middle" class="small">versioned + locked keys</text>
+  <path class="arrow" d="M280 340 H235"/><path class="arrow" d="M610 340 H740 V240 H785"/>
+</svg>

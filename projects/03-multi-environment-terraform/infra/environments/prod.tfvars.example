@@ -1,0 +1,10 @@
+environment = "prod"
+aws_region  = "ap-south-1"
+vpc_cidr    = "10.42.0.0/16"
+az_count    = 3
+
+tags = {
+  Project     = "devops-platform"
+  Environment = "prod"
+  ManagedBy   = "terraform"
+}

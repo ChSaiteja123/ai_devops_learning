@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="430" viewBox="0 0 1000 430" role="img" aria-labelledby="title desc">
+  <title id="title">Progressive delivery architecture</title>
+  <desc id="desc">CI builds a new version, rollout controller routes a small share of traffic to canary, Prometheus analysis decides promotion or rollback, and the stable version remains available.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#526579"/></marker>
+    <style>text{font-family:Segoe UI,Arial,sans-serif;fill:#183247}.title{font-size:25px;font-weight:700}.label{font-size:16px;font-weight:600}.small{font-size:13px;fill:#40566a}.box{rx:12;stroke-width:2}.arrow{stroke:#526579;stroke-width:2.5;fill:none;marker-end:url(#arrow)}</style>
+  </defs>
+  <rect width="1000" height="430" rx="18" fill="#f5f8fc"/>
+  <text x="40" y="48" class="title">Progressive delivery: canary or blue-green</text>
+  <text x="40" y="76" class="small">Traffic weights need an ingress/service-mesh integration to represent real user traffic.</text>
+  <rect class="box" x="40" y="150" width="170" height="85" fill="#e7f1ff" stroke="#4382c3"/><text x="125" y="184" text-anchor="middle" class="label">CI builds</text><text x="125" y="208" text-anchor="middle" class="small">scanned image</text>
+  <rect class="box" x="280" y="150" width="195" height="85" fill="#f0eaff" stroke="#8060bd"/><text x="377" y="184" text-anchor="middle" class="label">Rollout controller</text><text x="377" y="208" text-anchor="middle" class="small">Argo Rollouts / Flagger</text>
+  <rect class="box" x="545" y="105" width="180" height="80" fill="#e5f7ef" stroke="#3b9b70"/><text x="635" y="138" text-anchor="middle" class="label">Stable version</text><text x="635" y="161" text-anchor="middle" class="small">serves existing traffic</text>
+  <rect class="box" x="545" y="220" width="180" height="80" fill="#fff2d9" stroke="#d39528"/><text x="635" y="253" text-anchor="middle" class="label">Canary version</text><text x="635" y="276" text-anchor="middle" class="small">receives small share</text>
+  <rect class="box" x="790" y="150" width="170" height="85" fill="#e7f1ff" stroke="#4382c3"/><text x="875" y="184" text-anchor="middle" class="label">Traffic router</text><text x="875" y="208" text-anchor="middle" class="small">Ingress / mesh</text>
+  <path class="arrow" d="M210 192 H275"/><path class="arrow" d="M475 178 H540"/><path class="arrow" d="M475 207 H540"/><path class="arrow" d="M725 145 H785"/><path class="arrow" d="M725 260 H770 V225 H785"/>
+  <rect class="box" x="300" y="330" width="205" height="65" fill="#e7f1ff" stroke="#4382c3"/><text x="402" y="358" text-anchor="middle" class="label">Prometheus analysis</text><text x="402" y="380" text-anchor="middle" class="small">errors • latency • health</text>
+  <rect class="box" x="600" y="330" width="220" height="65" fill="#ffe8e5" stroke="#d16b5d"/><text x="710" y="358" text-anchor="middle" class="label">Decision</text><text x="710" y="380" text-anchor="middle" class="small">promote or abort / rollback</text>
+  <path class="arrow" d="M635 300 V320 H505"/><path class="arrow" d="M505 362 H595"/><path class="arrow" d="M710 330 V310 H475 V235"/>
+</svg>
