@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Combine conventional service health with model quality, usage, and data freshness.">
+  <title>Day 05: Observability for AI services | AI DevOps</title>
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+  <main class="page">
+    <p class="top-link"><a href="../index.html">&larr; AI DevOps visual path</a></p>
+    <header class="hero"><p class="eyebrow">Day 05 of 10 | INTERMEDIATE</p><h1>Observability for AI services</h1><p>Combine conventional service health with model quality, usage, and data freshness.</p></header>
+    <div class="layout">
+      <article class="panel">
+        <h2>Visual explanation</h2>
+        <figure class="diagram"><svg viewBox="0 0 860 270" role="img" aria-labelledby="visual-title visual-desc" xmlns="http://www.w3.org/2000/svg"><title id="visual-title">AI service health spans reliability and quality</title><desc id="visual-desc">A service dashboard tracks latency, errors, resource use, model-quality signals, token or cost usage, and input data freshness.</desc><defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#4a78b8"/></marker></defs><rect class="node" x="35" y="35" width="380" height="185" rx="14"/><text x="225" y="75" text-anchor="middle" font-size="17" font-weight="700"><tspan x="225" dy="0">Service health</tspan></text><text x="225" y="115" text-anchor="middle" font-size="14"><tspan x="225" dy="0">Availability, latency, errors, and</tspan><tspan x="225" dy="23">resource use</tspan></text><rect class="node-alt" x="450" y="35" width="380" height="185" rx="14"/><text x="640" y="75" text-anchor="middle" font-size="17" font-weight="700"><tspan x="640" dy="0">AI behavior and usage</tspan></text><text x="640" y="115" text-anchor="middle" font-size="14"><tspan x="640" dy="0">Quality checks, token or cost usage, and</tspan><tspan x="640" dy="23">data freshness</tspan></text><text x="430" y="255" text-anchor="middle" font-size="13">Choose based on the problem, evidence, lifecycle, and measured results</text></svg><figcaption>A service dashboard tracks latency, errors, resource use, model-quality signals, token or cost usage, and input data freshness.</figcaption></figure>
+        <section class="deep-dive"><h2>Deep dive</h2><div class="detail-grid"><section class="detail-card"><h3>Keep service and model signals distinct</h3><p>Availability, latency, and error rate describe the service. Groundedness, task success, refusal, and drift describe behavior or input quality. One can degrade while the other looks healthy.</p></section><section class="detail-card"><h3>Track cost drivers</h3><p>Measure requests, tokens or equivalent usage, retries, model tier, and cost by approved aggregate. Set budgets and alert before a usage spike becomes an unplanned expense.</p></section><section class="detail-card"><h3>Protect telemetry</h3><p>Use correlation IDs and redacted metadata where possible. Avoid collecting raw prompts or outputs by default; define access, retention, and audit policy for any sensitive trace.</p></section></div></section>
+        <div class="practice"><strong>Try it:</strong> Draw a dashboard with one service metric, one quality metric, one cost metric, and one freshness indicator. Explain what action a threshold should trigger.</div>
+        <div class="guardrail"><strong>Safety and reliability:</strong> Never expose prompts, outputs, customer data, or credentials in broadly accessible telemetry.</div>
+        <div class="checkpoint"><strong>Mastery checkpoint:</strong> Explain &quot;Observability for AI services&quot;, name one failure mode, and identify the relevant safety boundary.</div>
+        <nav class="lesson-nav"><a href="../release-strategies-and-rollback/index.html">&larr; Day 04</a><a href="../human-centered-incident-assistance/index.html">Day 06: Human-centered incident assistance &rarr;</a></nav>
+      </article>
+      <aside class="panel"><h2>Study routine</h2><ol class="side-list"><li>Read the diagram and its labels.</li><li>Explain the concept without the diagram.</li><li>Complete the fictional exercise.</li><li>Identify a limitation or failure case.</li><li>Record your checkpoint answer.</li></ol><h3>Safe practice</h3><p>All diagrams and exercises are illustrative. No model calls, tools, cloud resources, or production systems are used.</p></aside>
+    </div>
+  </main>
+</body>
+</html>

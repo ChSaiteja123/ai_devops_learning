@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Use an assistant to organize approved evidence while responders retain diagnosis and change authority.">
+  <title>Day 06: Human-centered incident assistance | AI DevOps</title>
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+  <main class="page">
+    <p class="top-link"><a href="../index.html">&larr; AI DevOps visual path</a></p>
+    <header class="hero"><p class="eyebrow">Day 06 of 10 | INTERMEDIATE</p><h1>Human-centered incident assistance</h1><p>Use an assistant to organize approved evidence while responders retain diagnosis and change authority.</p></header>
+    <div class="layout">
+      <article class="panel">
+        <h2>Visual explanation</h2>
+        <figure class="diagram"><svg viewBox="0 0 860 270" role="img" aria-labelledby="visual-title visual-desc" xmlns="http://www.w3.org/2000/svg"><title id="visual-title">Evidence is summarized before a human decides</title><desc id="visual-desc">A fictional alert and read-only evidence feed a draft summary; a responder verifies sources and uses the existing approved change process if action is needed.</desc><defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#4a78b8"/></marker></defs><rect class="node" x="20" y="82" width="180" height="90" rx="12"/><text x="110" y="128" text-anchor="middle" font-size="13" font-weight="700"><tspan x="110" dy="0">Synthetic alert</tspan></text><path class="connector" d="M205,127 L228,127" marker-end="url(#arrow)"/><rect class="node-alt" x="233" y="82" width="180" height="90" rx="12"/><text x="323" y="128" text-anchor="middle" font-size="13" font-weight="700"><tspan x="323" dy="0">Read-only evidence</tspan></text><path class="connector" d="M418,127 L441,127" marker-end="url(#arrow)"/><rect class="node" x="446" y="82" width="180" height="90" rx="12"/><text x="536" y="128" text-anchor="middle" font-size="13" font-weight="700"><tspan x="536" dy="0">Draft with sources</tspan></text><path class="connector" d="M631,127 L654,127" marker-end="url(#arrow)"/><rect class="node-warn" x="660" y="82" width="180" height="90" rx="12"/><text x="750" y="128" text-anchor="middle" font-size="13" font-weight="700"><tspan x="750" dy="0">Responder verifies</tspan></text><text x="430" y="225" text-anchor="middle" font-size="13">Conceptual flow; exact implementation depends on the system and policy</text></svg><figcaption>A fictional alert and read-only evidence feed a draft summary; a responder verifies sources and uses the existing approved change process if action is needed.</figcaption></figure>
+        <section class="deep-dive"><h2>Deep dive</h2><div class="detail-grid"><section class="detail-card"><h3>Separate facts and hypotheses</h3><p>A useful incident summary labels timestamps, observed signals, source references, and unknowns. Keep causal explanations clearly marked as hypotheses until evidence supports them.</p></section><section class="detail-card"><h3>Use read-only scope first</h3><p>Read-only access can still expose sensitive information and be manipulated by log content. Filter scope and minimize data before sending it to a model.</p></section><section class="detail-card"><h3>Preserve incident command</h3><p>The on-call responder owns triage and escalation. Any remediation uses established approval, testing, and rollback paths; an AI assistant should never silently restart or reconfigure systems.</p></section></div></section>
+        <div class="practice"><strong>Try it:</strong> Write a five-line fictional incident summary with two observations, one hypothesis, one unknown, and a human next step.</div>
+        <div class="guardrail"><strong>Safety and reliability:</strong> Do not grant an incident assistant unrestricted shell, secrets, or autonomous production remediation.</div>
+        <div class="checkpoint"><strong>Mastery checkpoint:</strong> Explain &quot;Human-centered incident assistance&quot;, name one failure mode, and identify the relevant safety boundary.</div>
+        <nav class="lesson-nav"><a href="../observability-for-ai-services/index.html">&larr; Day 05</a><a href="../mlops-from-data-to-monitored-model/index.html">Day 07: MLOps: from data to monitored model &rarr;</a></nav>
+      </article>
+      <aside class="panel"><h2>Study routine</h2><ol class="side-list"><li>Read the diagram and its labels.</li><li>Explain the concept without the diagram.</li><li>Complete the fictional exercise.</li><li>Identify a limitation or failure case.</li><li>Record your checkpoint answer.</li></ol><h3>Safe practice</h3><p>All diagrams and exercises are illustrative. No model calls, tools, cloud resources, or production systems are used.</p></aside>
+    </div>
+  </main>
+</body>
+</html>

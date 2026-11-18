@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Visualize reproducible model training, validation, promotion, and monitoring.">
+  <title>Day 07: MLOps: from data to monitored model | AI DevOps</title>
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+  <main class="page">
+    <p class="top-link"><a href="../index.html">&larr; AI DevOps visual path</a></p>
+    <header class="hero"><p class="eyebrow">Day 07 of 10 | ADVANCED</p><h1>MLOps: from data to monitored model</h1><p>Visualize reproducible model training, validation, promotion, and monitoring.</p></header>
+    <div class="layout">
+      <article class="panel">
+        <h2>Visual explanation</h2>
+        <figure class="diagram"><svg viewBox="0 0 860 270" role="img" aria-labelledby="visual-title visual-desc" xmlns="http://www.w3.org/2000/svg"><title id="visual-title">A model artifact moves through governed stages</title><desc id="visual-desc">Versioned data and code produce a trained model that is evaluated, registered, promoted, monitored, and rolled back or retrained under review.</desc><defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#4a78b8"/></marker></defs><rect class="node" x="170" y="12" width="520" height="46" rx="10"/><text x="430" y="41" text-anchor="middle" font-size="14" font-weight="700"><tspan x="430" dy="0">Version data + code</tspan></text><path class="connector" d="M430,58 L430,69" marker-end="url(#arrow)"/><rect class="node-alt" x="170" y="72" width="520" height="46" rx="10"/><text x="430" y="101" text-anchor="middle" font-size="14" font-weight="700"><tspan x="430" dy="0">Train + evaluate</tspan></text><path class="connector" d="M430,118 L430,129" marker-end="url(#arrow)"/><rect class="node" x="170" y="132" width="520" height="46" rx="10"/><text x="430" y="161" text-anchor="middle" font-size="14" font-weight="700"><tspan x="430" dy="0">Register + approve</tspan></text><path class="connector" d="M430,178 L430,189" marker-end="url(#arrow)"/><rect class="node-warn" x="170" y="192" width="520" height="46" rx="10"/><text x="430" y="221" text-anchor="middle" font-size="14" font-weight="700"><tspan x="430" dy="0">Deploy + monitor</tspan></text></svg><figcaption>Versioned data and code produce a trained model that is evaluated, registered, promoted, monitored, and rolled back or retrained under review.</figcaption></figure>
+        <section class="deep-dive"><h2>Deep dive</h2><div class="detail-grid"><section class="detail-card"><h3>Track lineage</h3><p>Record dataset versions, code, dependencies, configuration, random seeds where relevant, and model artifact identity. Provenance helps reproduce a result and investigate change.</p></section><section class="detail-card"><h3>Validate before promotion</h3><p>Check data quality, leakage, baseline performance, appropriate splits, subgroup behavior, and deployment compatibility. A strong offline metric can still fail on changed real-world inputs.</p></section><section class="detail-card"><h3>Monitor after release</h3><p>Watch service health, input drift, outcome quality when labels arrive, fairness concerns, and resource use. Define owners and thresholds for investigation, rollback, or a separately reviewed retraining cycle.</p></section></div></section>
+        <div class="practice"><strong>Try it:</strong> Label each arrow in the diagram with an artifact or approval that should be recorded. Name one signal that could require stopping promotion.</div>
+        <div class="guardrail"><strong>Safety and reliability:</strong> Do not treat a toy model score as production readiness or use unvalidated models for safety-critical decisions.</div>
+        <div class="checkpoint"><strong>Mastery checkpoint:</strong> Explain &quot;MLOps: from data to monitored model&quot;, name one failure mode, and identify the relevant safety boundary.</div>
+        <nav class="lesson-nav"><a href="../human-centered-incident-assistance/index.html">&larr; Day 06</a><a href="../llmops-prompt-model-and-retrieval-lifecycle/index.html">Day 08: LLMOps: prompt, model, and retrieval lifecycle &rarr;</a></nav>
+      </article>
+      <aside class="panel"><h2>Study routine</h2><ol class="side-list"><li>Read the diagram and its labels.</li><li>Explain the concept without the diagram.</li><li>Complete the fictional exercise.</li><li>Identify a limitation or failure case.</li><li>Record your checkpoint answer.</li></ol><h3>Safe practice</h3><p>All diagrams and exercises are illustrative. No model calls, tools, cloud resources, or production systems are used.</p></aside>
+    </div>
+  </main>
+</body>
+</html>

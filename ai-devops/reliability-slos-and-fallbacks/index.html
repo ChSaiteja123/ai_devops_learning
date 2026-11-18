@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Set service objectives that include user-visible quality and a safe degraded mode.">
+  <title>Day 09: Reliability, SLOs, and fallbacks | AI DevOps</title>
+  <link rel="stylesheet" href="../../styles.css">
+</head>
+<body>
+  <main class="page">
+    <p class="top-link"><a href="../index.html">&larr; AI DevOps visual path</a></p>
+    <header class="hero"><p class="eyebrow">Day 09 of 10 | ADVANCED</p><h1>Reliability, SLOs, and fallbacks</h1><p>Set service objectives that include user-visible quality and a safe degraded mode.</p></header>
+    <div class="layout">
+      <article class="panel">
+        <h2>Visual explanation</h2>
+        <figure class="diagram"><svg viewBox="0 0 860 270" role="img" aria-labelledby="visual-title visual-desc" xmlns="http://www.w3.org/2000/svg"><title id="visual-title">Reliability includes availability, latency, quality, and fallback</title><desc id="visual-desc">A service objective combines availability and latency with task-quality checks; budget exhaustion or dependency failure routes to a safe fallback and human support.</desc><defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#4a78b8"/></marker></defs><rect class="node" x="330" y="10" width="200" height="60" rx="12"/><text x="430" y="43" text-anchor="middle" font-size="13" font-weight="700"><tspan x="430" dy="0">User request</tspan></text><rect class="node-alt" x="625" y="100" width="200" height="60" rx="12"/><text x="725" y="133" text-anchor="middle" font-size="13" font-weight="700"><tspan x="725" dy="0">Quality + service SLO</tspan></text><rect class="node-warn" x="330" y="190" width="200" height="60" rx="12"/><text x="430" y="214" text-anchor="middle" font-size="13" font-weight="700"><tspan x="430" dy="0">Fallback or human</tspan><tspan x="430" dy="18">handoff</tspan></text><rect class="node-alt" x="35" y="100" width="200" height="60" rx="12"/><text x="135" y="133" text-anchor="middle" font-size="13" font-weight="700"><tspan x="135" dy="0">Recovery + review</tspan></text><path class="connector" d="M530,40 C600,42 600,100 625,120" marker-end="url(#arrow)"/><path class="connector" d="M625,150 C600,184 580,212 530,220" marker-end="url(#arrow)"/><path class="connector" d="M330,220 C250,220 255,168 235,150" marker-end="url(#arrow)"/><path class="connector" d="M235,110 C255,75 260,40 330,40" marker-end="url(#arrow)"/><text x="430" y="262" text-anchor="middle" font-size="12">Continue only while authorization, evidence, and budget remain valid</text></svg><figcaption>A service objective combines availability and latency with task-quality checks; budget exhaustion or dependency failure routes to a safe fallback and human support.</figcaption></figure>
+        <section class="deep-dive"><h2>Deep dive</h2><div class="detail-grid"><section class="detail-card"><h3>Define user-centered SLOs</h3><p>Availability and latency matter, but so can answer correctness, groundedness, and task completion. Define how each is measured, sampled, and attributed to the actual user experience.</p></section><section class="detail-card"><h3>Use error budgets thoughtfully</h3><p>An error budget is the tolerated unreliability implied by an objective over a period. Spend it deliberately: repeated regressions may pause feature rollout while reliability work catches up.</p></section><section class="detail-card"><h3>Design graceful degradation</h3><p>On model timeout, budget exhaustion, or low evidence, offer a deterministic result, a clear unavailable message, or human handoff. Do not invent a successful response to hide failure.</p></section></div></section>
+        <div class="practice"><strong>Try it:</strong> Design fallback behavior for a fictional knowledge assistant when retrieval is unavailable. State what it can still safely do and what it must not claim.</div>
+        <div class="guardrail"><strong>Safety and reliability:</strong> Do not present a model&#x27;s answer as an acceptable fallback when evidence or safety controls are unavailable.</div>
+        <div class="checkpoint"><strong>Mastery checkpoint:</strong> Explain &quot;Reliability, SLOs, and fallbacks&quot;, name one failure mode, and identify the relevant safety boundary.</div>
+        <nav class="lesson-nav"><a href="../llmops-prompt-model-and-retrieval-lifecycle/index.html">&larr; Day 08</a><a href="../ai-devops-architecture-and-governance-capstone/index.html">Day 10: AI DevOps architecture and governance capstone &rarr;</a></nav>
+      </article>
+      <aside class="panel"><h2>Study routine</h2><ol class="side-list"><li>Read the diagram and its labels.</li><li>Explain the concept without the diagram.</li><li>Complete the fictional exercise.</li><li>Identify a limitation or failure case.</li><li>Record your checkpoint answer.</li></ol><h3>Safe practice</h3><p>All diagrams and exercises are illustrative. No model calls, tools, cloud resources, or production systems are used.</p></aside>
+    </div>
+  </main>
+</body>
+</html>
